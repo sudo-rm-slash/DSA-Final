@@ -1,0 +1,3 @@
+# Nothing yet...
+#
+# Invoke the Makefiles under submodules and compile the files in doc folder.
