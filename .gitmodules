@@ -1,9 +1,0 @@
-[submodule "src/bank-records"]
-	path = src/bank-records
-	url = https://github.com/sudo-rm-slash/bank-records.git
-[submodule "src/bank-accounts"]
-	path = src/bank-accounts
-	url = https://github.com/sudo-rm-slash/bank-accounts.git
-[submodule "src/bank-client"]
-	path = src/bank-client
-	url = https://github.com/sudo-rm-slash/bank-client.git
