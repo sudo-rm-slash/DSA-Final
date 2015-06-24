@@ -15,18 +15,19 @@ typedef std::map<std::string, std::function<void()> > functions;
 /*
  * Generate function lookup table.
  */
-#define INSERT(LUT, NAME, FUNC) LUT.insert(std::pair<std::string, std::function<void()> >(NAME, FUNC))
 void functions_init(functions &lookup_table)
 {
-	INSERT(lookup_table, "login", 	dsa::login);
-	INSERT(lookup_table, "create", 	dsa::create);
-	INSERT(lookup_table, "delete", 	dsa::remove);
-	INSERT(lookup_table, "merge", 	dsa::merge);
-	INSERT(lookup_table, "deposit", 	dsa::deposit);
-	INSERT(lookup_table, "withdraw", 	dsa::withdraw);
-	INSERT(lookup_table, "transfer",	dsa::transfer);
-	INSERT(lookup_table, "find", 		dsa::find);
-	INSERT(lookup_table, "search", 	dsa::search);
+#define INSERT(NAME, FUNC) lookup_table.insert(std::pair<std::string, std::function<void()> >(NAME, FUNC))
+
+	INSERT("login", 	dsa::login);
+	INSERT("create", 	dsa::create);
+	INSERT("delete", 	dsa::remove);
+	INSERT("merge", 	dsa::merge);
+	INSERT("deposit", 	dsa::deposit);
+	INSERT("withdraw", 	dsa::withdraw);
+	INSERT("transfer",	dsa::transfer);
+	INSERT("find", 		dsa::find);
+	INSERT("search", 	dsa::search);
 }
 
 
