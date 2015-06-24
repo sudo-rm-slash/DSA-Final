@@ -7,7 +7,7 @@ namespace dsa
 	/*
 	 * Definitions
 	 */
-	typedef std::map<const char*, std::function<void()> > Functions;
+	typedef std::map<const char*, std::function<void()> > functions;
 
 
 	/*
@@ -20,7 +20,7 @@ namespace dsa
 
 	namespace global
 	{
-		Functions lookup_table;
+		dsa::functions lookup_table;
 	}
 
 
@@ -78,15 +78,15 @@ namespace dsa
 	 */
 	void functions_init()
 	{
-		lookup_table.insert(std::make_pair("login", login));
-		lookup_table.insert(std::make_pair("create", create));
-		lookup_table.insert(std::make_pair("delete", remove));
-		lookup_table.insert(std::make_pair("merge", merge));
-		lookup_table.insert(std::make_pair("deposit", deposit));
-		lookup_table.insert(std::make_pair("withdraw", withdraw));
-		lookup_table.insert(std::make_pair("transfer", transfer));
-		lookup_table.insert(std::make_pair("find", find));
-		lookup_table.insert(std::make_pair("search", search));
+		dsa::global::lookup_table.insert(std::make_pair("login", login));
+		dsa::global::lookup_table.insert(std::make_pair("create", create));
+		dsa::global::lookup_table.insert(std::make_pair("delete", remove));
+		dsa::global::lookup_table.insert(std::make_pair("merge", merge));
+		dsa::global::lookup_table.insert(std::make_pair("deposit", deposit));
+		dsa::global::lookup_table.insert(std::make_pair("withdraw", withdraw));
+		dsa::global::lookup_table.insert(std::make_pair("transfer", transfer));
+		dsa::global::lookup_table.insert(std::make_pair("find", find));
+		dsa::global::lookup_table.insert(std::make_pair("search", search));
 	}
 }
 
@@ -97,7 +97,7 @@ namespace dsa
 int main()
 {
 	// Generate "name to function" lookup table beforehand.
-	functions_init();
+	dsa::functions_init();
 
 	// Start parsing strings
 	while (true)
