@@ -1,23 +1,22 @@
 #include <map>			// std::map
 #include <functional>	// std::function
 #include <string>		// std::string
+#include <iostream>		// std::cin
+#include <stdexcept>	// std::invalid_argument
+
+#include "operations.hpp"
 
 namespace dsa
 {
 	/*
 	 * Definitions
 	 */
-	typedef std::map<const char*, std::function<void()> > functions;
+	typedef std::map<std::string, std::function<void()> > functions;
 
 
 	/*
 	 * Global variables.
 	 */
-	namespace inputs
-	{
-		std::string var1, var2, var3, var4;
-	}
-
 	namespace global
 	{
 		dsa::functions lookup_table;
@@ -25,68 +24,20 @@ namespace dsa
 
 
 	/*
-	 * Operations.
-	 */
-	void login()
-	{
-
-	}
-
-	void create()
-	{
-
-	}
-
-	void remove()
-	{
-
-	}
-
-	void merge()
-	{
-
-	}
-
-	void deposit()
-	{
-
-	}
-
-	void withdraw()
-	{
-
-	}
-
-	void transfer()
-	{
-
-	}
-
-	void find()
-	{
-
-	}
-
-	void search()
-	{
-
-	}
-
-
-	/*
 	 * Generate function lookup table.
 	 */
+#define INSERT(NAME, FUNC) dsa::global::lookup_table.insert(std::pair<std::string, std::function<void()> >(NAME, FUNC))
 	void functions_init()
 	{
-		dsa::global::lookup_table.insert(std::make_pair("login", login));
-		dsa::global::lookup_table.insert(std::make_pair("create", create));
-		dsa::global::lookup_table.insert(std::make_pair("delete", remove));
-		dsa::global::lookup_table.insert(std::make_pair("merge", merge));
-		dsa::global::lookup_table.insert(std::make_pair("deposit", deposit));
-		dsa::global::lookup_table.insert(std::make_pair("withdraw", withdraw));
-		dsa::global::lookup_table.insert(std::make_pair("transfer", transfer));
-		dsa::global::lookup_table.insert(std::make_pair("find", find));
-		dsa::global::lookup_table.insert(std::make_pair("search", search));
+		INSERT("login", login);
+		INSERT("create", create);
+		INSERT("delete", remove);
+		INSERT("merge", merge);
+		INSERT("deposit", deposit);
+		INSERT("withdraw", withdraw);
+		INSERT("transfer", transfer);
+		INSERT("find", find);
+		INSERT("search", search);
 	}
 }
 
@@ -100,13 +51,18 @@ int main()
 	dsa::functions_init();
 
 	// Start parsing strings
-	while (true)
+	std::string operation;
+	while (std::cin >> operation)
 	{
-		// Get the target function.
+		// Find the target function.
+		auto search = dsa::global::lookup_table.find(operation);
+		if (search == dsa::global::lookup_table.end())
+		{
+			throw std::invalid_argument("Invalid operation \"" + operation + "\".\n");
+		}
 
 		// Execute the function.
-
-		// (Deprecated) Print the result.
+		search->second();
 	}
 
 	return 0;
