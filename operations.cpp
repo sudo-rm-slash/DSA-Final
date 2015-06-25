@@ -1,6 +1,6 @@
 #include "operations.hpp"
 
-dsa::disjoint_sets objects;
+dsa::disjoint_sets<int> relationships;
 
 void dsa::login()
 {
@@ -15,7 +15,7 @@ void dsa::create()
 	std::cin >> input;
 	std::cout << "...Input=" << input << std::endl;
 
-	objects.make_set(input);
+	relationships.make_set(input);
 }
 
 void dsa::del()
@@ -31,7 +31,7 @@ void dsa::merge()
 	std::cin >> a >> b;
 	std::cout << "...a=" << a << ", b=" << b << std::endl;
 
-	objects.link(a, b);
+	relationships.link(a, b);
 }
 
 void dsa::deposit()
@@ -57,7 +57,7 @@ void dsa::find()
 	std::cin >> id;
 	std::cout << "...Parent of " << id << " is ";
 
-	std::cout << objects.find_set(id) << std::endl;
+	std::cout << relationships.find_root(id) << std::endl;
 }
 
 void dsa::search()

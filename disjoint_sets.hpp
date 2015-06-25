@@ -6,6 +6,7 @@
 // TODO: Function descriptions.
 namespace dsa
 {
+	template <class T>
 	class disjoint_sets
 	{
 	private:
@@ -23,6 +24,12 @@ namespace dsa
 		disjoint_sets();
 		virtual ~disjoint_sets();
 
+		/*
+		 * @brief Create a new disjoint set in the forest.
+		 *
+		 * @ param value The child that the newly created set contains.
+		 * @ return Void.
+		 */
 		void make_set(int num_to_add);
 
 		/*
@@ -31,7 +38,7 @@ namespace dsa
 		 * @ param child The child to look up for.
 		 * @ return The set ID of the root node.
 		 */
-		int find_set(int id) const;
+		int find_root(int id) const;
 
 		/*
 		 * @brief Merge the sets that child1 and child2 belogns to.
@@ -57,5 +64,7 @@ namespace dsa
 		int get_elements();
 	};
 }
+
+#include "disjoint_sets.tpp"
 
 #endif
