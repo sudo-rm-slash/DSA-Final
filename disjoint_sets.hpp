@@ -16,12 +16,14 @@ namespace dsa
 			T data;			// The data this node carries.
 		};
 		std::vector<node*> sets;
+		int set_count;
+		int element_count;
 
 	public:
 		disjoint_sets();
 		virtual ~disjoint_sets();
 
-		void make_set(const T& item);
+		void make_set(int num_to_add);
 
 		/*
 		 * @brief Find the set child belongs to.
@@ -29,7 +31,7 @@ namespace dsa
 		 * @ param child The child to look up for.
 		 * @ return The set ID of the root node.
 		 */
-		int find_set(const T& child) const;
+		int find_set(int id) const;
 
 		/*
 		 * @brief Merge the sets that child1 and child2 belogns to.
@@ -38,7 +40,7 @@ namespace dsa
 		 * @param child2 The second child.
 		 * @return Void.
 		 */
-		void link(const T& child1, const T& child2);
+		void link(int id1, int id2);
 
 		/*
 		 * @brief Get the number of sets this container currently holds.
@@ -46,6 +48,13 @@ namespace dsa
 		 * @return The sets count.
 		 */
 		int get_sets();
+
+		/*
+		 * @brief Get the number of elements this container currently holds.
+		 *
+		 * @return The elements count.
+		 */
+		int get_elements();
 	};
 }
 
