@@ -19,15 +19,15 @@ void functions_init(functions &lookup_table)
 {
 #define INSERT(NAME, FUNC) lookup_table.insert(std::pair<std::string, std::function<void()> >(NAME, FUNC))
 
-	INSERT("login", 	login);
-	INSERT("create", 	create);
-	INSERT("delete", 	del);
-	INSERT("merge", 	merge);
-	INSERT("deposit", 	deposit);
-	INSERT("withdraw", 	withdraw);
-	INSERT("transfer",	transfer);
-	INSERT("find", 		find);
-	INSERT("search", 	search);
+	INSERT("login", 	dsa::login);
+	INSERT("create", 	dsa::create);
+	INSERT("delete", 	dsa::del);
+	INSERT("merge", 	dsa::merge);
+	INSERT("deposit", 	dsa::deposit);
+	INSERT("withdraw", 	dsa::withdraw);
+	INSERT("transfer",	dsa::transfer);
+	INSERT("find", 		dsa::find);
+	INSERT("search", 	dsa::search);
 }
 
 

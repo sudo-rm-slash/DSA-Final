@@ -1,9 +1,6 @@
-#include <vector>		// std::vector
-
 #include "disjoint_sets.hpp"
 
-template <class T>
-disjoint_sets<T>::disjoint_sets()
+dsa::disjoint_sets::disjoint_sets()
 {
 	// Initialize the vector.
 	this->sets.clear();
@@ -12,8 +9,7 @@ disjoint_sets<T>::disjoint_sets()
 	this->element_count = this->set_count = 0;
 }
 
-template <class T>
-disjoint_sets<T>::~disjoint_sets()
+dsa::disjoint_sets::~disjoint_sets()
 {
 	// Delete all the nodes in this container.
 	for (int i = 0; i < element_count; i++)
@@ -26,15 +22,14 @@ disjoint_sets<T>::~disjoint_sets()
 	this->element_count = this->set_count = 0;
 }
 
-template <class T>
-void disjoint_sets<T>::make_set(int num_to_add)
+void dsa::disjoint_sets::make_set(int num_to_add)
 {
 	sets.insert(sets.end(), num_to_add, (node*)NULL);
 	for (int i = this->element_count; i < this->element_count + num_to_add; i++)
 	{
 		this->sets[i] = new node();
 		this->sets[i]->parent = NULL;
-		this->sets[i]->index = i;
+		this->sets[i]->id = i;
 		this->sets[i]->rank = 0;
 	}
 
@@ -42,8 +37,7 @@ void disjoint_sets<T>::make_set(int num_to_add)
 	this->element_count += num_to_add;
 }
 
-template <class T>
-int disjoint_sets<T>::find_set(int id) const
+int dsa::disjoint_sets::find_set(int id) const
 {
 	node* current_node;
 
@@ -68,8 +62,7 @@ int disjoint_sets<T>::find_set(int id) const
 	return root->id;
 }
 
-template <class T>
-void disjoint_sets<T>::link(int id1, int id2)
+void dsa::disjoint_sets::link(int id1, int id2)
 {
 	// Already the same union.
 	if (id1 == id2)
@@ -101,14 +94,12 @@ void disjoint_sets<T>::link(int id1, int id2)
 	--this->set_count;
 }
 
-template <class T>
-int disjoint_sets<T>::get_sets()
+int dsa::disjoint_sets::get_sets()
 {
 	return this->set_count;
 }
 
-template <class T>
-int disjoint_sets<T>::get_elements()
+int dsa::disjoint_sets::get_elements()
 {
 	return this->element_count;
 }

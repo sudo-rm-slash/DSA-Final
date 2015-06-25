@@ -1,14 +1,13 @@
-#include <iostream>				// std::cout
-
 #include "operations.hpp"
-#include "disjoint_sets.hpp"	// disjoint_sets
 
-void login()
+dsa::disjoint_sets objects;
+
+void dsa::login()
 {
 	std::cout << "login()" << std::endl;
 }
 
-void create()
+void dsa::create()
 {
 	std::cout << "create()" << std::endl;
 
@@ -19,12 +18,12 @@ void create()
 	objects.make_set(input);
 }
 
-void del()
+void dsa::del()
 {
 	std::cout << "delete()" << std::endl;
 }
 
-void merge()
+void dsa::merge()
 {
 	std::cout << "merge()" << std::endl;
 
@@ -35,22 +34,22 @@ void merge()
 	objects.link(a, b);
 }
 
-void deposit()
+void dsa::deposit()
 {
 	std::cout << "deposit()" << std::endl;
 }
 
-void withdraw()
+void dsa::withdraw()
 {
 	std::cout << "withdraw()" << std::endl;
 }
 
-void transfer()
+void dsa::transfer()
 {
 	std::cout << "transfer()" << std::endl;
 }
 
-void find()
+void dsa::find()
 {
 	std::cout << "find()" << std::endl;
 
@@ -61,7 +60,7 @@ void find()
 	std::cout << objects.find_set(id) << std::endl;
 }
 
-void search()
+void dsa::search()
 {
 	std::cout << "search()" << std::endl;
 }

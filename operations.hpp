@@ -1,27 +1,30 @@
 #ifndef __OPERATIONS_HPP__
 #define	__OPERATIONS_HPP__
 
+#include <iostream>				// std::cout
+
 #include "disjoint_sets.hpp"
 
 // TODO: Add function descriptions.
-disjoint_sets<int> objects;
+namespace dsa
+{
+	void login();
 
-void login();
+	void create();
 
-void create();
+	void del();
 
-void del();
+	void merge();
 
-void merge();
+	void deposit();
 
-void deposit();
+	void withdraw();
 
-void withdraw();
+	void transfer();
 
-void transfer();
+	void find();
 
-void find();
-
-void search();
+	void search();
+}
 
 #endif
