@@ -30,8 +30,8 @@ documentation and/or software.
 
 */
 
-#ifndef __BZF_MD5_H__
-#define __BZF_MD5_H__
+#ifndef __BZF_MD5_HPP__
+#define __BZF_MD5_HPP__
 
 #include <cstring>
 #include <iostream>
