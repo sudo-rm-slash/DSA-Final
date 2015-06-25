@@ -21,7 +21,7 @@ void functions_init(functions &lookup_table)
 
 	INSERT("login", 	dsa::login);
 	INSERT("create", 	dsa::create);
-	INSERT("delete", 	dsa::remove);
+	INSERT("delete", 	dsa::del);
 	INSERT("merge", 	dsa::merge);
 	INSERT("deposit", 	dsa::deposit);
 	INSERT("withdraw", 	dsa::withdraw);

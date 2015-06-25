@@ -1,5 +1,9 @@
-#ifndef __OPERATIONS_H__
-#define	__OPERATIONS_H__
+#ifndef __OPERATIONS_HPP__
+#define	__OPERATIONS_HPP__
+
+#include <iostream>				// std::cout
+
+#include "disjoint_sets.hpp"
 
 // TODO: Add function descriptions.
 namespace dsa
@@ -8,7 +12,7 @@ namespace dsa
 
 	void create();
 
-	void remove();
+	void del();
 
 	void merge();
 

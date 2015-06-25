@@ -1,7 +1,8 @@
 #ifndef __DISJOINT_SETS_HPP__
 #define __DISJOINT_SETS_HPP__
 
-// TODO: Function descriptions.
+#include <vector>			// std::vector
+
 namespace dsa
 {
 	template <class T>
@@ -13,7 +14,7 @@ namespace dsa
 			node* parent;	// The parent node of this node.
 			int id;			// The index of this node.
 			int rank;		// Roughly represent the max height of the node in its subtree.
-			T data;			// The data this node carries.
+			T data;			// The data that this node holds.
 		};
 		std::vector<node*> sets;
 		int set_count;
@@ -23,7 +24,13 @@ namespace dsa
 		disjoint_sets();
 		virtual ~disjoint_sets();
 
-		void make_set(int num_to_add);
+		/*
+		 * @brief Create a new disjoint set in the forest.
+		 *
+		 * @ param value The child that the newly created set contains.
+		 * @ return Generated ID.
+		 */
+		int make_set(const T& data);
 
 		/*
 		 * @brief Find the set child belongs to.
@@ -31,7 +38,7 @@ namespace dsa
 		 * @ param child The child to look up for.
 		 * @ return The set ID of the root node.
 		 */
-		int find_set(int id) const;
+		int find_root(int id) const;
 
 		/*
 		 * @brief Merge the sets that child1 and child2 belogns to.
@@ -42,6 +49,14 @@ namespace dsa
 		 */
 		void link(int id1, int id2);
 
+		/*
+		 * @brief Get the data stored in the specified node.
+		 * 
+		 * @param id The generated ID of the node.
+		 * @return The data.
+		 */
+		T& get_data(int id) const;
+		
 		/*
 		 * @brief Get the number of sets this container currently holds.
 		 *
@@ -57,5 +72,7 @@ namespace dsa
 		int get_elements();
 	};
 }
+
+#include "disjoint_sets.tpp"
 
 #endif
