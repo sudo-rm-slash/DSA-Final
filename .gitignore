@@ -11,3 +11,6 @@ obj/*
 *.out
 bin
 bin/*
+
+# PDF
+*.pdf
