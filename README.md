@@ -16,6 +16,8 @@ then merge the branch in-development.
 ...And the following command to delete the remote one.  
 `git push <remote> :<name>`
 
+## Structure
+
 ## Features
 TBA
 
