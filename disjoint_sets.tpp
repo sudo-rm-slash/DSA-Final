@@ -23,19 +23,22 @@ dsa::disjoint_sets<T>::~disjoint_sets()
 }
 
 template <class T>
-void dsa::disjoint_sets<T>::make_set(int num_to_add)
+int dsa::disjoint_sets<T>::make_set(const T& data)
 {
-	sets.insert(sets.end(), num_to_add, (node*)NULL);
-	for (int i = this->element_count; i < this->element_count + num_to_add; i++)
-	{
-		this->sets[i] = new node();
-		this->sets[i]->parent = NULL;
-		this->sets[i]->id = i;
-		this->sets[i]->rank = 0;
-	}
+	sets.insert(sets.end(), 1, (node*)NULL);
+
+	int index = this->element_count;
+	this->sets[index] = new node();		// Generate new node.
+	this->sets[index]->parent = NULL;	// No further parent node exists.
+	this->sets[index]->id = index;		// Generated ID of current node.
+	this->sets[index]->rank = 0;		// Default ranking.
+	this->sets[index]->data = data;		// Data stored in this node.
 
 	// Update element counts.
-	this->element_count += num_to_add;
+	++(this->element_count);
+
+	// Return the generated index.
+	return this->sets[index]->id;
 }
 
 template <class T>
@@ -95,6 +98,12 @@ void dsa::disjoint_sets<T>::link(int id1, int id2)
 
 	// Since two sets are linked together, one less set to maintain.
 	--this->set_count;
+}
+
+template <class T>
+T& dsa::disjoint_sets<T>::get_data(int id) const
+{
+	return this->sets[id]->data;
 }
 
 template <class T>

@@ -13,9 +13,8 @@ void dsa::create()
 
 	int input;
 	std::cin >> input;
-	std::cout << "...Input=" << input << std::endl;
-
-	relationships.make_set(input);
+	std::cout << "...Input=" << input << ", ";
+	std::cout << "ID=" << relationships.make_set(input) << std::endl;
 }
 
 void dsa::del()

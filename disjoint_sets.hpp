@@ -3,7 +3,6 @@
 
 #include <vector>			// std::vector
 
-// TODO: Function descriptions.
 namespace dsa
 {
 	template <class T>
@@ -15,6 +14,7 @@ namespace dsa
 			node* parent;	// The parent node of this node.
 			int id;			// The index of this node.
 			int rank;		// Roughly represent the max height of the node in its subtree.
+			T data;			// The data that this node holds.
 		};
 		std::vector<node*> sets;
 		int set_count;
@@ -28,9 +28,9 @@ namespace dsa
 		 * @brief Create a new disjoint set in the forest.
 		 *
 		 * @ param value The child that the newly created set contains.
-		 * @ return Void.
+		 * @ return Generated ID.
 		 */
-		void make_set(int num_to_add);
+		int make_set(const T& data);
 
 		/*
 		 * @brief Find the set child belongs to.
@@ -49,6 +49,14 @@ namespace dsa
 		 */
 		void link(int id1, int id2);
 
+		/*
+		 * @brief Get the data stored in the specified node.
+		 * 
+		 * @param id The generated ID of the node.
+		 * @return The data.
+		 */
+		T& get_data(int id) const;
+		
 		/*
 		 * @brief Get the number of sets this container currently holds.
 		 *
