@@ -1,5 +1,5 @@
-#ifndef __OPERATIONS_H__
-#define	__OPERATIONS_H__
+#ifndef __OPERATIONS_HPP__
+#define	__OPERATIONS_HPP__
 
 // TODO: Add function descriptions.
 namespace dsa

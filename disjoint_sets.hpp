@@ -1,6 +1,8 @@
 #ifndef __DISJOINT_SETS_HPP__
 #define __DISJOINT_SETS_HPP__
 
+#include <vector>		// std::vector
+
 // TODO: Function descriptions.
 namespace dsa
 {
@@ -13,7 +15,6 @@ namespace dsa
 			node* parent;	// The parent node of this node.
 			int id;			// The index of this node.
 			int rank;		// Roughly represent the max height of the node in its subtree.
-			T data;			// The data this node carries.
 		};
 		std::vector<node*> sets;
 		int set_count;
