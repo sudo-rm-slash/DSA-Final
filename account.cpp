@@ -4,22 +4,22 @@
 namespace dsa 
 {
 
-    account::account( const char* password )
+    account::account(const char* password)
     {
         strncpy( md5_password , MD5( password ) , MD5_BYTE );
     }
 
-    int check_password(const char* password)
+    bool account::authenticate(const char* password)
     {
         return strcmp( MD5(password), md5_password ) == 0;
     }
 
-    void deposit(int dollar)
+    int account::deposit(int dollar)
     {
-        money += dollar;
+        return ( money += dollar );
     }
 
-    std::pair<bool,int> withdraw(int dollar)
+    std::pair<bool,int> account::withdraw(int dollar)
     {
         if( dollar < money )
             return std::pair<bool,int>( false, money );

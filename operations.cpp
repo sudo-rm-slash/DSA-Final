@@ -2,9 +2,25 @@
 
 dsa::disjoint_sets<int> relationships;
 
+dsa::account* last_login_account;
+
 void dsa::login()
 {
 	std::cout << "login()" << std::endl;
+
+    std::string ID[100], password[100];
+
+    std::cin >> ID >> password;
+
+    // return a pointer to the account object
+    dsa::account* unauthenticated_account = dsa::trie.find(ID.c_str());
+
+    if( last_login_account == nullptr )
+        printf("ID %s not found\n", ID); 
+    else if( !unauthenticated_account->authenticate( password.c_str() ) )
+        printf("wrong passowrd\n");
+    else
+        printf("sucess\n");
 }
 
 void dsa::create()
@@ -44,11 +60,23 @@ void dsa::merge()
 void dsa::deposit()
 {
 	std::cout << "deposit()" << std::endl;
+
+    int money;
+    std::cin >> money;
+    std::cout << "success, " << last_login_account->deposit( money ) << " dollars in current account\n" ;
 }
 
 void dsa::withdraw()
 {
 	std::cout << "withdraw()" << std::endl;
+
+    int money;
+    std::cin >> money;
+    std::pair<bool,int> status = last_login_account->withdraw( money );
+    if( status.first )
+        std::cout << "success, " << status.second << " dollars left in current account\n";
+    else
+        std::cout << "fail, "    << status.second << " dollars only in current account\n";
 }
 
 void dsa::transfer()

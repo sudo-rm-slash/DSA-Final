@@ -11,9 +11,9 @@ namespace dsa
 
         account::account(const char* password);
 
-        int check_password(const char* password);
+        bool authenticate(const char* password);
 
-        void deposit(int dollar);
+        int deposit(int dollar);
 
         std::pair<bool,int> withdraw(int dollar);
 
