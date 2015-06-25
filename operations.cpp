@@ -15,6 +15,14 @@ void dsa::create()
 	std::cin >> input;
 	std::cout << "...Input=" << input << ", ";
 	std::cout << "ID=" << relationships.make_set(input) << std::endl;
+
+	// Generate new block in the storage.
+
+	// Acqurie the pointer to the block in the storage.
+
+	// Add the pointer to disjoint set, and acquire the generated ID.
+
+	// Store the generated ID along with the account string in TRIE.
 }
 
 void dsa::del()
