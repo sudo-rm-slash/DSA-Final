@@ -29,11 +29,11 @@ namespace dsa
 	template <class T>
 	void disjoint_sets<T>::make_set(int num_to_add)
 	{
-		sets.insert(sets.end(), num_to_add, (node*)NULL);
+		sets.insert(sets.end(), num_to_add, (node*)nullptr);
 		for(int i = this->element_count; i < this->element_count + num_to_add; i++)
 		{
 			this->sets[i] = new node();
-			this->sets[i]->parent = NULL;
+			this->sets[i]->parent = nullptr;
 			this->sets[i]->index = i;
 			this->sets[i]->rank = 0;
 		}
@@ -49,7 +49,7 @@ namespace dsa
 
 		// Find the root element that represents the set which id belongs to.
 		current_node = this->sets[id];
-		while (current_node->parent != NULL)
+		while (current_node->parent != nullptr)
 		{
 			current_node = current_node->parent;
 		}

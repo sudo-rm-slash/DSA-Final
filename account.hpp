@@ -9,7 +9,9 @@ namespace dsa
 
     public:
 
-        int check_password(std::string password);
+        account::account(const char* password);
+
+        int check_password(const char* password);
 
         void deposit(int dollar);
 

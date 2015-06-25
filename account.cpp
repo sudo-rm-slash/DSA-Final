@@ -8,6 +8,7 @@ namespace dsa
     {
         strncpy( md5_password , MD5( password ) , MD5_BYTE );
     }
+
     int check_password(const char* password)
     {
         return strcmp( MD5(password), md5_password ) == 0;
