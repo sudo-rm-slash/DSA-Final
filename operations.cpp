@@ -26,11 +26,8 @@ void dsa::login()
 		return;
 	}
 
-	// MD5 the password.
-	char md5[33] = md5(password);
-
 	// Authenticate the account's password.
-	if (!storage[last_login].authenticate(md5))
+	if (!storage[last_login].authenticate(password))
 	{
 		std::cout << "wrong password" << std::endl;
 		return;
@@ -79,56 +76,57 @@ void dsa::merge()
 {
 	std::cout << "merge()" << std::endl;
 
-	// First account...
-	// Find the account ID(int) by account name(string).
+	// Acquire the variables.
+	char username_1[101] = {0};
+	char password_1[101] = {0};
+	std::cin >> username_1 >> password_1;
 
-	// MD5 the password.
+	char username_2[101] = {0};
+	char password_2[101] = {0};
+	std::cin >> username_2 >> password_2;
+
+	// Find the account ID(int) by account name(string).
+	// ...First account.
+	int user_id_1 = lookup_table.find(username_1);
+	if (user_id_1 == -1)
+	{
+		std::cout << "ID " << username_1 << " not found" << std::endl;
+		return;
+	}
+	// ...Second account.
+	int user_id_2 = lookup_table.find(username_2);
+	if (user_id_2 == -1)
+	{
+		std::cout << "ID " << username_2 << " not found" << std::endl;
+		return;
+	}
 
 	// Authenticate the account's password.
+	// ...First account.
+	if (!storage[user_id_1].authenticate(password_1))
+	{
+		std::cout << "wrong password1" << std::endl;
+		return;
+	}
+	// ...Second account.
+	if (!storage[user_id_2].authenticate(password_2))
+	{
+		std::cout << "wrong password2" << std::endl;
+		return;
+	}
 
-
-	// Second account...
-	// Find the account ID(int) by account name(string).
-
-	// MD5 the password.
-
-	// Authenticate the account's password.
-
+	// Transfer the cash.
+	storage[user_id_1].merge(storage[user_id_2]);
 
 	// Link the accounts' relationships.
+	relationships.link(user_id_1, user_id_2);
 
 	// Remove the entry of the second account in TRIE.
+	lookup_table.remove(storage[user_id_2].get_name());
 
-
-	std::cin >> ID1 >> password1 >> ID2 >> password2 ;
-
-	account* merger = dsa::trie.find(ID1);
-	if (merger == nullptr)
-	{
-		std::cout << "ID " << ID1 << " not found\n";
-		return;
-	}
-
-	account* mergee = dsa::trie.find(ID2);
-	if (merger == nullptr)
-	{
-		std::cout << "ID " << ID1 << " not found\n";
-		return;
-	}
-
-	if (!merger->authenticate(password1.c_str()))
-	{
-		std::cout << "wrong password1\n";
-		return
-	}
-
-	if (!mergee->authenticate(password1.c_str()))
-	{
-		std::cout << "wrong password2\n";
-		return
-	}
-
-	std::cout << "success, " << ID1 << " has " << merger->merge(mergee) << " dollars\n";
+	// Print transfer sucess message.
+	std::cout << "success, " << storage[user_id_1].get_name();
+	std::cout << " has " << storage[user_id_1].get_money() << " dollars" << std::endl;
 }
 
 void dsa::deposit()
