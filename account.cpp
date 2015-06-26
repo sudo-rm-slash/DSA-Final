@@ -1,4 +1,5 @@
 #include "account.hpp"
+#include "md5.hpp"
 
 extern dsa::history history;
 
@@ -7,11 +8,11 @@ namespace dsa
     account::account(std::string& ID, std::string& password): ID(new char[ID.size()+1]), money(0)
     {
         strcpy( this->ID , ID.c_str() );
-        strncpy( this->md5_password , MD5( password ) , MD5_BYTE_LEN );
+        strncpy( this->md5_password , md5( password ) , MD5_BYTE_LEN );
     }
 
     bool account::authenticate(const char* password) {
-        return strcmp( MD5(password), this->md5_password ) == 0;
+        return strcmp( md5(password), this->md5_password ) == 0;
     }
 
     int account::deposit(int dollar)

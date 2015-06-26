@@ -1,5 +1,6 @@
 #include "operations.hpp"
 #include "history.hpp"
+#include "account.hpp"
 
 dsa::disjoint_sets<int> relationships;	// The relationships between accounts.
 dsa::storage<dsa::account> accounts;	// The actual objects, which hold the info of each account.
