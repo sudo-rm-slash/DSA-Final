@@ -47,6 +47,7 @@ void dsa::create()
 	char password[101] = {0};
 	std::cin >> username >> password;
 
+	// Verify whether the account exists or not.
 	int user_id = lookup_table.find(username);
 	if (user_id != -1)
 	{
