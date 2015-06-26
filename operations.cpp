@@ -51,7 +51,7 @@ void dsa::create()
 	
 	auto new_account = dsa::storage.insert( new dsa::account(ID,password) );
 	int  index       = dsa::relationships.make_set( new_account );
-	dsa::trie.insert( ID, index );
+	dsa::lookup_table.insert( ID, index );
 
 	// Generate new account in the storage.
 
