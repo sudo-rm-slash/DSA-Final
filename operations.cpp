@@ -226,7 +226,7 @@ void dsa::transfer()
 		return;
 	}
 	// ...Desposit.
-	accounts[last_login].deposit(value);
+	accounts[user_id].deposit(value);
 
 	// Add an entry in the history and the related user list.
 	transaction_history.insert(last_login, user_id, value);
