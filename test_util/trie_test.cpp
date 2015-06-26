@@ -6,16 +6,18 @@
 #include <cstdlib>
 #include <map>
 #include <utility>
-
+#include <cstring>
 using namespace std;
 
 typedef char* key;
-typedef void* data;
+typedef int data;
 
 #define N_CHAR 62
 #define STR_MAX_LENGTH 100
 #define N_TEST 10000
 #define N_OPERATION 3
+
+using namespace dsa;
 
 enum operations{ INSERT, REMOVE, FIND };
 
@@ -62,7 +64,7 @@ data trie_find( trie&t, key k ){
 
 data std_map_find( map<key,data>& m, key k ){
 	if( m.count( k ) == 0 ){
-		return 0;
+		return -1;
 	}
 	return m.at( k );
 }
@@ -116,8 +118,8 @@ int main(){
 	trie my_trie;
 	
 
-	std_map_insert( std_map, rand_strs[0], (void*) -1 );
-	trie_insert( my_trie, rand_strs[0], (void*) -1 );
+	std_map_insert( std_map, rand_strs[0], -1 );
+	trie_insert( my_trie, rand_strs[0],  -1 );
 
 	char str[N_CHAR];
 	for( unsigned long long int i = 1 ; i < N_TEST ; ++i ){
@@ -127,12 +129,12 @@ int main(){
 		case INSERT:{
 			char* str = rand_strs[index_used++];
 			cout << i << "-th Insert " << str << endl;
-			data result1 = std_map_insert( std_map, str, (void*) i );
-			data result2 = trie_insert( my_trie, str, (void*) i );
+			data result1 = std_map_insert( std_map, str, i );
+			data result2 = trie_insert( my_trie, str,  i );
 			if( result1 != result2 ){				
 				cerr << "Error: " << i << "-th Insert " << str << endl
-				     << "      std = " << (unsigned long long int ) result1 
-				     << " char = " << (unsigned long long int )  result2 << endl;
+				     << "      std = " <<  result1 
+				     << " char = " <<  result2 << endl;
 			}
 			break;
 		}
@@ -145,8 +147,8 @@ int main(){
 			data result2 = trie_remove( my_trie , str );
 			if( result1 != result2 ){				
 				cerr << "Error: " << i << "-th Remove " << str << endl
-				     << "      std = " << (unsigned long long int ) result1
-				     << " char = " << (unsigned long long int )  result2 << endl;
+				     << "      std = " <<  result1
+				     << " char = " <<   result2 << endl;
 			}
 			break;
 		}
@@ -159,8 +161,8 @@ int main(){
 			data result2 = trie_find( my_trie, str );
 			if( result1 != result2 ){				
 				cerr << "Error: " << i << "-th Find " << str << endl
-				     << "      std = " << (unsigned long long int )  result1 
-				     << " char = " << (unsigned long long int ) result2 << endl;
+				     << "      std = " <<   result1 
+				     << " char = " << result2 << endl;
 			}
 			break;
 		}

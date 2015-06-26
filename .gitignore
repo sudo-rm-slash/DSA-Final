@@ -1,3 +1,5 @@
+*~
+
 # Compiled Object files
 *.o
 build/
@@ -13,3 +15,4 @@ bin/*
 
 # Project specific names
 final_project
+
