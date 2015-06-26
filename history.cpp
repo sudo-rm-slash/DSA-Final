@@ -50,52 +50,31 @@ void set_output_stream(const ostream& stream)
 	this->output = stream;
 }
 
-void dsa::history::operator[](const int& associated_id)
+void dsa::history::operator[](const int& history_index)
 {
-	// First round of the search.
-	auto it = std::find_if(std::begin(this->container), std::end(this->container), [](entry e)
-	{
-		if ((e.from == this->base_id) && (e.to == associated_id))
-		{
-			output << "To " << e.value << std::endl;
-			return true;
-		}
-		else if ((e.from == associated_id) && (e.to == this->base_id))
-		{
-			output << "From " << e.value << std::endl;
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	});
+	// Get the raw entry in the container.
+	entry& pulled_history = this->container.data()[history_index];
 
-	// Quit when no record exist, which means the iterator is pointed at the end.
-	if (it == std::end(this->container))
+	// Output the direction string.
+	int query_id;
+	if (pulled_history.from == base_id)
 	{
-		output << "no output\n";
-		return;
+		this->output << "To ";
+		query_id = pulled_history.to;
+	}
+	else if (pulled_history.to == base_id)
+	{
+		this->output << "From ";
+		query_id = pulled_history.from;
+	}
+	else
+	{
+		throw std::invalid_argument("Invalid argument: Queried ID isn't in current transaction entry.");
 	}
 
-	while (it != std::end(this->container))
-	{
-		it = std::find_if(std::next(it), std::end(this->container), [](entry e)
-		{
-			if ((e.from == this->base_id) && (e.to == associated_id))
-			{
-				output << "To " << e.value << std::endl;
-				return true;
-			}
-			else if ((e.from == associated_id) && (e.to == this->base_id))
-			{
-				output << "From " << e.value << std::endl;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		});
-	}
+	// Find the username and print it.
+	this->output << storage[query_id].get_name() << " ";
+
+	// Print the amount of money during this transaction.
+	this->output << pulled_history.value << std::endl;
 }
