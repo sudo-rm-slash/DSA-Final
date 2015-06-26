@@ -21,7 +21,7 @@ namespace dsa
 		 * @param item New item to insert.
 		 * @return The address of the newly inserted item.
 		 */
-		T* insert(const T& item) const;
+		T* insert(const T& item);
 
 		/*
 		 * @brief Subscripting operator overload to easily acquire specific account.

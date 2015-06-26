@@ -20,7 +20,7 @@ void dsa::login()
 	std::cin >> username >> password;
 
 	// Find the account ID(int) by account name(string).
-	last_login = dsa::lookup_table.find(username);
+	last_login = lookup_table.find(username);
 	if (last_login == -1)
 	{
 		std::cout << "ID " << username << " not found" << std::endl;
@@ -197,45 +197,41 @@ void dsa::transfer()
 {
 	std::cout << "transfer()" << std::endl;
 
-	// Find the account ID(int) by account name(string).
-
-	// Check whether the account exists.
-
-	// Deposit and withdraw cash from the respective account.
-
-	// Add an entry in the history.
-
-
+	// Acquire the username(string).
 	char username[101] = {0};
-	int money;
+	int value;
+	std::cin >> username >> value;
 
-	std::cin >> username >> money;
-
-	int user_id = dsa::lookup_table.find(username);
-
+	// Find the account ID(int) by account name(string).
+	int user_id = lookup_table.find(username);
 	if (user_id == -1)
 	{
-		std::cout << "ID " << ID << " not found, ";
-		// TODO
-		// 10 best recommendations
-		//
+		std::cout << "ID " << username << " not found" << std::endl;
+		return;
+	}
+
+	// Deposit and withdraw cash from the respective account.
+	// ...Withdraw.
+	auto status = accounts[last_login].withdraw(value);
+	if (status.first)
+	{
+		std::cout << "success, " << status.second << " dollars left in current account" << std::endl;
 	}
 	else
 	{
-		auto status = storage[user_id].withdraw(money);
+		std::cout << "fail, " << status.second << " dollars only in current account" << std::endl;
+		
+		//
+		// TODO: Recommends 10 best unused ids
+		//
 
-		if (status.first)
-		{
-			storage[last_login].deposit(money);
-			history.insert(last_login , user_id, money);
-			std::cout << "success, " << status.second << " dollars left in current account\n";
-		}
-		else
-		{
-			std::cout << "fail, "    << status.second << " dollars only in current account\n";
-		}
+		return;
 	}
+	// ...Desposit.
+	accounts[last_login].deposit(value);
 
+	// Add an entry in the history.
+	transaction_history.insert(last_login, user_id, value);
 }
 
 void dsa::find()
@@ -267,15 +263,14 @@ void dsa::search()
 	}
 
 	// Set the criteria to last successfully login account(int).
-	history.set_criteria(last_login);
+	transaction_history.set_criteria(last_login);
 
 	// Print out all the history.
 	if( last_login == user_id )
 	{
 		//
-		// TODO
-		// Print out all history entries with identical transferer and transferee 
-		// i.e. From A to A
+		// TODO: Print out all history entries with identical transferer and transferee 
+		// 		 i.e. From A to A
 		//
 	}
 	else if(accounts[last_login].search(accounts[user_id]))

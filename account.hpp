@@ -50,9 +50,18 @@ namespace dsa
          */
         std::pair<bool, int> withdraw(int value);
 
+        /*
+         * @brief Wipe the account, aka, the reset the account to contain no cash.
+         *
+         * @return Return the amount of cash before the wipe.
+         */
+        int wipe_account() const;
+
+        /*
 		int merge(account& mergee);
 		bool search(account& transferee);
-
+        */
+        
         /*
          * @brief Get the username of this account.
          *

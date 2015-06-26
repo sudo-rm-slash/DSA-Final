@@ -107,7 +107,7 @@ void dsa::trie::wildcard_print_node( trie_node* node, char* str ){
 		}		
 	}
 	else if( *str == '\0' ){
-		print_full_id();
+		//print_full_id();
 	}
 	else{
 		traveler tr_child = tr_node.child( *str );

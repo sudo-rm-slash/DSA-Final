@@ -2,6 +2,7 @@
 #include <functional>	// std::function
 #include <iostream>		// std::cin
 #include <stdexcept>	// std::invalid_argument
+#include <sstream>		// std::stringstream
 
 #include "operations.hpp"
 
@@ -9,6 +10,8 @@
  * Definitions
  */
 typedef std::map<const char*, std::function<void()> > functions;
+
+#define OP_BUFFER_SIZE	10
 
 
 /*
@@ -40,21 +43,23 @@ int main()
 	functions_init(lookup_table);
 
 	// Start parsing strings
-	char* operation = new char[10];
+	char* operation = new char[OP_BUFFER_SIZE];
 	while (std::cin >> operation)
 	{
 		// Find the target function.
 		auto search = lookup_table.find(operation);
 		if (search == lookup_table.end())
 		{
-			throw std::invalid_argument("Invalid operation \"" + operation + "\".\n");
+			std::stringstream ss;
+			ss << "Invalid operation \"" << operation << "\"." << std::endl;
+			throw std::invalid_argument(ss.str());
 		}
 
 		// Execute the function.
 		search->second();
 
 		// Reinitialize the operation string buffer.
-		operation = "";
+		std::memset(operation, 0, sizeof(char) * OP_BUFFER_SIZE);
 	}
 
 	return 0;

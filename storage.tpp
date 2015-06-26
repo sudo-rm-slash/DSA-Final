@@ -13,14 +13,14 @@ dsa::storage<T>::~storage()
 }
 
 template <class T>
-T* dsa::storage<T>::insert(const T& item) const
+T* dsa::storage<T>::insert(const T& item)
 {
-	container.push_back(item);
-	return container.data() + container.size() - 1;
+	this->container.push_back(item);
+	return std::addressof(this->container.data()[this->container.size() - 1]);
 }
 
 template <class T>
 T& dsa::storage<T>::operator[](const int& account_index)
 {
-	return container.data()[account_index];
+	return this->container.data()[account_index];
 }
