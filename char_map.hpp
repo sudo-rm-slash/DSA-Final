@@ -6,8 +6,8 @@ class char_map{
 public:
 	int insert( char key, T data );	
 	T find( char key );	
-	void remove( char key );
-	int get_size();
+	T remove( char key );
+	unsigned int get_size();
 
 private:	
 	int size = 0;
@@ -27,6 +27,9 @@ unsigned char_map<T>::key_to_ind( char key ){
 	}
 	if( '0' <= key && key <= '9' ){
 		return key - '0' + 52;
+	}
+	if( key == '\0' ){
+		return 62;
 	}
 }
 
@@ -50,15 +53,24 @@ T char_map<T>::find( char key){
 }
 
 template <class T>
-void char_map<T>::remove( char key ){
+T char_map<T>::remove( char key ){
 	unsigned int index = key_to_ind( key );
 	if( array[index] != 0 ){
+		T tmp = array[index];
 		array[index] = 0;
 		size -= 1;
+		return tmp;
 	}
+
 
 #ifdef _DEBUG
 	//	assert( size >= 0 );
 #endif
 
+}
+
+
+template <class T>
+unsigned int char_map<T>::get_size(){
+	return size;
 }
