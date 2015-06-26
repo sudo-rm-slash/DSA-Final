@@ -106,6 +106,35 @@ void dsa::withdraw()
 void dsa::transfer()
 {
 	std::cout << "transfer()" << std::endl;
+
+	std::string ID; 
+	int money;
+	std::cin >> ID >> money;
+
+	account* transferee = dsa::trie.find( ID.c_str() );
+
+	if( transferee == nullptr )
+	{
+		std::cout << "ID " << ID << " not found, ";
+		// TODO
+		// 10 best recommendations
+	}
+	else    
+	{
+		std::pair<bool,int> status = last_login_account->withdraw( money );
+
+		if( status.first )
+		{
+			transferee->deposit( money );
+			dsa::history.insert( last_login_account->owner , transferee->owner, money );
+			std::cout << "success, " << status.second << " dollars left in current account\n"; 
+		}
+		else
+		{
+			std::cout << "fail, "    << status.second << " dollars only in current account\n"; 
+		}
+	}
+
 }
 
 void dsa::find()
