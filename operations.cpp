@@ -16,7 +16,7 @@ void dsa::login()
 
 	// Authenticate the account's password.
 
-	// Update last succesfully login account.
+	// Update last succesfully login account(int).
 
 
 	std::string ID[100], password[100];
@@ -135,7 +135,7 @@ void dsa::deposit()
 {
 	std::cout << "deposit()" << std::endl;
 
-	// Deposit the money to the last succesfully login account.
+	// Deposit the money to the last succesfully login account(int).
 	
 
 	int money;
@@ -147,7 +147,7 @@ void dsa::withdraw()
 {
 	std::cout << "withdraw()" << std::endl;
 
-	// Withdraw the money from the last succesfully login account.
+	// Withdraw the money from the last succesfully login account(int).
 
 
 	int money;
@@ -166,6 +166,15 @@ void dsa::withdraw()
 void dsa::transfer()
 {
 	std::cout << "transfer()" << std::endl;
+
+	// Find the account ID(int) by account name(string).
+
+	// Check whether the account exists.
+
+	// Deposit and withdraw cash from the respective account.
+
+	// Add an entry in the history.
+
 
 	std::string ID;
 	int money;
@@ -201,6 +210,9 @@ void dsa::find()
 {
 	std::cout << "find()" << std::endl;
 
+	// Find the matches ID by TRIE.
+
+
 	int id;
 	std::cin >> id;
 	std::cout << "...Parent of " << id << " is ";
@@ -211,6 +223,13 @@ void dsa::find()
 void dsa::search()
 {
 	std::cout << "search()" << std::endl;
+
+	// Find the account ID(int) by account name(string).
+
+	// Set the criteria to last successfully login account(int). 
+
+	// Print out all the history.
+	
 
 	std::string ID;
 	std::cin >> ID;
