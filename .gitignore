@@ -1,4 +1,15 @@
-*~
-bin
+# Compiled Object files
+*.o
+build/
+build/*
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Executables
+bin/
 bin/*
-deprecated
+
+# Project specific names
+final_project

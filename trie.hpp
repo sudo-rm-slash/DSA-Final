@@ -1,24 +1,42 @@
-#include <string.h>
-#include <stdlib.h>
 #include "char_map.hpp"
 
-typedef unsigned int uint;
-typedef void account;
+namespace dsa
+{
+	class trie
+	{
+	private:
+		struct trie_node
+		{
+			char_map<trie_node*> children;
+			account* ptr_account = nullptr;
+		};
 
-//trie:
+		trie_node root;
 
-class trie{
+	public:
+		/*
+		 * @brief EXPLANATION
+		 * 
+		 * @param str EXPLANATION
+		 * @return EXPLANATION
+		 */
+		account* find(char* str);
 
-public:
-	
-	struct trie_node{
-		char_map<trie_node*>children;
-		account* ptr_account = nullptr;
-	};		
-	account* find( char* str );
-	void insert( char* str, account* ptr_account );
-	void remove( char* str );
+		/*
+		 * @brief EXPLANATION
+		 * 
+		 * @param str EXPLANATION
+		 * @param ptr_account EXPLANATION
+		 * @return Void.
+		 */
+		void insert(char* str, account* ptr_account);
 
-private:       
-	trie_node root;       
-};
+		/*
+		 * @brief EXPLANATION
+		 * 
+		 * @param str EXPLANATION
+		 * @return Void
+		 */
+		void remove(char* str);
+	};
+}
