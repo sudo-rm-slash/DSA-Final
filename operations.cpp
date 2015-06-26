@@ -2,13 +2,13 @@
 #include "history.hpp"
 #include "account.hpp"
 
-dsa::disjoint_sets<int> relationships;	// The relationships between accounts.
-dsa::storage<dsa::account> accounts;	// The actual objects, which hold the info of each account.
+dsa::disjoint_sets<dsa::account*> relationships;	// The relationships between accounts.
+dsa::storage<dsa::account> accounts;				// The actual objects, which hold the info of each account.
 
-dsa::trie lookup_table;					// The TRIE structure that holds the entire search operation.
+dsa::trie lookup_table;								// The TRIE structure that holds the entire search operation.
 
-dsa::history transaction_history;		// The transaction history between accounts.
-int last_login;							// The ID(int) of the last successfully login account(string).
+dsa::history transaction_history;					// The transaction history between accounts.
+int last_login;										// The ID(int) of the last successfully login account(string).
 
 void dsa::login()
 {
@@ -28,7 +28,7 @@ void dsa::login()
 	}
 
 	// Authenticate the account's password.
-	if (!storage[last_login].authenticate(password))
+	if (!accounts[last_login].authenticate(password))
 	{
 		std::cout << "wrong password" << std::endl;
 		return;
@@ -42,31 +42,29 @@ void dsa::create()
 {
 	std::cout << "create()" << std::endl;
 
-	std::string ID, password;
-	std::cin >> ID >> password;
-
-	std::cout << "ID " << ID << " exists, ";
-	// TODO
-	// Recommends 10 best unused ids
-	
-	auto new_account = dsa::storage.insert( new dsa::account(ID,password) );
-	int  index       = dsa::relationships.make_set( new_account );
-	dsa::trie.insert( ID, index );
-
-	// Generate new account in the storage.
-
-	// Acqurie the pointer to account in the storage.
-
-	// Add the pointer to disjoint set, and acquire the generated ID(int).
-
-	// Store the generated ID(int) along with the account name(string) in TRIE.
+	// Acquire the username and password.
+	char username[101] = {0};
+	char password[101] = {0};
+	std::cin >> username >> password;
 
 	//
+	// TODO: Recommends 10 best unused ids
+	//
 
+	// Generate new account in the storage.
+	dsa::account new_account(username, password);
 
-	int input;
-	std::cin >> input;
-	std::cout << "...Input=" << input << ", " << "ID=" << relationships.make_set(input) << std::endl;
+	// Acqurie the pointer to account in the storage.
+	dsa::account* new_account_ptr = accounts.insert(new_account);
+
+	// Add the pointer to disjoint set, and acquire the generated ID(int).
+	int generated_id = relationships.make_set(new_account_ptr);
+
+	// Store the generated ID(int) along with the account name(string) in TRIE.
+	lookup_table.insert(username, generated_id);
+
+	// Print create success message.
+	std::cout << "success" << std::endl;
 }
 
 void dsa::del()
@@ -114,29 +112,29 @@ void dsa::merge()
 
 	// Authenticate the account's password.
 	// ...First account.
-	if (!storage[user_id_1].authenticate(password_1))
+	if (!accounts[user_id_1].authenticate(password_1))
 	{
 		std::cout << "wrong password1" << std::endl;
 		return;
 	}
 	// ...Second account.
-	if (!storage[user_id_2].authenticate(password_2))
+	if (!accounts[user_id_2].authenticate(password_2))
 	{
 		std::cout << "wrong password2" << std::endl;
 		return;
 	}
 
 	// Transfer the cash.
-	storage[user_id_1].merge(storage[user_id_2]);
+	accounts[user_id_1].merge(accounts[user_id_2]);
 
 	// Link the accounts' relationships.
 	relationships.link(user_id_1, user_id_2);
 
 	// Remove the entry of the second account in TRIE.
-	lookup_table.remove(storage[user_id_2].get_name());
+	lookup_table.remove(accounts[user_id_2].get_name());
 
 	// Print transfer sucess message.
-	std::cout << "success, " << storage[user_id_1].get_name() << " has " << storage[user_id_1].get_money() << " dollars" << std::endl;
+	std::cout << "success, " << accounts[user_id_1].get_name() << " has " << accounts[user_id_1].get_money() << " dollars" << std::endl;
 }
 
 void dsa::deposit()
@@ -148,7 +146,7 @@ void dsa::deposit()
 	std::cin >> money;
 
 	// Deposit the money to the last succesfully login account(int).
-	std::cout << "success, " << storage[last_login].deposit(money) << " dollars in current account" << std::endl;
+	std::cout << "success, " << accounts[last_login].deposit(money) << " dollars in current account" << std::endl;
 }
 
 void dsa::withdraw()
@@ -160,7 +158,7 @@ void dsa::withdraw()
 	std::cin >> money;
 
 	// Withdraw the money from the last succesfully login account(int).
-	auto status = storage[last_login].withdraw(money);
+	auto status = accounts[last_login].withdraw(money);
 	if (status.first)
 	{
 		std::cout << "success, " << status.second << " dollars left in current account" << std::endl;
