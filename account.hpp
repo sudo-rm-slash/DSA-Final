@@ -19,14 +19,30 @@ namespace dsa
 
         int money;            // Amount of cash stored in this account.
 
-		std::vector<int> transfer_history;    // A list of IDs(int), showing which account has interactions with.
+		std::vector<int> related_users;    // A list of IDs(int), showing which account has interactions with.
 	
     public:
-		account(const char* ID, const char* password);
+		account(const char* username, const char* password);
+        virtual ~account();
 
-		std::pair<bool, int> withdraw(int dollar);
-		bool  authenticate(const char* password);
-		int   deposit(int dollar);
+        /*
+         * @brief Authenticate a non-encoded password with the one stored here.
+         *
+         * @param password A non-encoded password to compare with.
+         * @return Indicate whether the password is correct or not.
+         */
+        bool  authenticate(const char* password);
+		  
+        /*
+         * @brief Deposit money to this account.
+         *
+         * @param value The amount of cash to deposit in this account.
+         * @return The new statistic of the cash in this account.
+         */
+		int   deposit(int value);
+
+        std::pair<bool, int> withdraw(int dollar);
+
 		int   merge(account& mergee);
 		bool  search(account& transferee);
 		char* get_name();
