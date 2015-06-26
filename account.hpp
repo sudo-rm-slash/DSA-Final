@@ -22,7 +22,6 @@ namespace dsa
 
 	public:
 		account(const char* ID, const char* password);
-		account(const char* ID, const char* password);
 
 		std::pair<bool, int> withdraw(int dollar);
 		bool  authenticate(const char* password);
