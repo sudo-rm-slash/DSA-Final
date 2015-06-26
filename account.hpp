@@ -19,7 +19,7 @@ namespace dsa
 
         int money;            // Amount of cash stored in this account.
 
-		std::vector<int> related_users;    // A list of IDs(int), showing which account has interactions with.
+		std::vector<int> related_history;    // A list of indices, showing which history entry it has participated in.
 	
     public:
 		account(const char* username, const char* password);
@@ -72,25 +72,25 @@ namespace dsa
 		int get_money() const;
 
         /*
-         * @brief Get the related user with this account.
+         * @brief Get the related transaction history with this account.
          *
-         * @return Return the related users(int) in vector.
+         * @return Return the related history indices in vector.
          */
-        std::vector<int>& get_related_users();
+        std::vector<int>& get_related_history();
 
         /*
-         * @brief Add a related user with this account.
+         * @brief Add a related history with this account.
          *
          * @return Voids.
          */
-         void add_related_users(const int& user_index);
+         void add_related_history(const int& user_index);
 
         /*
-         * @brief Set the related user with this account using a pre-defined vector.
+         * @brief Set the related history with this account using a pre-defined vector.
          *
          * @return Void.
          */
-         void set_related_users(std::vector<int>&);
+         void set_related_history(std::vector<int>&);
 	};
 }
 

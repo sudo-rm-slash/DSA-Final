@@ -149,11 +149,11 @@ void dsa::merge()
 	// ...Transfer the money to the root account.
 	accounts[user_id_1].deposit(cash);
 	// ...Merge the related user list.
-	std::vector<int> combined(accounts[user_id_1].get_related_users().size() + accounts[user_id_2].get_related_users().size());
-	std::set_union(std::begin(accounts[user_id_1].get_related_users()), std::end(accounts[user_id_1].get_related_users()),
-	               std::begin(accounts[user_id_2].get_related_users()), std::end(accounts[user_id_2].get_related_users()),
+	std::vector<int> combined(accounts[user_id_1].get_related_history().size() + accounts[user_id_2].get_related_history().size());
+	std::set_union(std::begin(accounts[user_id_1].get_related_history()), std::end(accounts[user_id_1].get_related_history()),
+	               std::begin(accounts[user_id_2].get_related_history()), std::end(accounts[user_id_2].get_related_history()),
 	               std::back_inserter(combined));
-	accounts[user_id_1].set_related_users(accounts[user_id_2].get_related_users());
+	accounts[user_id_1].set_related_history(accounts[user_id_2].get_related_history());
 
 	// Link the accounts' relationships.
 	relationships.link(user_id_1, user_id_2);
@@ -228,10 +228,10 @@ void dsa::transfer()
 	// ...Desposit.
 	accounts[user_id].deposit(value);
 
-	// Add an entry in the history and the related user list.
-	transaction_history.insert(last_login, user_id, value);
-	accounts[last_login].add_related_users(user_id);
-	accounts[user_id].add_related_users(last_login);
+	// Add an entry in the history and record it to the list.
+	int index = transaction_history.insert(last_login, user_id, value);
+	accounts[last_login].add_related_history(index);
+	accounts[user_id].add_related_history(index);
 }
 
 void dsa::find()
@@ -264,6 +264,8 @@ void dsa::search()
 	// Print out all the history.
 	if (last_login == user_id)
 	{
+		std::cerr << "...transfer to itself." << std::endl;
+
 		//
 		// TODO: Print out all history entries with identical transferer and transferee.
 		// 		 i.e. From A to A
@@ -271,11 +273,17 @@ void dsa::search()
 	}
 	else
 	{
+		std::cerr << "...start finding intersection." << std::endl;
+
 		// Find the intersected items in the list, which means it's a pair of transaction history.
 		std::vector<int> common;
-		std::set_intersection(std::begin(accounts[last_login].get_related_users()), std::end(accounts[last_login].get_related_users()),
-		                      std::begin(accounts[user_id].get_related_users()), std::end(accounts[user_id].get_related_users()),
+		std::vector<int> list_1 = accounts[last_login].get_related_history();
+		std::vector<int> list_2 = accounts[user_id].get_related_history();
+		std::set_intersection(std::begin(list_1), std::end(list_1),
+		                      std::begin(list_2), std::end(list_2),
 		                      std::back_inserter(common));
+
+		std::cerr << "...list_1.size()=" << list_1.size() << ", list_2.size()=" << list_2.size() << std::endl;
 
 		if (common.empty())
 		{

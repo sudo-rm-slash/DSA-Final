@@ -24,7 +24,7 @@ dsa::account::~account()
 	this->money = 0;
 
 	// Wipe the ID list.
-	this->related_users.clear();
+	this->related_history.clear();
 }
 
 bool dsa::account::authenticate(const char* password) const
@@ -75,17 +75,18 @@ int dsa::account::get_money() const
 	return money;
 }
 
-std::vector<int>& dsa::account::get_related_users()
+std::vector<int>& dsa::account::get_related_history()
 {
-	return related_users;
+	return related_history;
 }
 
-void dsa::account::add_related_users(const int& user_index)
+void dsa::account::add_related_history(const int& history_index)
 {
-	this->related_users.push_back(user_index);
+	std::cerr << "...add new related history=" << history_index << std::endl;
+	this->related_history.push_back(history_index);
 }
 
-void dsa::account::set_related_users(std::vector<int>& new_vector)
+void dsa::account::set_related_history(std::vector<int>& new_vector)
 {
-	this->related_users = new_vector;
+	this->related_history = new_vector;
 }
