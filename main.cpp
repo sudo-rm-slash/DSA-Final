@@ -58,7 +58,7 @@ int main()
 	// Start parsing strings
 	while (std::cin >> operation)
 	{
-		std::cerr << "new instruction=" << operation << std::endl;
+		std::cerr << ">>> \"" << operation << "\" START <<<" << std::endl;
 
 		// Find the target function.
 		auto search = function_lookup_table.find(operation);
@@ -75,7 +75,7 @@ int main()
 		// Reinitialize the operation string buffer.
 		std::memset(operation, 0, sizeof(char) * OP_BUFFER_SIZE);
 
-		std::cerr << "instruction complete." << std::endl;
+		std::cerr << ">>> END <<<" << std::endl << std::endl;
 	}
 
 	delete operation;

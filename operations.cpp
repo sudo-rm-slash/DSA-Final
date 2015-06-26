@@ -12,8 +12,6 @@ int last_login;										// The ID(int) of the last successfully login account(s
 
 void dsa::login()
 {
-	std::cout << "login()" << std::endl;
-
 	// Acquire the username and password.
 	char username[101] = {0};
 	char password[101] = {0};
@@ -42,8 +40,6 @@ void dsa::login()
 
 void dsa::create()
 {
-	std::cout << "create()" << std::endl;
-
 	// Acquire the username and password.
 	char username[101] = {0};
 	char password[101] = {0};
@@ -79,8 +75,6 @@ void dsa::create()
 
 void dsa::del()
 {
-	std::cout << "delete()" << std::endl;
-
 	// Acquire the username and password.
 	char username[101] = {0};
 	char password[101] = {0};
@@ -110,8 +104,6 @@ void dsa::del()
 
 void dsa::merge()
 {
-	std::cout << "merge()" << std::endl;
-
 	// Acquire the variables.
 	char username_1[101] = {0};
 	char password_1[101] = {0};
@@ -175,8 +167,6 @@ void dsa::merge()
 
 void dsa::deposit()
 {
-	std::cout << "deposit()" << std::endl;
-
 	// Acquire the variable.
 	int money;
 	std::cin >> money;
@@ -187,8 +177,6 @@ void dsa::deposit()
 
 void dsa::withdraw()
 {
-	std::cout << "withdraw()" << std::endl;
-
 	// Acquire the variable.
 	int money;
 	std::cin >> money;
@@ -207,8 +195,6 @@ void dsa::withdraw()
 
 void dsa::transfer()
 {
-	std::cout << "transfer()" << std::endl;
-
 	// Acquire the username(string).
 	char username[101] = {0};
 	int value;
@@ -250,8 +236,6 @@ void dsa::transfer()
 
 void dsa::find()
 {
-	std::cout << "find()" << std::endl;
-
 	// Acquire the username(string).
 	char username[101] = {0};
 	std::cin >> username;
@@ -262,8 +246,6 @@ void dsa::find()
 
 void dsa::search()
 {
-	std::cout << "search()" << std::endl;
-
 	// Acquire the username(string).
 	char username[101] = {0};
 	std::cin >> username;
