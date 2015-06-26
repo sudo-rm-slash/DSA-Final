@@ -184,13 +184,14 @@ void dsa::transfer()
 	// Add an entry in the history.
 
 
-	std::string ID;
+	char username[101] = {0};
 	int money;
-	std::cin >> ID >> money;
 
-	account* transferee = dsa::trie.find(ID.c_str());
+	std::cin >> username >> money;
 
-	if (transferee == nullptr)
+	int user_id = dsa::lookup_table.find(ID);
+
+	if (user_id == -1)
 	{
 		std::cout << "ID " << ID << " not found, ";
 		// TODO
@@ -198,12 +199,12 @@ void dsa::transfer()
 	}
 	else
 	{
-		std::pair<bool, int> status = last_login_account->withdraw(money);
+		auto status = storage[user_id].withdraw(money);
 
 		if (status.first)
 		{
-			transferee->deposit(money);
-			dsa::history.insert(last_login_account->owner , transferee->owner, money);
+			storage[last_login].deposit(money);
+			dsa::history.insert(last_login , user_id, money);
 			std::cout << "success, " << status.second << " dollars left in current account\n";
 		}
 		else
