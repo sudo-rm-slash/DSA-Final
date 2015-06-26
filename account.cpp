@@ -30,7 +30,7 @@ namespace dsa
         return std::pair<bool,int>( true, this->money );
     }
 
-	int merge(account* mergee)
+	int merge(account& mergee)
 	{
 		std::vector<unsigned int> history_union( max(history.size(),transferee->history );
 		auto history_union_end = std::set_union (
