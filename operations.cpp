@@ -8,14 +8,14 @@ void dsa::login()
 {
 	std::cout << "login()" << std::endl;
 
-    std::string ID[100], password[100];
+	std::string ID[100], password[100];
 
-    std::cin >> ID >> password;
+	std::cin >> ID >> password;
 
     // return a pointer to the account object
-    dsa::account* unauthenticated_account = dsa::trie.find(ID.c_str());
+	dsa::account* unauthenticated_account = dsa::trie.find(ID.c_str());
 
-    if( last_login_account == nullptr )
+	if( last_login_account == nullptr )
         printf("ID %s not found\n", ID); 
     else if( !unauthenticated_account->authenticate( password.c_str() ) )
         printf("wrong passowrd\n");
@@ -98,4 +98,10 @@ void dsa::find()
 void dsa::search()
 {
 	std::cout << "search()" << std::endl;
+
+	std::string ID;
+
+	std::cin >> ID;
+	if( ! last_login_account->transfer_history_lookup( ID.c_str() )
+		std::cout << "no record\n";
 }

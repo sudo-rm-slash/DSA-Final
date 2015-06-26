@@ -29,4 +29,9 @@ namespace dsa
         return std::pair<bool,int>( true, money );
     }
 
+	int transfer_history_lookup( const char* ID )
+	{
+		accout* transferee = trie.find( ID );
+
+	}
 };
