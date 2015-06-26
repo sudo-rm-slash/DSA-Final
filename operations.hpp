@@ -8,22 +8,67 @@
 // TODO: Add function descriptions.
 namespace dsa
 {
+	/*
+	 * @brief A BRIEF INTRODUCTION TO THE FUNCTION
+	 *
+	 * @return Void.
+	 */
 	void login();
 
+	/*
+	 * @brief A BRIEF INTRODUCTION TO THE FUNCTION
+	 *
+	 * @return Void.
+	 */
 	void create();
 
+	/*
+	 * @brief A BRIEF INTRODUCTION TO THE FUNCTION
+	 *
+	 * @return Void.
+	 */
 	void del();
 
+	/*
+	 * @brief A BRIEF INTRODUCTION TO THE FUNCTION
+	 *
+	 * @return Void.
+	 */
 	void merge();
 
+	/*
+	 * @brief A BRIEF INTRODUCTION TO THE FUNCTION
+	 *
+	 * @return Void.
+	 */
 	void deposit();
 
+	/*
+	 * @brief A BRIEF INTRODUCTION TO THE FUNCTION
+	 *
+	 * @return Void.
+	 */
 	void withdraw();
 
+	/*
+	 * @brief A BRIEF INTRODUCTION TO THE FUNCTION
+	 *
+	 * @return Void.
+	 */
 	void transfer();
 
+	/*
+	 * @brief A BRIEF INTRODUCTION TO THE FUNCTION
+	 *
+	 * @return Void.
+	 */
 	void find();
 
+	/*
+	 * @brief A BRIEF INTRODUCTION TO THE FUNCTION
+	 *
+	 * @return Void.
+	 */
 	void search();
 }
 
