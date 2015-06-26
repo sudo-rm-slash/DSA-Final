@@ -73,7 +73,8 @@ void dsa::history::operator[](const int& history_index)
 	}
 
 	// Find the username and print it.
-	this->output << storage[query_id].get_name() << " ";
+	int user_id = relationships.find_root[query_id];
+	this->output << storage[user_id].get_name() << " ";
 
 	// Print the amount of money during this transaction.
 	this->output << pulled_history.value << std::endl;
