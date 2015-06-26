@@ -1,28 +1,43 @@
 #include "operations.hpp"
 #include "history.hpp"
 
-dsa::disjoint_sets<int> relationships;
-dsa::history            history;
-dsa::storage            storage;
-dsa::account*           last_login_account;
+dsa::disjoint_sets<int> relationships;	// The relationships between accounts.
+dsa::storage<dsa::account> accounts;	// The actual objects, which hold the info of each account.
+
+dsa::trie lookup_table;					// The TRIE structure that holds the entire search operation.
+
+dsa::history transaction_history;		// The transaction history between accounts.
+int last_login;							// The ID(int) of the last successfully login account(string).
 
 void dsa::login()
 {
 	std::cout << "login()" << std::endl;
 
-	std::string ID, password;
+	// Acquire the username and password.
+	char username[101] = {0};
+	char password[101] = {0};
+	std::cin >> username >> password;
 
-	std::cin >> ID >> password;
+	// Find the account ID(int) by account name(string).
+	last_login = dsa::trie.find(username);
+	if (last_login == -1)
+	{
+		std::cout << "ID " << username << " not found" << std::endl;
+		return;
+	}
 
-    // return a pointer to the account object
-	dsa::account* unauthenticated_account = dsa::trie.find(ID.c_str());
+	// MD5 the password.
+	char md5[33] = md5(password);
 
-	if( unauthenticated_account == nullptr )
-        printf("ID %s not found\n", ID); 
-    else if( !unauthenticated_account->authenticate( password.c_str() ) )
-        printf("wrong passowrd\n");
-    else
-        printf("sucess\n");
+	// Authenticate the account's password.
+	if (!storage[last_login].authenticate(md5))
+	{
+		std::cout << "wrong password" << std::endl;
+		return;
+	}
+
+	// Print login success message.
+	std::cout << "success" << std::endl;
 }
 
 void dsa::create()
@@ -44,102 +59,159 @@ void dsa::create()
 
 	// Acqurie the pointer to account in the storage.
 
-	// Add the pointer to disjoint set, and acquire the generated ID.
+	// Add the pointer to disjoint set, and acquire the generated ID(int).
 
-	// Store the generated ID along with the account string in TRIE.
+	// Store the generated ID(int) along with the account name(string) in TRIE.
+
+	//
+
+
+	int input;
+	std::cin >> input;
+	std::cout << "...Input=" << input << ", ";
+	std::cout << "ID=" << relationships.make_set(input) << std::endl;
 }
 
 void dsa::del()
 {
 	std::cout << "delete()" << std::endl;
+
+	// Find the account ID(int) by account name(string).
+
+	// MD5 the password.
+
+	// Authenticate the account's password.
+
+	// Remove the entry in TRIE.
+
 }
 
 void dsa::merge()
 {
 	std::cout << "merge()" << std::endl;
 
+	// First account...
+	// Find the account ID(int) by account name(string).
+
+	// MD5 the password.
+
+	// Authenticate the account's password.
+
+
+	// Second account...
+	// Find the account ID(int) by account name(string).
+
+	// MD5 the password.
+
+	// Authenticate the account's password.
+
+
+	// Link the accounts' relationships.
+
+	// Remove the entry of the second account in TRIE.
+
+
 	std::cin >> ID1 >> password1 >> ID2 >> password2 ;
 
-	account* merger = dsa::trie.find( ID1 );
-	if( merger == nullptr )
+	account* merger = dsa::trie.find(ID1);
+	if (merger == nullptr)
 	{
 		std::cout << "ID " << ID1 << " not found\n";
 		return;
 	}
 
-	account* mergee = dsa::trie.find( ID2 );
-	if( merger == nullptr )
+	account* mergee = dsa::trie.find(ID2);
+	if (merger == nullptr)
 	{
 		std::cout << "ID " << ID1 << " not found\n";
 		return;
 	}
 
-    if( !merger->authenticate( password1.c_str() ) )
+	if (!merger->authenticate(password1.c_str()))
 	{
 		std::cout << "wrong password1\n";
-		return 
+		return
 	}
 
-    if( !mergee->authenticate( password1.c_str() ) )
+	if (!mergee->authenticate(password1.c_str()))
 	{
 		std::cout << "wrong password2\n";
-		return 
+		return
 	}
 
-	std::cout << "success, " << ID1 << " has " << merger->merge( mergee ) << " dollars\n";
+	std::cout << "success, " << ID1 << " has " << merger->merge(mergee) << " dollars\n";
 }
 
 void dsa::deposit()
 {
 	std::cout << "deposit()" << std::endl;
 
-    int money;
-    std::cin >> money;
-    std::cout << "success, " << last_login_account->deposit( money ) << " dollars in current account\n" ;
+	// Deposit the money to the last succesfully login account(int).
+
+
+	int money;
+	std::cin >> money;
+	std::cout << "success, " << last_login_account->deposit(money) << " dollars in current account\n" ;
 }
 
 void dsa::withdraw()
 {
 	std::cout << "withdraw()" << std::endl;
 
-    int money;
-    std::cin >> money;
-    std::pair<bool,int> status = last_login_account->withdraw( money );
-    if( status.first )
-        std::cout << "success, " << status.second << " dollars left in current account\n";
-    else
-        std::cout << "fail, "    << status.second << " dollars only in current account\n";
+	// Withdraw the money from the last succesfully login account(int).
+
+
+	int money;
+	std::cin >> money;
+	std::pair<bool, int> status = last_login_account->withdraw(money);
+	if (status.first)
+	{
+		std::cout << "success, " << status.second << " dollars left in current account\n";
+	}
+	else
+	{
+		std::cout << "fail, "    << status.second << " dollars only in current account\n";
+	}
 }
 
 void dsa::transfer()
 {
 	std::cout << "transfer()" << std::endl;
 
-	std::string ID; 
+	// Find the account ID(int) by account name(string).
+
+	// Check whether the account exists.
+
+	// Deposit and withdraw cash from the respective account.
+
+	// Add an entry in the history.
+
+
+	std::string ID;
 	int money;
 	std::cin >> ID >> money;
 
-	account* transferee = dsa::trie.find( ID.c_str() );
+	account* transferee = dsa::trie.find(ID.c_str());
 
-	if( transferee == nullptr )
+	if (transferee == nullptr)
 	{
 		std::cout << "ID " << ID << " not found, ";
 		// TODO
 		// 10 best recommendations
 	}
-	else    
+	else
 	{
-		std::pair<bool,int> status = last_login_account->withdraw( money );
+		std::pair<bool, int> status = last_login_account->withdraw(money);
 
-		if( status.first )
+		if (status.first)
 		{
-			transferee->deposit( money );
-			dsa::history.insert( last_login_account->owner , transferee->owner, money );
-			std::cout << "success, " << status.second << " dollars left in current account\n"; 
+			transferee->deposit(money);
+			dsa::history.insert(last_login_account->owner , transferee->owner, money);
+			std::cout << "success, " << status.second << " dollars left in current account\n";
 		}
 		else
 		{
-			std::cout << "fail, "    << status.second << " dollars only in current account\n"; 
+			std::cout << "fail, "    << status.second << " dollars only in current account\n";
 		}
 	}
 
@@ -148,6 +220,9 @@ void dsa::transfer()
 void dsa::find()
 {
 	std::cout << "find()" << std::endl;
+
+	// Find the matches ID by TRIE.
+
 
 	int id;
 	std::cin >> id;
@@ -160,12 +235,23 @@ void dsa::search()
 {
 	std::cout << "search()" << std::endl;
 
+	// Find the account ID(int) by account name(string).
+
+	// Set the criteria to last successfully login account(int).
+
+	// Print out all the history.
+
+
 	std::string ID;
 	std::cin >> ID;
 
-	account* transferee = dsa::trie.find( ID.c_str() );
-	if( transferee == nullptr )
+	account* transferee = dsa::trie.find(ID.c_str());
+	if (transferee == nullptr)
+	{
 		std::cout << "ID " << ID << " not found\n";
-	else if( !last_login_account->search( transferee ) )
+	}
+	else if (!last_login_account->search(transferee))
+	{
 		std::cout << "no record\n";
+	}
 }

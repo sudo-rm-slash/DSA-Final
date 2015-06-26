@@ -72,6 +72,16 @@ namespace dsa
 		 * @return Void.
 		 */
 		void operator[](const int& associated_id);
+
+		/*
+		 * DEPRECATED
+		 *
+		 * @brief Print personal transfer list. 
+		 *
+		 * @param list The list that contains the IDs transferred with.
+		 * @return Whether there are records printed or not.
+		 */
+		bool print_personal_record(std::vector<int>& list);
 	};
 }
 

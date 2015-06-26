@@ -1,6 +1,5 @@
 #include <map>			// std::map
 #include <functional>	// std::function
-#include <string>		// std::string
 #include <iostream>		// std::cin
 #include <stdexcept>	// std::invalid_argument
 
@@ -9,7 +8,7 @@
 /*
  * Definitions
  */
-typedef std::map<std::string, std::function<void()> > functions;
+typedef std::map<const char*, std::function<void()> > functions;
 
 
 /*
@@ -17,7 +16,7 @@ typedef std::map<std::string, std::function<void()> > functions;
  */
 void functions_init(functions &lookup_table)
 {
-#define INSERT(NAME, FUNC) lookup_table.insert(std::pair<std::string, std::function<void()> >(NAME, FUNC))
+#define INSERT(NAME, FUNC) lookup_table.insert(std::pair<const char*, std::function<void()> >(NAME, FUNC))
 
 	INSERT("login", 	dsa::login);
 	INSERT("create", 	dsa::create);
