@@ -1,19 +1,13 @@
-#include <algorithm>
-#include <cstring>
-
-#include "md5.hpp"
 #include "account.hpp"
 
 namespace dsa 
 {
-
     account::account(const char* password)
     {
         strncpy( this->md5_password , MD5( password ) , MD5_BYTE );
     }
 
-    bool account::authenticate(const char* password)
-    {
+    bool account::authenticate(const char* password) {
         return strcmp( MD5(password), this->md5_password ) == 0;
     }
 
@@ -83,5 +77,4 @@ namespace dsa
 			}
 		}
 	}
-
 };

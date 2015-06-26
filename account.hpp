@@ -1,42 +1,36 @@
-#ifndef __ACCOUNT_H_
-#define __ACCOUNT_H_ 
+#ifndef __ACCOUNT_HPP__
+#define __ACCOUNT_HPP__
 
-#define MD5_BYTE 16 
-// fixed length 16 byte ( 128 bits )
+#define MD5_BYTE 16     // Fixed length 16 byte (128 bits)
 
-namespace dsa 
+#include <utility>      // std::pair
+#include <cstring>      // std::strncpy, std::strcmp
+
+#include "md5.hpp"      // MD5
+
+namespace dsa
 {
+	class account
+	{
+	private:
+		int money;
+		const char md5_password[ MD5_BYTE ];
+		std::vector<unsigned int> transfer_history;
 
-    class account
-    {
-
-    public:
-
+	public:
 		account():money(0){}
+		account(const char* password);
 
-        account(const char* password);
-
-        bool authenticate(const char* password);
-
-        int deposit(int dollar);
-
-        std::pair<bool,int> withdraw(int dollar);
-
+		bool authenticate(const char* password);
+		int deposit(int dollar);
+		std::pair<bool, int> withdraw(int dollar);
 		int merge(account* mergee);
-
 		int search(account* transferee);
 
 
-    private:
+	};
 
 
-        int money;
-        char md5_password[ MD5_BYTE ]; 
-		std::vector<unsigned int> history;
-
-    };
-
-
-};
+}
 
 #endif
