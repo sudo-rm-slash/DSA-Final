@@ -8,19 +8,20 @@
 #include <vector>       // std::vector
 
 #include "md5.hpp"      // md5
-#include "history.hpp"  // dsa::history
 
 namespace dsa
 {
 	class account
 	{
 	private:
-		int money;
-		char* ID;
-		char md5_password[ MD5_BYTE_LEN ];
-		std::vector<unsigned int> transfer_history; // vector of transfer history 
+		char* username;       // Username(string).
+        char* password;       // MD5 encoded password.
 
-	public:
+        int money;            // Amount of cash stored in this account.
+
+		std::vector<int> transfer_history;    // A list of IDs(int), showing which account has interactions with.
+	
+    public:
 		account(const char* ID, const char* password);
 
 		std::pair<bool, int> withdraw(int dollar);

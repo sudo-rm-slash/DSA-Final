@@ -1,5 +1,8 @@
 #include "history.hpp"
 
+extern dsa::disjoint_sets<dsa::account*> relationships;
+extern dsa::storage<dsa::account> accounts;
+
 dsa::history::history()
 {
 	// Initialize the vector.
@@ -7,9 +10,6 @@ dsa::history::history()
 
 	// Reset the base ID flag.
 	this->base_id = -1;
-
-	// Set the default output method as std::cout.
-	this->output = std::cout;
 }
 
 dsa::history::~history()
@@ -40,12 +40,12 @@ int dsa::history::insert(const int& from_id, const int& to_id, unsigned int valu
 	return index;
 }
 
-void set_criteria(const int& base_id)
+void dsa::history::set_criteria(const int& base_id)
 {
 	this->base_id = base_id;
 }
 
-void set_output_stream(const ostream& stream)
+void dsa::history::set_output_stream(const std::ostream& stream)
 {
 	this->output = stream;
 }
@@ -74,7 +74,7 @@ void dsa::history::operator[](const int& history_index)
 
 	// Find the username and print it.
 	int user_id = relationships.find_root[query_id];
-	this->output << storage[user_id].get_name() << " ";
+	this->output << accounts[user_id].get_name() << " ";
 
 	// Print the amount of money during this transaction.
 	this->output << pulled_history.value << std::endl;

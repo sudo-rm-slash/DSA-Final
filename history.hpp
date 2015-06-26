@@ -1,11 +1,13 @@
 #ifndef __HISTORY_HPP__
 #define __HISTORY_HPP__
 
-#include <vector>		// std::vector
-#include <algorithm>	// std::find_if
-#include <ostream>		// std::ostream, std::cout
+#include <vector>				// std::vector
+#include <algorithm>			// std::find_if
+#include <ostream>				// std::ostream, std::cout
 
-#include "account.hpp"
+#include "disjoint_sets.hpp"	// dsa::disjoint_sets
+#include "storage.hpp"			// dsa::storage
+#include "account.hpp"			// dsa::account
 
 namespace dsa
 {
@@ -18,10 +20,10 @@ namespace dsa
 			int to;
 			unsigned int value;
 		};
-		std::vector<entry> container;
+		std::vector<entry*> container;
 
-		int base_id;			// Normally, it's the last successful login ID.
-		std::ostream output;	// Default output method.
+		int base_id;						// Normally, it's the last successful login ID.
+		std::ostream& output = std::cout;	// Default output method.
 
 		/*
 		 * DEPRECATED
