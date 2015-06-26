@@ -26,7 +26,7 @@ void dsa::history::insert(const int& from_id, const int& to_id, unsigned int val
 
 long long dsa::history::convert_to_key(const int& from_id, const int& to_id)
 {
-
+	return (from_id << 32) | to_id;
 }
 
 void dsa::history::modify(const int& before_id, const int& after_id)
