@@ -15,7 +15,7 @@ void dsa::login()
     // return a pointer to the account object
 	dsa::account* unauthenticated_account = dsa::trie.find(ID.c_str());
 
-	if( last_login_account == nullptr )
+	if( unauthenticated_account == nullptr )
         printf("ID %s not found\n", ID); 
     else if( !unauthenticated_account->authenticate( password.c_str() ) )
         printf("wrong passowrd\n");
@@ -50,11 +50,35 @@ void dsa::merge()
 {
 	std::cout << "merge()" << std::endl;
 
-	int a, b;
-	std::cin >> a >> b;
-	std::cout << "...a=" << a << ", b=" << b << std::endl;
+	std::cin >> ID1 >> password1 >> ID2 >> password2 ;
 
-	relationships.link(a, b);
+	account* merger = dsa::trie.find( ID1 );
+	if( merger == nullptr )
+	{
+		std::cout << "ID " << ID1 << " not found\n";
+		return;
+	}
+
+	account* mergee = dsa::trie.find( ID2 );
+	if( merger == nullptr )
+	{
+		std::cout << "ID " << ID1 << " not found\n";
+		return;
+	}
+
+    if( !merger->authenticate( password1.c_str() ) )
+	{
+		std::cout << "wrong password1\n";
+		return 
+	}
+
+    if( !mergee->authenticate( password1.c_str() ) )
+	{
+		std::cout << "wrong password2\n";
+		return 
+	}
+
+	std::cout << "success, " << ID1 << " has " << merger->merge( mergee ) << " dollars\n";
 }
 
 void dsa::deposit()
