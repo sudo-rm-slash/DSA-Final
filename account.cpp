@@ -1,6 +1,6 @@
 #include "account.hpp"
 
-extern dsa::history history;
+extern dsa::history transaction_history;
 
 namespace dsa
 {
@@ -51,7 +51,7 @@ namespace dsa
 
 	bool account::search(account& transferee)
 	{
-		dsa::history.set_criteria(this->id);
+		transaction_history.set_criteria(this->id);
 
 		account* transferee = trie.find(ID);
 
@@ -61,15 +61,15 @@ namespace dsa
 			auto history_intersection_end = std::set_intersection(
 			                                    this->transfer_history.begin(),
 			                                    this->transfer_history.end(),
-			                                    transferee->transfer_history.begin(),
-			                                    transferee->transfer_history.end(),
+			                                    transferee.transfer_history.begin(),
+			                                    transferee.transfer_history.end(),
 			                                    history_intersection.begin()
 			                                );
 			history_intersection.resize(history_intersection_end - intersection.begin());
 
 			for (auto transfer_record : history_intersection)
 			{
-				dsa::history[ transfer_record ];
+				transaction_history[ transfer_record ];
 			}
 
 			if (history_intersection.empty())
@@ -83,9 +83,9 @@ namespace dsa
 		}
 		else
 		{
-			for (auto transfer_record : this->history)
+			for (auto transfer_record : this->transfer_history)
 			{
-				dsa::history.print_self(transfer_record);
+				transaction_history.print_self(transfer_record);
 			}
 		}
 	}
