@@ -66,8 +66,7 @@ void dsa::create()
 
 	int input;
 	std::cin >> input;
-	std::cout << "...Input=" << input << ", ";
-	std::cout << "ID=" << relationships.make_set(input) << std::endl;
+	std::cout << "...Input=" << input << ", " << "ID=" << relationships.make_set(input) << std::endl;
 }
 
 void dsa::del()
@@ -137,39 +136,38 @@ void dsa::merge()
 	lookup_table.remove(storage[user_id_2].get_name());
 
 	// Print transfer sucess message.
-	std::cout << "success, " << storage[user_id_1].get_name();
-	std::cout << " has " << storage[user_id_1].get_money() << " dollars" << std::endl;
+	std::cout << "success, " << storage[user_id_1].get_name() << " has " << storage[user_id_1].get_money() << " dollars" << std::endl;
 }
 
 void dsa::deposit()
 {
 	std::cout << "deposit()" << std::endl;
 
-	// Deposit the money to the last succesfully login account(int).
-
-
+	// Acquire the variable.
 	int money;
 	std::cin >> money;
-	std::cout << "success, " << last_login_account->deposit(money) << " dollars in current account\n" ;
+
+	// Deposit the money to the last succesfully login account(int).
+	std::cout << "success, " << storage[last_login].deposit(money) << " dollars in current account" << std::endl;
 }
 
 void dsa::withdraw()
 {
 	std::cout << "withdraw()" << std::endl;
 
-	// Withdraw the money from the last succesfully login account(int).
-
-
+	// Acquire the variable.
 	int money;
 	std::cin >> money;
-	std::pair<bool, int> status = last_login_account->withdraw(money);
+
+	// Withdraw the money from the last succesfully login account(int).
+	auto status = storage[last_login].withdraw(money);
 	if (status.first)
 	{
-		std::cout << "success, " << status.second << " dollars left in current account\n";
+		std::cout << "success, " << status.second << " dollars left in current account" << std::endl;
 	}
 	else
 	{
-		std::cout << "fail, "    << status.second << " dollars only in current account\n";
+		std::cout << "fail, " << status.second << " dollars only in current account" << std::endl;
 	}
 }
 

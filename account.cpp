@@ -95,7 +95,7 @@ namespace dsa
 		return ID;
 	}
 
-	int get_money()
+	int account::get_money()
 	{
 		return money;
 	}
