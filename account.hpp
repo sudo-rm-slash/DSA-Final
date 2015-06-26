@@ -7,7 +7,8 @@
 #include <cstring>      // std::strncpy, std::strcmp
 #include <vector>       // std::vector
 
-#include "md5.hpp"      // MD5
+#include "md5.hpp"      // md5
+#include "history.hpp"  // dsa::history
 
 namespace dsa
 {
