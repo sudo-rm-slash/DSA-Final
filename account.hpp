@@ -16,8 +16,8 @@ namespace dsa
 	{
 	private:
 		int money;
-		const char* ID;
-		const char md5_password[ MD5_BYTE_LEN ];
+		char* ID;
+		char md5_password[ MD5_BYTE_LEN ];
 		std::vector<unsigned int> transfer_history; // vector of transfer history 
 
 	public:
