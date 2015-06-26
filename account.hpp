@@ -1,7 +1,7 @@
 #ifndef __ACCOUNT_HPP__
 #define __ACCOUNT_HPP__
 
-#define MD5_BYTE 16     // Fixed length 16 byte (128 bits)
+#define MD5_BYTE_LEN 16 // Fixed length 16 byte (128 bits)
 
 #include <utility>      // std::pair
 #include <cstring>      // std::strncpy, std::strcmp
@@ -19,7 +19,7 @@ namespace dsa
 
 	public:
 		account():money(0){}
-		account(const char* password);
+		account(const char* ID, const char* password);
 
 		bool authenticate(const char* password);
 		int deposit(int dollar);

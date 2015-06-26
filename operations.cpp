@@ -2,9 +2,9 @@
 #include "history.hpp"
 
 dsa::disjoint_sets<int> relationships;
-
-dsa::history 
-dsa::account* last_login_account;
+dsa::history            history;
+dsa::storage            storage;
+dsa::account*           last_login_account;
 
 void dsa::login()
 {
@@ -29,14 +29,20 @@ void dsa::create()
 {
 	std::cout << "create()" << std::endl;
 
-	int input;
-	std::cin >> input;
-	std::cout << "...Input=" << input << ", ";
-	std::cout << "ID=" << relationships.make_set(input) << std::endl;
+	std::string ID, password;
+	std::cin >> ID >> password;
 
-	// Generate new block in the storage.
+	std::cout << "ID " << ID << " exists, ";
+	// TODO
+	// Recommends 10 best unused ids
+	
+	auto new_account = dsa::storage.insert( new dsa::account(ID.c_str(), password.c_str()) );
+	int  index       = dsa::relationships.make_set( new_account );
+	dsa::trie.insert( ID, index );
 
-	// Acqurie the pointer to the block in the storage.
+	// Generate new account in the storage.
+
+	// Acqurie the pointer to account in the storage.
 
 	// Add the pointer to disjoint set, and acquire the generated ID.
 
