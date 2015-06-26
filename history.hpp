@@ -3,7 +3,7 @@
 
 #include <vector>				// std::vector
 #include <algorithm>			// std::find_if
-#include <ostream>				// std::ostream, std::cout
+#include <iostream>				// std::ostream, std::cout
 
 #include "disjoint_sets.hpp"	// dsa::disjoint_sets
 #include "storage.hpp"			// dsa::storage
@@ -64,7 +64,7 @@ namespace dsa
 		 * @param stream Desired ostream object.
 		 * @return Void.
 		 */
-		void set_output_stream(const std::ostream& stream);
+		void set_output_stream(std::ostream& stream);
 
 		/*
 		 * @brief Subscripting operator overload to easily print out A/B related entries,

@@ -27,15 +27,16 @@ dsa::account::~account()
 	this->related_users.clear();
 }
 
-bool dsa::account::authenticate(const char* password)
+bool dsa::account::authenticate(const char* password) const
 {
+    // Compare the encypted password.
 	return (std::strcmp(this->password, md5(password)) == 0);
 }
 
 int dsa::account::deposit(int value)
 {
 	// Add the additional cash to the counter.
-	this->money += dollar;
+	this->money += value;
 
 	// Return the newest amount of cash.
 	return this->money;
@@ -51,12 +52,13 @@ std::pair<bool, int> dsa::account::withdraw(int value)
 	else
 	{
 		// Subtract the money from this account.
-		this->money -= dollar;
+		this->money -= value;
 
 		return std::make_pair(true, this->money);
 	}
 }
 
+/*
 int dsa::account::merge(account& mergee)
 {
 	std::vector<unsigned int> history_union(transfer_history.size() + mergee.transfer_history.size());
@@ -100,13 +102,19 @@ bool dsa::account::search(account& transferee)
 		return true;
 	}
 }
+*/
 
-char* dsa::account::get_name()
+char* dsa::account::get_name() const
 {
-	return ID;
+	return username;
 }
 
-int dsa::account::get_money()
+int dsa::account::get_money() const
 {
 	return money;
+}
+
+std::vector<int>& dsa::account::get_related_user()
+{
+    return related_users;
 }

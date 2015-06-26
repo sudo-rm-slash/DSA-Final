@@ -18,3 +18,9 @@ T* dsa::storage::insert(const T& item) const
 	container.push_back(item);
 	return container.data() + container.size() - 1;
 }
+
+template <class T>
+void dsa::storage::operator[](const int& account_index)
+{
+	
+}

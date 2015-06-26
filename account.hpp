@@ -31,7 +31,7 @@ namespace dsa
          * @param password A non-encoded password to compare with.
          * @return Indicate whether the password is correct or not.
          */
-        bool  authenticate(const char* password);
+        bool  authenticate(const char* password) const;
 		  
         /*
          * @brief Deposit money to this account.
@@ -39,14 +39,40 @@ namespace dsa
          * @param value The amount of cash to deposit in this account.
          * @return The new statistic of the cash in this account.
          */
-		int   deposit(int value);
+		int deposit(int value);
 
-        std::pair<bool, int> withdraw(int dollar);
+        /*
+         * @brief Withdraw money from this account.
+         *
+         * @param value The amount of cash to withdraw from this account.
+         * @return The new statistic of the cash in this account, and whether this 
+         *         operation succeed or not.
+         */
+        std::pair<bool, int> withdraw(int value);
 
-		int   merge(account& mergee);
-		bool  search(account& transferee);
-		char* get_name();
-		int   get_money();
+		int merge(account& mergee);
+		bool search(account& transferee);
+
+        /*
+         * @brief Get the username of this account.
+         *
+         * @return Return the username(string) of this account.
+         */
+		char* get_name() const;
+
+        /*
+         * @brief Get the amount of cash in this account.
+         *
+         * @return Return the amount of cash in this account.
+         */
+		int get_money() const;
+
+        /*
+         * @brief Get the related user with this account.
+         *
+         * @return Return the related users(int) in vector.
+         */
+        std::vector<int>& get_related_user();
 	};
 }
 

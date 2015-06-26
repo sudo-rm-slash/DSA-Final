@@ -45,7 +45,7 @@ void dsa::history::set_criteria(const int& base_id)
 	this->base_id = base_id;
 }
 
-void dsa::history::set_output_stream(const std::ostream& stream)
+void dsa::history::set_output_stream(std::ostream& stream)
 {
 	this->output = stream;
 }

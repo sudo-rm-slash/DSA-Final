@@ -22,6 +22,14 @@ namespace dsa
 		 * @return The address of the newly inserted item.
 		 */
 		T* insert(const T& item) const;
+
+		/*
+		 * @brief Subscripting operator overload to easily acquire specific account.
+		 *
+		 * @param associated_id The associated ID.
+		 * @return Void.
+		 */
+		void operator[](const int& account_index);
 	};
 }
 
