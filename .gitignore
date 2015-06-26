@@ -11,5 +11,11 @@ build/*
 bin/
 bin/*
 
+# Vim swap file
+.swp
+
+# spec pdf
+.pdf
+
 # Project specific names
 final_project
