@@ -218,6 +218,7 @@ void dsa::transfer()
 		std::cout << "ID " << ID << " not found, ";
 		// TODO
 		// 10 best recommendations
+		//
 	}
 	else
 	{
@@ -269,9 +270,13 @@ void dsa::search()
 	history.set_criteria(last_login);
 
 	// Print out all the history.
-	if( last_login != user_id )
+	if( last_login == user_id )
 	{
+		//
 		// TODO
+		// Print out all history entries with identical transferer and transferee 
+		// i.e. From A to A
+		//
 	}
 	else if(accounts[last_login].search(accounts[user_id]))
 	{
