@@ -34,7 +34,7 @@ namespace dsa
 
 	int merge(account& mergee)
 	{
-		std::vector<unsigned int> history_union(max(history.size(), transferee->history);
+		std::vector<unsigned int> history_union(max(transfer_history.size(), transferee->history);
 		                                        auto history_union_end = std::set_union(
 		                                                this->transfer_history.begin(),
 		                                                this->transfer_history.end(),
@@ -49,7 +49,7 @@ namespace dsa
 		                                        return (this->money += mergee->money);
 	}
 
-	bool account::search(account* transferee)
+	bool account::search(account& transferee)
 	{
 		dsa::history.set_criteria(this->id);
 
@@ -57,7 +57,7 @@ namespace dsa
 
 		if (transferee != this)
 		{
-			std::vector<unsigned int> history_intersection(std::max(history.size(), transferee->history.size()));
+			std::vector<unsigned int> history_intersection(std::max(transfer_history.size(), transferee->history.size()));
 			auto history_intersection_end = std::set_intersection(
 			                                    this->transfer_history.begin(),
 			                                    this->transfer_history.end(),
