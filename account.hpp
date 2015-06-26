@@ -58,11 +58,6 @@ namespace dsa
         int wipe_account() const;
 
         /*
-		int merge(account& mergee);
-		bool search(account& transferee);
-        */
-
-        /*
          * @brief Get the username of this account.
          *
          * @return Return the username(string) of this account.

@@ -65,52 +65,6 @@ int dsa::account::wipe_account() const
     return value;
 }
 
-/*
-int dsa::account::merge(account& mergee)
-{
-	std::vector<unsigned int> history_union(transfer_history.size() + mergee.transfer_history.size());
-	auto history_union_end = std::set_union(
-	                             this->transfer_history.begin(),
-	                             this->transfer_history.end(),
-	                             mergee.transfer_history.begin(),
-	                             mergee.transfer_history.end(),
-	                             history_union.begin()
-	                         );
-	history_union.resize(history_union_end - history_union.begin());
-
-	this->transfer_history = std::move(history_union);
-
-	return (this->money += mergee.money);
-}
-
-bool dsa::account::search(account& transferee)
-{
-	std::vector<unsigned int> history_intersection(std::max(transfer_history.size(), transferee.transfer_history.size()));
-	auto history_intersection_end = std::set_intersection(
-	                                    this->transfer_history.begin(),
-	                                    this->transfer_history.end(),
-	                                    transferee.transfer_history.begin(),
-	                                    transferee.transfer_history.end(),
-	                                    history_intersection.begin()
-	                                );
-	history_intersection.resize(history_intersection_end - history_intersection.begin());
-
-	for (auto transfer_record : history_intersection)
-	{
-		transaction_history[ transfer_record ];
-	}
-
-	if (history_intersection.empty())
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
-}
-*/
-
 char* dsa::account::get_name() const
 {
 	return username;

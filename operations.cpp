@@ -284,8 +284,25 @@ void dsa::search()
 		// 		 i.e. From A to A
 		//
 	}
-	else if (accounts[last_login].search(accounts[user_id]))
+	else
 	{
-		std::cout << "no record" << std::endl;
+		// Find the intersected items in the list, which means it's a pair of transaction history.
+		std::vector<int> common(accounts[user_id_1].size() + accounts[user_id_2].size());
+		std::set_intersection(std::begin(accounts[user_id_1]), std::end(accounts[user_id_1]),
+		                      std::begin(accounts[user_id_2]), std::end(accounts[user_id_2]),
+		                      std::back_inserter(common));
+
+		if (common.empty())
+		{
+			std::cout << "no record" << std::endl;
+		}
+		else
+		{
+			// Iterate through all the history indices.
+			for (const auto& index : common)
+			{
+				transaction_history[index];
+			}
+		}
 	}
 }
