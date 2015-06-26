@@ -29,9 +29,16 @@ namespace dsa
         return std::pair<bool,int>( true, money );
     }
 
-	int transfer_history_lookup( const char* ID )
+	int lookup_transfers_history( const char* ID )
 	{
-		accout* transferee = trie.find( ID );
+		// transferee store the corresponding index of the ID owner
+		int transferee = trie.find( ID )->index;
 
+	}
+
+	void merge_transfers_history( account& rhs )
+	{
+		auto merger = history.begin();
+		auto mergee = rhs.history.begin();
 	}
 };

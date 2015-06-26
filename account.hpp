@@ -3,17 +3,20 @@
 
 #define MD5_BYTE 16 
 // fixed length 16 byte ( 128 bits )
+
 namespace dsa 
 {
-	struct record;
-	using transfer_history = std::vector<record>;
+	class transfers_history;
+
 
     class account
     {
 
     public:
 
-        account::account(const char* password);
+		account(){}
+
+        account(const char* password);
 
         bool authenticate(const char* password);
 
@@ -21,28 +24,43 @@ namespace dsa
 
         std::pair<bool,int> withdraw(int dollar);
 
-		int transfer_history_lookup( const char* ID );
+		int lookup_transfers_history( const char* ID );
+
+		void merge_transfers_history( account& rhs );
 
     private:
 
         int money;
         const char md5_password[ MD5_BYTE ]; 
-		transfer_history* history;
+		transfers_history* history;
 
     };
 
 	struct record
 	{
+		enum t_transfer { TO, FROM };	
+
+		record(){}
 
 		bool operator < ( const record& rhs ) const
 		{
 			return timestamp < rhs.timestamp;
 		}
 
-		int to;
-		int from;
+		t_transfer transfer_type;
 		int dollar;
 		int timestamp;
+	}
+
+	struct transfers_history
+	{
+		bool operator == ( const record& rhs ) const
+		{
+			return  owner[transferee] == owner[rhs.transferee] ;
+		}
+
+		int transferee;
+		std::vector<record> records;
 	};
 
 };
