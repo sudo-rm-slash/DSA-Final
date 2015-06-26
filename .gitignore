@@ -18,7 +18,7 @@ bin/*
 *.pdf
 
 # Timing log files
-*_time
+*time
 
 # Project specific names
 final_project
