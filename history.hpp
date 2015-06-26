@@ -10,10 +10,17 @@ namespace dsa
 	class history
 	{
 	private:
-		std::vector<account> container;
+		struct entry
+		{
+			long long key;
+			unsigned int value;
+		};
+
+		std::vector<entry> container;
 
 		/*
 		 * @brief Convert the transaction relationship into a single key.
+		 *		  (FROM << 32) | TO
 		 *
 		 * @param from_id From this account...
 		 * @param to_id ...to this account.
