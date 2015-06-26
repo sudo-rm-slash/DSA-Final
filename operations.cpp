@@ -226,7 +226,7 @@ void dsa::transfer()
 		if (status.first)
 		{
 			storage[last_login].deposit(money);
-			dsa::history.insert(last_login , user_id, money);
+			history.insert(last_login , user_id, money);
 			std::cout << "success, " << status.second << " dollars left in current account\n";
 		}
 		else
@@ -266,20 +266,11 @@ void dsa::search()
 	}
 
 	// Set the criteria to last successfully login account(int).
+	history.set_criteria(last_login);
 
 	// Print out all the history.
-
-
-	std::string ID;
-	std::cin >> ID;
-
-	account* transferee = dsa::trie.find(ID.c_str());
-	if (transferee == nullptr)
+	if (accounts[last_login].search(accounts[user_id]))
 	{
-		std::cout << "ID " << ID << " not found\n";
-	}
-	else if (!last_login_account->search(transferee))
-	{
-		std::cout << "no record\n";
+		std::cout << "no record" << std::endl;
 	}
 }
