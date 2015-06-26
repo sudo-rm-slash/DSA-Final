@@ -93,11 +93,11 @@ void dsa::disjoint_sets<T>::link(int id1, int id2)
 		set2->parent = set1;
 
 		// Increase the rank of a set to break the tie.
-		++set1->rank;
+		++(set1->rank);
 	}
 
 	// Since two sets are linked together, one less set to maintain.
-	--this->set_count;
+	--(this->set_count);
 }
 
 template <class T>
