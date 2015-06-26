@@ -9,7 +9,14 @@
 /*
  * Definitions
  */
-typedef std::map<const char*, std::function<void()> > functions;
+struct string_comparer
+{
+	bool operator()(const char *a, const char *b)
+	{
+		return std::strcmp(a, b) < 0;
+	}
+};
+typedef std::map<const char*, std::function<void()>, string_comparer> functions;
 
 #define OP_BUFFER_SIZE	10
 
@@ -30,6 +37,8 @@ void functions_init(functions &lookup_table)
 	INSERT("transfer",	dsa::transfer);
 	INSERT("find", 		dsa::find);
 	INSERT("search", 	dsa::search);
+
+	std::cerr << "function lut init." << std::endl;
 }
 
 
@@ -39,8 +48,8 @@ void functions_init(functions &lookup_table)
 int main()
 {
 	// Generate "name to function" lookup table beforehand.
-	functions lookup_table;
-	functions_init(lookup_table);
+	functions function_lookup_table;
+	functions_init(function_lookup_table);
 
 	// Initialize operation buffer.
 	char operation[OP_BUFFER_SIZE];
@@ -49,9 +58,11 @@ int main()
 	// Start parsing strings
 	while (std::cin >> operation)
 	{
+		std::cerr << "input string: " << operation << std::endl;
+
 		// Find the target function.
-		auto search = lookup_table.find(operation);
-		if (search == lookup_table.end())
+		auto search = function_lookup_table.find(operation);
+		if (search == function_lookup_table.end())
 		{
 			std::stringstream ss;
 			ss << "Invalid operation \"" << operation << "\"." << std::endl;
