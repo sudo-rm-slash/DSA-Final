@@ -1,27 +1,24 @@
+#define MD5_BYTE 16     // Fixed length 16 byte (128 bits)
 
+#include <utility>      // std::pair
+#include <cstring>      // std::strncpy, std::strcmp
 
-#define MD5_BYTE 16 
-// fixed length 16 byte ( 128 bits )
-namespace dsa 
+#include "md5.hpp"      // MD5
+
+namespace dsa
 {
-    class account
-    {
+	class account
+	{
+	private:
+		int money;
+		const char md5_password[ MD5_BYTE ];
 
-    public:
+	public:
+		account(const char* password);
 
-        account::account(const char* password);
-
-        bool authenticate(const char* password);
-
-        int deposit(int dollar);
-
-        std::pair<bool,int> withdraw(int dollar);
-
-    private:
-
-        int money;
-        const char md5_password[ MD5_BYTE ]; 
-
-    };
+		bool authenticate(const char* password);
+		int deposit(int dollar);
+		std::pair<bool, int> withdraw(int dollar);
+	};
 
 }
