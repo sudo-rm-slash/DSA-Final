@@ -149,7 +149,16 @@ void dsa::merge()
 	}
 
 	// Transfer the cash.
-	accounts[user_id_1].merge(accounts[user_id_2]);
+	// ...Wipe the original account.
+	int cash = accounts[user_id_2].wipe_account();
+	// ...Transfer the money to the root account.
+	accounts[user_id_1].deposit(cash);
+	// ...Merge the related user list.
+	std::vector<int> combined(accounts[user_id_1].size() + accounts[user_id_2].size());
+	std::set_union(std::begin(accounts[user_id_1]), std::end(accounts[user_id_1]),
+	               std::begin(accounts[user_id_2]), std::end(accounts[user_id_2]),
+	               std::back_inserter(combined));
+	accounts[user_id_1].set_related_users(accounts[user_id_2].get_releated_users());
 
 	// Link the accounts' relationships.
 	relationships.link(user_id_1, user_id_2);
@@ -220,7 +229,7 @@ void dsa::transfer()
 	else
 	{
 		std::cout << "fail, " << status.second << " dollars only in current account" << std::endl;
-		
+
 		//
 		// TODO: Recommends 10 best unused ids
 		//
@@ -230,8 +239,10 @@ void dsa::transfer()
 	// ...Desposit.
 	accounts[last_login].deposit(value);
 
-	// Add an entry in the history.
+	// Add an entry in the history and the related user list.
 	transaction_history.insert(last_login, user_id, value);
+	accounts[last_login].add_related_users(user_id);
+	accounts[user_id].add_related_users(last_login);
 }
 
 void dsa::find()
@@ -266,14 +277,14 @@ void dsa::search()
 	transaction_history.set_criteria(last_login);
 
 	// Print out all the history.
-	if( last_login == user_id )
+	if (last_login == user_id)
 	{
 		//
-		// TODO: Print out all history entries with identical transferer and transferee 
+		// TODO: Print out all history entries with identical transferer and transferee.
 		// 		 i.e. From A to A
 		//
 	}
-	else if(accounts[last_login].search(accounts[user_id]))
+	else if (accounts[last_login].search(accounts[user_id]))
 	{
 		std::cout << "no record" << std::endl;
 	}

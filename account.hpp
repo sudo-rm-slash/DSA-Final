@@ -61,7 +61,7 @@ namespace dsa
 		int merge(account& mergee);
 		bool search(account& transferee);
         */
-        
+
         /*
          * @brief Get the username of this account.
          *
@@ -81,7 +81,21 @@ namespace dsa
          *
          * @return Return the related users(int) in vector.
          */
-        std::vector<int>& get_related_user();
+        std::vector<int>& get_related_users();
+
+        /*
+         * @brief Add a related user with this account.
+         *
+         * @return Voids.
+         */
+         void add_related_users(const int& user_index);
+
+        /*
+         * @brief Set the related user with this account using a pre-defined vector.
+         *
+         * @return Void.
+         */
+         void set_related_users(std::vector<int>&);
 	};
 }
 

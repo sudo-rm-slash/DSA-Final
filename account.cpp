@@ -58,6 +58,13 @@ std::pair<bool, int> dsa::account::withdraw(int value)
 	}
 }
 
+int dsa::account::wipe_account() const
+{
+    int value = this->money;
+    this->money = 0;
+    return value;
+}
+
 /*
 int dsa::account::merge(account& mergee)
 {
