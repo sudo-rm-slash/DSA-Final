@@ -24,7 +24,7 @@ namespace dsa
 
 		int merge(account* mergee);
 
-		int lookup_transfers_history( const char* ID );
+		int search(account* transferee);
 
 
     private:

@@ -1,7 +1,9 @@
 #include "operations.hpp"
+#include "history.hpp"
 
 dsa::disjoint_sets<int> relationships;
 
+dsa::history 
 dsa::account* last_login_account;
 
 void dsa::login()
@@ -153,8 +155,11 @@ void dsa::search()
 	std::cout << "search()" << std::endl;
 
 	std::string ID;
-
 	std::cin >> ID;
-	if( ! last_login_account->transfer_history_lookup( ID.c_str() )
+
+	account* transferee = dsa::trie.find( ID.c_str() );
+	if( transferee == nullptr )
+		std::cout << "ID " << ID << " not found\n";
+	else if( !last_login_account->search( transferee ) )
 		std::cout << "no record\n";
 }

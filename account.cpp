@@ -49,7 +49,7 @@ namespace dsa
 		return ( this->money += mergee->money );
 	}
 
-	int account::lookup_transfers_history( const char* ID )
+	bool account::search(account* transferee)
 	{
 		account* transferee = trie.find( ID );
 
@@ -69,12 +69,17 @@ namespace dsa
 			{
 				dsa::history.print( transfer_record );	
 			}
+
+			if( history_intersection.empty() )
+				return false;
+			else
+				return true;
 		}
 		else
 		{
 			for( auto transfer_record: this->history )
 			{
-				dsa::history.print( transfer_record );
+				dsa::history.print_self( transfer_record );
 			}
 		}
 	}
