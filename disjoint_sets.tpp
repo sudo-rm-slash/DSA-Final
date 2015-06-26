@@ -23,7 +23,7 @@ dsa::disjoint_sets<T>::~disjoint_sets()
 }
 
 template <class T>
-int dsa::disjoint_sets<T>::make_set(const T& data)
+int dsa::disjoint_sets<T>::make_set(const T data)
 {
 	sets.insert(sets.end(), 1, (node*)NULL);
 

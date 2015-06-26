@@ -30,7 +30,7 @@ namespace dsa
 		 * @ param value The child that the newly created set contains.
 		 * @ return Generated ID.
 		 */
-		int make_set(const T& data);
+		int make_set(const T data);
 
 		/*
 		 * @brief Find the set child belongs to.

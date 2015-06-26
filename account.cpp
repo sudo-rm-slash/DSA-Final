@@ -17,8 +17,8 @@ dsa::account::account(const char* username, const char* password)
 dsa::account::~account()
 {
 	// Delete the char pointers.
-	delete this->username;
-	delete this->password;
+	//delete [] this->username;
+	//delete [] this->password;
 
 	// Reset the amount of cash.
 	this->money = 0;

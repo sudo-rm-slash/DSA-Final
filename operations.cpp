@@ -27,6 +27,8 @@ void dsa::login()
 		return;
 	}
 
+	std::cerr << "...user_id=" << last_login << std::endl;
+
 	// Authenticate the account's password.
 	if (!accounts[last_login].authenticate(password))
 	{
@@ -51,6 +53,7 @@ void dsa::create()
 	int user_id = lookup_table.find(username);
 	if (user_id != -1)
 	{
+		std::cerr << "...user exists." << std::endl;
 		//
 		// TODO: Recommends 10 best unused ids
 		//
@@ -59,10 +62,10 @@ void dsa::create()
 	}
 
 	// Generate new account in the storage.
-	dsa::account new_account(username, password);
+	//dsa::account new_account(username, password);
 
 	// Acqurie the pointer to account in the storage.
-	dsa::account* new_account_ptr = accounts.insert(new_account);
+	dsa::account* new_account_ptr = accounts.insert(username, password);
 
 	// Add the pointer to disjoint set, and acquire the generated ID(int).
 	int generated_id = relationships.make_set(new_account_ptr);

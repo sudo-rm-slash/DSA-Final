@@ -13,14 +13,19 @@ dsa::storage<T>::~storage()
 }
 
 template <class T>
-T* dsa::storage<T>::insert(const T& item)
+T* dsa::storage<T>::insert(const char* username, const char* password)
 {
-	this->container.push_back(item);
-	return std::addressof(this->container.data()[this->container.size() - 1]);
+	//std::cerr << "...start insert" << std::endl;
+
+	//this->container.push_back(std::move(item));
+	this->container.emplace(this->container.end(), username, md5(password));
+	//std::cerr << "...push_back duplicate item" << std::endl;
+
+	return &(this->container.back());
 }
 
 template <class T>
 T& dsa::storage<T>::operator[](const int& account_index)
 {
-	return this->container.data()[account_index];
+	return this->container[account_index];
 }

@@ -3,6 +3,8 @@
 
 #include <vector>		// std::vector
 
+#include "md5.hpp"		// md5
+
 namespace dsa 
 {
 	template <class T>
@@ -21,7 +23,8 @@ namespace dsa
 		 * @param item New item to insert.
 		 * @return The address of the newly inserted item.
 		 */
-		T* insert(const T& item);
+		//T* insert(const T&& item);
+		T* insert(const char* username, const char* password);
 
 		/*
 		 * @brief Subscripting operator overload to easily acquire specific account.
