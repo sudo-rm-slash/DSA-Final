@@ -85,7 +85,7 @@ void dsa::del()
 
 	// Find the account ID(int) by account name(string).
 	int user_id = lookup_table.find(username);
-	if (last_login == -1)
+	if (user_id == -1)
 	{
 		std::cout << "ID " << username << " not found" << std::endl;
 		return;
@@ -240,21 +240,29 @@ void dsa::find()
 {
 	std::cout << "find()" << std::endl;
 
+	// Acquire the username(string).
+	char username[101] = {0};
+	std::cin >> username;
+
 	// Find the matches ID by TRIE.
-
-
-	int id;
-	std::cin >> id;
-	std::cout << "...Parent of " << id << " is ";
-
-	std::cout << relationships.find_root(id) << std::endl;
+	lookup_table.wildcard_print(username);
 }
 
 void dsa::search()
 {
 	std::cout << "search()" << std::endl;
 
+	// Acquire the username(string).
+	char username[101] = {0};
+	std::cin >> username;
+
 	// Find the account ID(int) by account name(string).
+	int user_id = lookup_table.find(username);
+	if (user_id == -1)
+	{
+		std::cout << "ID " << username << " not found" << std::endl;
+		return;
+	}
 
 	// Set the criteria to last successfully login account(int).
 
