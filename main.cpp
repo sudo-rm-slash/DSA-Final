@@ -40,7 +40,7 @@ int main()
 	functions_init(lookup_table);
 
 	// Start parsing strings
-	const char* operation = new char[10];
+	char* operation = new char[10];
 	while (std::cin >> operation)
 	{
 		// Find the target function.
