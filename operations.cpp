@@ -20,7 +20,7 @@ void dsa::login()
 	std::cin >> username >> password;
 
 	// Find the account ID(int) by account name(string).
-	last_login = dsa::trie.find(username);
+	last_login = dsa::lookup_table.find(username);
 	if (last_login == -1)
 	{
 		std::cout << "ID " << username << " not found" << std::endl;

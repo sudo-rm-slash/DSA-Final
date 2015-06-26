@@ -83,4 +83,14 @@ namespace dsa
 			}
 		}
 	}
+
+	char* account::get_name()
+	{
+		return ID;
+	}
+
+	int get_money()
+	{
+		return money;
+	}
 };

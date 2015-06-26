@@ -23,11 +23,13 @@ namespace dsa
 		account(std::string& ID, std::string& password);
 		account(const char* ID, const char* password);
 
-		bool authenticate(const char* password);
-		int deposit(int dollar);
 		std::pair<bool, int> withdraw(int dollar);
-		int merge(account* mergee);
-		int search(account* transferee);
+		bool  authenticate(const char* password);
+		int   deposit(int dollar);
+		int   merge(account* mergee);
+		int   search(account* transferee);
+		char* get_name();
+		int   get_money();
 	};
 }
 
