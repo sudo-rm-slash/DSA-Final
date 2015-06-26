@@ -40,7 +40,7 @@ int main()
 	functions_init(lookup_table);
 
 	// Start parsing strings
-	std::string operation;
+	const char* operation = new char[10];
 	while (std::cin >> operation)
 	{
 		// Find the target function.
@@ -52,6 +52,9 @@ int main()
 
 		// Execute the function.
 		search->second();
+
+		// Reinitialize the operation string buffer.
+		operation = "";
 	}
 
 	return 0;
