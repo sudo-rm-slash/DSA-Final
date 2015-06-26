@@ -4,9 +4,9 @@ extern dsa::history history;
 
 namespace dsa
 {
-	account::account(std::string& ID, std::string& password): ID(new char[ID.size() + 1]), money(0)
+	account::account(const char* ID, const char* password): ID(new char[std::strlen(ID) + 1]), money(0)
 	{
-		std::strcpy(this->ID , ID.c_str());
+		std::strcpy(this->ID , ID);
 		std::strncpy(this->md5_password , md5(password) , MD5_BYTE_LEN);
 	}
 
@@ -32,7 +32,7 @@ namespace dsa
 		return std::pair<bool, int>(true, this->money);
 	}
 
-	int merge(account* mergee)
+	int merge(account& mergee)
 	{
 		std::vector<unsigned int> history_union(max(history.size(), transferee->history);
 		                                        auto history_union_end = std::set_union(
