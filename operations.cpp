@@ -211,7 +211,7 @@ void dsa::transfer()
 
 	std::cin >> username >> money;
 
-	int user_id = dsa::lookup_table.find(ID);
+	int user_id = dsa::lookup_table.find(username);
 
 	if (user_id == -1)
 	{
