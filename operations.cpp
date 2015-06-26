@@ -47,9 +47,15 @@ void dsa::create()
 	char password[101] = {0};
 	std::cin >> username >> password;
 
-	//
-	// TODO: Recommends 10 best unused ids
-	//
+	int user_id = lookup_table.find(username);
+	if (user_id != -1)
+	{
+		//
+		// TODO: Recommends 10 best unused ids
+		//
+
+		return;
+	}
 
 	// Generate new account in the storage.
 	dsa::account new_account(username, password);
@@ -71,14 +77,31 @@ void dsa::del()
 {
 	std::cout << "delete()" << std::endl;
 
-	// Find the account ID(int) by account name(string).
+	// Acquire the username and password.
+	char username[101] = {0};
+	char password[101] = {0};
+	std::cin >> username >> password;
 
-	// MD5 the password.
+	// Find the account ID(int) by account name(string).
+	int user_id = lookup_table.find(username);
+	if (last_login == -1)
+	{
+		std::cout << "ID " << username << " not found" << std::endl;
+		return;
+	}
 
 	// Authenticate the account's password.
+	if (!accounts[last_login].authenticate(password))
+	{
+		std::cout << "wrong password" << std::endl;
+		return;
+	}
 
 	// Remove the entry in TRIE.
+	lookup_table.remove(username);
 
+	// Print login success message.
+	std::cout << "success" << std::endl;
 }
 
 void dsa::merge()
