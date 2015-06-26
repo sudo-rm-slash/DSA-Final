@@ -29,7 +29,7 @@ namespace dsa
 		 * @param associated_id The associated ID.
 		 * @return Void.
 		 */
-		void operator[](const int& account_index);
+		T& operator[](const int& account_index);
 	};
 }
 
