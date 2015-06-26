@@ -155,19 +155,19 @@ void dsa::withdraw()
 {
 	std::cout << "withdraw()" << std::endl;
 
-	// Withdraw the money from the last succesfully login account(int).
-
-
+	// Acquire the variable.
 	int money;
 	std::cin >> money;
-	std::pair<bool, int> status = last_login_account->withdraw(money);
+
+	// Withdraw the money from the last succesfully login account(int).
+	auto status = storage[last_login].withdraw(money);
 	if (status.first)
 	{
-		std::cout << "success, " << status.second << " dollars left in current account\n";
+		std::cout << "success, " << status.second << " dollars left in current account" << std::endl;
 	}
 	else
 	{
-		std::cout << "fail, "    << status.second << " dollars only in current account\n";
+		std::cout << "fail, " << status.second << " dollars only in current account" << std::endl;
 	}
 }
 
