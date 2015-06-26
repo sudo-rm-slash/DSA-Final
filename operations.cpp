@@ -10,7 +10,7 @@ void dsa::login()
 {
 	std::cout << "login()" << std::endl;
 
-	std::string ID[100], password[100];
+	std::string ID, password;
 
 	std::cin >> ID >> password;
 
@@ -36,7 +36,7 @@ void dsa::create()
 	// TODO
 	// Recommends 10 best unused ids
 	
-	auto new_account = dsa::storage.insert( new dsa::account(ID.c_str(), password.c_str()) );
+	auto new_account = dsa::storage.insert( new dsa::account(ID,password) );
 	int  index       = dsa::relationships.make_set( new_account );
 	dsa::trie.insert( ID, index );
 

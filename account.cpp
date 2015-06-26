@@ -4,9 +4,9 @@ extern dsa::history history;
 
 namespace dsa 
 {
-    account::account(const char* ID, const char* password): money(0)
+    account::account(std::string& ID, std::string& password): ID(new char[ID.size()+1]), money(0)
     {
-        strcpy( this->ID , ID );
+        strcpy( this->ID , ID.c_str() );
         strncpy( this->md5_password , MD5( password ) , MD5_BYTE_LEN );
     }
 

@@ -1,7 +1,7 @@
 #ifndef __HISTORY_HPP__
 #define __HISTORY_HPP__
 
-#include <vecotor>		// std::vector
+#include <vector>		// std::vector
 #include <algorithm>	// std::find_if
 #include <ostream>		// std::ostream, std::cout
 
