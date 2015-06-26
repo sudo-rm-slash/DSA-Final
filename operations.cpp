@@ -269,7 +269,11 @@ void dsa::search()
 	history.set_criteria(last_login);
 
 	// Print out all the history.
-	if (accounts[last_login].search(accounts[user_id]))
+	if( last_login != user_id )
+	{
+		// TODO
+	}
+	else if(accounts[last_login].search(accounts[user_id]))
 	{
 		std::cout << "no record" << std::endl;
 	}

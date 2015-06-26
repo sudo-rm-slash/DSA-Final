@@ -27,7 +27,7 @@ namespace dsa
 		bool  authenticate(const char* password);
 		int   deposit(int dollar);
 		int   merge(account& mergee);
-		int   search(account& transferee);
+		bool  search(account& transferee);
 		char* get_name();
 		int   get_money();
 	};
