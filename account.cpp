@@ -29,7 +29,7 @@ dsa::account::~account()
 
 bool dsa::account::authenticate(const char* password) const
 {
-    // Compare the encypted password.
+	// Compare the encypted password.
 	return (std::strcmp(this->password, md5(password)) == 0);
 }
 
@@ -58,11 +58,11 @@ std::pair<bool, int> dsa::account::withdraw(int value)
 	}
 }
 
-int dsa::account::wipe_account() const
+int dsa::account::wipe_account()
 {
-    int value = this->money;
-    this->money = 0;
-    return value;
+	int value = this->money;
+	this->money = 0;
+	return value;
 }
 
 char* dsa::account::get_name() const
@@ -75,7 +75,17 @@ int dsa::account::get_money() const
 	return money;
 }
 
-std::vector<int>& dsa::account::get_related_user()
+std::vector<int>& dsa::account::get_related_users()
 {
-    return related_users;
+	return related_users;
+}
+
+void dsa::account::add_related_users(const int& user_index)
+{
+	this->related_users.push_back(user_index);
+}
+
+void dsa::account::set_related_users(std::vector<int>& new_vector)
+{
+	this->related_users = new_vector;
 }

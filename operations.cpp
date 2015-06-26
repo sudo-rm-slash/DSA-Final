@@ -154,11 +154,11 @@ void dsa::merge()
 	// ...Transfer the money to the root account.
 	accounts[user_id_1].deposit(cash);
 	// ...Merge the related user list.
-	std::vector<int> combined(accounts[user_id_1].size() + accounts[user_id_2].size());
-	std::set_union(std::begin(accounts[user_id_1]), std::end(accounts[user_id_1]),
-	               std::begin(accounts[user_id_2]), std::end(accounts[user_id_2]),
+	std::vector<int> combined(accounts[user_id_1].get_related_users().size() + accounts[user_id_2].get_related_users().size());
+	std::set_union(std::begin(accounts[user_id_1].get_related_users()), std::end(accounts[user_id_1].get_related_users()),
+	               std::begin(accounts[user_id_2].get_related_users()), std::end(accounts[user_id_2].get_related_users()),
 	               std::back_inserter(combined));
-	accounts[user_id_1].set_related_users(accounts[user_id_2].get_releated_users());
+	accounts[user_id_1].set_related_users(accounts[user_id_2].get_related_users());
 
 	// Link the accounts' relationships.
 	relationships.link(user_id_1, user_id_2);
@@ -287,9 +287,9 @@ void dsa::search()
 	else
 	{
 		// Find the intersected items in the list, which means it's a pair of transaction history.
-		std::vector<int> common(accounts[user_id_1].size() + accounts[user_id_2].size());
-		std::set_intersection(std::begin(accounts[user_id_1]), std::end(accounts[user_id_1]),
-		                      std::begin(accounts[user_id_2]), std::end(accounts[user_id_2]),
+		std::vector<int> common;
+		std::set_intersection(std::begin(accounts[last_login].get_related_users()), std::end(accounts[last_login].get_related_users()),
+		                      std::begin(accounts[user_id].get_related_users()), std::end(accounts[user_id].get_related_users()),
 		                      std::back_inserter(common));
 
 		if (common.empty())

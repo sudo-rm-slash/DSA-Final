@@ -55,7 +55,7 @@ namespace dsa
          *
          * @return Return the amount of cash before the wipe.
          */
-        int wipe_account() const;
+        int wipe_account();
 
         /*
          * @brief Get the username of this account.

@@ -42,8 +42,11 @@ int main()
 	functions lookup_table;
 	functions_init(lookup_table);
 
+	// Initialize operation buffer.
+	char operation[OP_BUFFER_SIZE];
+	std::memset(operation, 0, sizeof(char) * OP_BUFFER_SIZE);
+
 	// Start parsing strings
-	char* operation = new char[OP_BUFFER_SIZE];
 	while (std::cin >> operation)
 	{
 		// Find the target function.
