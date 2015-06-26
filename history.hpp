@@ -23,7 +23,6 @@ namespace dsa
 		std::vector<entry*> container;
 
 		int base_id;						// Normally, it's the last successful login ID.
-		std::ostream& output = std::cout;	// Default output method.
 
 		/*
 		 * DEPRECATED
@@ -57,14 +56,6 @@ namespace dsa
 		 * @return Void.
 		 */
 		void set_criteria(const int& base_id);
-
-		/*
-		 * @brief Override the default output stream (std::cout).
-		 *
-		 * @param stream Desired ostream object.
-		 * @return Void.
-		 */
-		void set_output_stream(std::ostream& stream);
 
 		/*
 		 * @brief Subscripting operator overload to easily print out A/B related entries,

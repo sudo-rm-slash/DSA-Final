@@ -45,27 +45,22 @@ void dsa::history::set_criteria(const int& base_id)
 	this->base_id = base_id;
 }
 
-void dsa::history::set_output_stream(std::ostream& stream)
-{
-	this->output = stream;
-}
-
 void dsa::history::operator[](const int& history_index)
 {
 	// Get the raw entry in the container.
-	entry& pulled_history = this->container.data()[history_index];
+	entry* pulled_history = this->container[history_index];
 
 	// Output the direction string.
 	int query_id;
-	if (pulled_history.from == base_id)
+	if (pulled_history->from == base_id)
 	{
-		this->output << "To ";
-		query_id = pulled_history.to;
+		std::cout << "To ";
+		query_id = pulled_history->to;
 	}
-	else if (pulled_history.to == base_id)
+	else if (pulled_history->to == base_id)
 	{
-		this->output << "From ";
-		query_id = pulled_history.from;
+		std::cout << "From ";
+		query_id = pulled_history->from;
 	}
 	else
 	{
@@ -74,8 +69,8 @@ void dsa::history::operator[](const int& history_index)
 
 	// Find the username and print it.
 	int user_id = relationships.find_root(query_id);
-	this->output << accounts[user_id].get_name() << " ";
+	std::cout << accounts[user_id].get_name() << " ";
 
 	// Print the amount of money during this transaction.
-	this->output << pulled_history.value << std::endl;
+	std::cout << pulled_history->value << std::endl;
 }
