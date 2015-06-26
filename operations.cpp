@@ -1,5 +1,6 @@
 #include "operations.hpp"
 #include "history.hpp"
+#include "account.hpp"
 
 dsa::disjoint_sets<int> relationships;	// The relationships between accounts.
 dsa::storage<dsa::account> accounts;	// The actual objects, which hold the info of each account.
@@ -41,9 +42,20 @@ void dsa::create()
 {
 	std::cout << "create()" << std::endl;
 
-	// Generate new acount in the storage.
+	std::string ID, password;
+	std::cin >> ID >> password;
 
-	// Acqurie the pointer to the block in the storage.
+	std::cout << "ID " << ID << " exists, ";
+	// TODO
+	// Recommends 10 best unused ids
+	
+	auto new_account = dsa::storage.insert( new dsa::account(ID,password) );
+	int  index       = dsa::relationships.make_set( new_account );
+	dsa::trie.insert( ID, index );
+
+	// Generate new account in the storage.
+
+	// Acqurie the pointer to account in the storage.
 
 	// Add the pointer to disjoint set, and acquire the generated ID(int).
 
