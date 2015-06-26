@@ -22,7 +22,8 @@ namespace dsa
 		std::vector<int> related_history;    // A list of indices, showing which history entry it has participated in.
 	
     public:
-		account(const char* username, const char* password);
+		account();
+        account(const char* username, const char* password);
         virtual ~account();
 
         /*
@@ -32,7 +33,23 @@ namespace dsa
          * @return Indicate whether the password is correct or not.
          */
         bool  authenticate(const char* password) const;
-		  
+	   
+        /*
+         * @brief Setup the account with designated info.
+         *
+         * @param username The username to assign.
+         * @param password The password to assign.
+         * @return Void.
+         */
+        void set_account(const char* username, const char* password);
+        
+        /*
+         * @brief Wipe the account, aka, the reset the account to contain no cash.
+         *
+         * @return Return the amount of cash before the wipe.
+         */
+        int wipe_account();
+
         /*
          * @brief Deposit money to this account.
          *
@@ -49,13 +66,6 @@ namespace dsa
          *         operation succeed or not.
          */
         std::pair<bool, int> withdraw(int value);
-
-        /*
-         * @brief Wipe the account, aka, the reset the account to contain no cash.
-         *
-         * @return Return the amount of cash before the wipe.
-         */
-        int wipe_account();
 
         /*
          * @brief Get the username of this account.

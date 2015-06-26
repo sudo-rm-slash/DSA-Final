@@ -1,13 +1,25 @@
 #include "account.hpp"
 
+dsa::account::account()
+{
+	// Set blank username and password.
+	this->username = new char[101];
+	std::memset(this->username, 0, sizeof(char) * 101);
+
+	this->password = new char[101];
+	std::memset(this->password, 0, sizeof(char) * 101);
+
+	// Reset the amount of cash this account holds to 0.
+	this->money = 0;
+}
+
 dsa::account::account(const char* username, const char* password)
 {
-	// Set the username.
-	this->username = new char[std::strlen(username) + 1];
+	// Set blank username and password.
+	this->username = new char[strlen(username)+1];
 	std::strcpy(this->username, username);
 
-	// Set the password.
-	this->password = new char[std::strlen(password) + 1];
+	this->password = new char[strlen(password)+1];
 	std::strcpy(this->password, password);
 
 	// Reset the amount of cash this account holds to 0.
@@ -16,9 +28,11 @@ dsa::account::account(const char* username, const char* password)
 
 dsa::account::~account()
 {
+	std::cerr << "...destructor called, for " << this->username << std::endl;
+
 	// Delete the char pointers.
-	//delete [] this->username;
-	//delete [] this->password;
+	delete [] this->username;
+	delete [] this->password;
 
 	// Reset the amount of cash.
 	this->money = 0;
@@ -31,6 +45,19 @@ bool dsa::account::authenticate(const char* password) const
 {
 	// Compare the encypted password.
 	return (std::strcmp(this->password, md5(password)) == 0);
+}
+
+void dsa::account::set_account(const char* username, const char* password)
+{
+	std::strcpy(this->username, username);
+	std::strcpy(this->password, password);
+}
+
+int dsa::account::wipe_account()
+{
+	int value = this->money;
+	this->money = 0;
+	return value;
 }
 
 int dsa::account::deposit(int value)
@@ -56,13 +83,6 @@ std::pair<bool, int> dsa::account::withdraw(int value)
 
 		return std::make_pair(true, this->money);
 	}
-}
-
-int dsa::account::wipe_account()
-{
-	int value = this->money;
-	this->money = 0;
-	return value;
 }
 
 char* dsa::account::get_name() const

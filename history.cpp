@@ -1,7 +1,7 @@
 #include "history.hpp"
 
-extern dsa::disjoint_sets<dsa::account*> relationships;
-extern dsa::storage<dsa::account> accounts;
+extern dsa::disjoint_sets<int> relationships;
+extern dsa::storage accounts;
 
 dsa::history::history()
 {

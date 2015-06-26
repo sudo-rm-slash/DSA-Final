@@ -1,14 +1,12 @@
 #include "operations.hpp"
-#include "history.hpp"
-#include "account.hpp"
 
-dsa::disjoint_sets<dsa::account*> relationships;	// The relationships between accounts.
-dsa::storage<dsa::account> accounts;				// The actual objects, which hold the info of each account.
+dsa::disjoint_sets<int> relationships;	// The relationships between accounts.
+dsa::storage accounts;					// The actual objects, which hold the info of each account.
 
-dsa::trie lookup_table;								// The TRIE structure that holds the entire search operation.
+dsa::trie lookup_table;					// The TRIE structure that holds the entire search operation.
 
-dsa::history transaction_history;					// The transaction history between accounts.
-int last_login;										// The ID(int) of the last successfully login account(string).
+dsa::history transaction_history;		// The transaction history between accounts.
+int last_login;							// The ID(int) of the last successfully login account(string).
 
 void dsa::login()
 {
@@ -50,6 +48,7 @@ void dsa::create()
 	if (user_id != -1)
 	{
 		std::cerr << "...user exists." << std::endl;
+
 		//
 		// TODO: Recommends 10 best unused ids
 		//
@@ -57,17 +56,17 @@ void dsa::create()
 		return;
 	}
 
-	// Generate new account in the storage.
-	//dsa::account new_account(username, password);
-
 	// Acqurie the pointer to account in the storage.
-	dsa::account* new_account_ptr = accounts.insert(username, password);
+	int storage_index = accounts.insert(username, password);
+	std::cerr << "...pointer acquired" << std::endl;
 
 	// Add the pointer to disjoint set, and acquire the generated ID(int).
-	int generated_id = relationships.make_set(new_account_ptr);
+	int generated_id = relationships.make_set(storage_index);
+	std::cerr << "...new relationship in the disjoint set" << std::endl;
 
 	// Store the generated ID(int) along with the account name(string) in TRIE.
 	lookup_table.insert(username, generated_id);
+	std::cerr << "...inserted in TRIE" << std::endl;
 
 	// Print create success message.
 	std::cout << "success" << std::endl;
