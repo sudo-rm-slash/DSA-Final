@@ -1,43 +1,43 @@
 #include "operations.hpp"
 #include "history.hpp"
 
-dsa::disjoint_sets<int> relationships;
+dsa::disjoint_sets<int> relationships;	// The relationships between accounts.
+dsa::storage<dsa::account> accounts;	// The actual objects, which hold the info of each account.
 
-dsa::history
-dsa::account* last_login_account;
+dsa::trie lookup_table;					// The TRIE structure that holds the entire search operation.
+
+dsa::history transaction_history;		// The transaction history between accounts.
+int last_login;							// The ID(int) of the last successfully login account(string).
 
 void dsa::login()
 {
 	std::cout << "login()" << std::endl;
 
+	// Acquire the username and password.
+	char username[101] = {0};
+	char password[101] = {0};
+	std::cin >> username >> password;
+
 	// Find the account ID(int) by account name(string).
+	last_login = dsa::trie.find(username);
+	if (last_login == -1)
+	{
+		std::cout << "ID " << username << " not found" << std::endl;
+		return;
+	}
 
 	// MD5 the password.
+	char md5[33] = md5(password);
 
 	// Authenticate the account's password.
-
-	// Update last succesfully login account(int).
-
-
-	std::string ID[100], password[100];
-
-	std::cin >> ID >> password;
-
-	// return a pointer to the account object
-	dsa::account* unauthenticated_account = dsa::trie.find(ID.c_str());
-
-	if (unauthenticated_account == nullptr)
+	if (!storage[last_login].authenticate(md5))
 	{
-		printf("ID %s not found\n", ID);
+		std::cout << "wrong password" << std::endl;
+		return;
 	}
-	else if (!unauthenticated_account->authenticate(password.c_str()))
-	{
-		printf("wrong passowrd\n");
-	}
-	else
-	{
-		printf("sucess\n");
-	}
+
+	// Print login success message.
+	std::cout << "success" << std::endl;
 }
 
 void dsa::create()
@@ -52,7 +52,7 @@ void dsa::create()
 
 	// Store the generated ID(int) along with the account name(string) in TRIE.
 
-	// 
+	//
 
 
 	int input;
@@ -94,7 +94,7 @@ void dsa::merge()
 
 	// Authenticate the account's password.
 
-	
+
 	// Link the accounts' relationships.
 
 	// Remove the entry of the second account in TRIE.
@@ -136,7 +136,7 @@ void dsa::deposit()
 	std::cout << "deposit()" << std::endl;
 
 	// Deposit the money to the last succesfully login account(int).
-	
+
 
 	int money;
 	std::cin >> money;
@@ -226,10 +226,10 @@ void dsa::search()
 
 	// Find the account ID(int) by account name(string).
 
-	// Set the criteria to last successfully login account(int). 
+	// Set the criteria to last successfully login account(int).
 
 	// Print out all the history.
-	
+
 
 	std::string ID;
 	std::cin >> ID;
