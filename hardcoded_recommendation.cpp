@@ -4,11 +4,11 @@
 	recommendations.push_back( new char[ length+1 ] ); \
 	strcpy( recommendations.last() , candidate_string ); 						
 
-#define PROBE( candidate_string ) 				\
-	if(hashmap[ candidate_string ]) 			\
-	{											\
+#define PROBE( candidate_string )               \
+	if(hashmap[ candidate_string ])             \
+	{                                           \
 		ADD_RECOMMENDATION( candidate_string )  \
-		CHECK_RETURN()						    \
+		CHECK_RETURN()                          \
 	}
 	
 #define RECOVER_STRING( candidate_string, position ) \
@@ -85,7 +85,7 @@ void dsa::hardcoded_recommendation::recommenend(const char* original_text)
 
 //
 //	Hardcoded spagetti
-//	Upper bound on candidate character to preserver alphabetic order
+//	Upper bound on candidate character to preserve alphabetic order
 //
 //	Score 1: □  □  □  ✖  |
 //
@@ -108,7 +108,7 @@ void dsa::hardcoded_recommendation::recommenend(const char* original_text)
 
 //
 //	Hardcoded spagetti
-//	Lower bound on candidate character to preserver alphabetic order
+//	Lower bound on candidate character to preserve alphabetic order
 //
 //	Score 1: □  □  □  ✖  |
 //
