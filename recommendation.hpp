@@ -1,6 +1,5 @@
 #ifndef __RECOMMENDATION_HPP__
 #define __RECOMMENDATION_HPP__
-#define DEBUG
 
 #include <cstring>
 #include <vector>
@@ -14,7 +13,7 @@
 #define CANDIDATES_SIZE 62
 namespace dsa 
 {
-	template<class T>
+	templat<class T>
 	class recommendation
 	{
 
