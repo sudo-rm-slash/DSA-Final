@@ -286,7 +286,9 @@ void dsa::search()
 			// Iterate through all the history indices.
 			for (const auto& index : common)
 			{
-				transaction_history[index];
+				auto temp = transaction_history[index];
+				std::cout << ((std::get<1>(temp) == 0) ? "To " : "From ");
+				std::cout << std::get<0>(temp) << " " << std::get<2>(temp);
 			}
 		}
 	}

@@ -45,21 +45,21 @@ void dsa::history::set_criteria(const int& base_id)
 	this->base_id = base_id;
 }
 
-void dsa::history::operator[](const int& history_index)
+std::tuple<const char*, int, int> dsa::history::operator[](const int& history_index)
 {
 	// Get the raw entry in the container.
 	entry* pulled_history = this->container[history_index];
 
 	// Output the direction string.
-	int query_id;
+	int query_id, direction;
 	if (pulled_history->from == base_id)
 	{
-		std::cout << "To ";
+		direction = 0;
 		query_id = pulled_history->to;
 	}
 	else if (pulled_history->to == base_id)
 	{
-		std::cout << "From ";
+		direction = 1;
 		query_id = pulled_history->from;
 	}
 	else
@@ -69,8 +69,7 @@ void dsa::history::operator[](const int& history_index)
 
 	// Find the username and print it.
 	int user_id = relationships.find_root(query_id);
-	std::cout << accounts[user_id].get_name() << " ";
 
-	// Print the amount of money during this transaction.
-	std::cout << pulled_history->value << std::endl;
+	// Return the reverse lookup-ed history info.
+	return std::make_tuple(accounts[user_id].get_name(), direction, pulled_history->value);
 }
