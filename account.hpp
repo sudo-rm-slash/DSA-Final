@@ -9,15 +9,17 @@
 
 #include "md5.hpp"      // md5
 
+#define FIELD_SIZE  101
+
 namespace dsa
 {
 	class account
 	{
 	private:
-		char* username;       // Username(string).
-        char* password;       // MD5 encoded password.
+		char username[FIELD_SIZE];    // Username(string).
+        char password[FIELD_SIZE];    // MD5 encoded password.
 
-        int money;            // Amount of cash stored in this account.
+        int money;                    // Amount of cash stored in this account.
 
 		std::vector<int> related_history;    // A list of indices, showing which history entry it has participated in.
 	

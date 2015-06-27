@@ -1,26 +1,13 @@
 #include "account.hpp"
 
-dsa::account::account()
-{
-	// Set blank username and password.
-	this->username = new char[101];
-	std::memset(this->username, 0, sizeof(char) * 101);
-
-	this->password = new char[101];
-	std::memset(this->password, 0, sizeof(char) * 101);
-
-	// Reset the amount of cash this account holds to 0.
-	this->money = 0;
-}
-
 dsa::account::account(const char* username, const char* password)
 {
-	// Set blank username and password.
-	this->username = new char[strlen(username)+1];
-	std::strcpy(this->username, username);
+	// Set username and password.
+	std::memset(this->username, 0, sizeof(char) * FIELD_SIZE);
+	std::strcpy(&this->username[0], username);
 
-	this->password = new char[strlen(password)+1];
-	std::strcpy(this->password, password);
+	std::memset(this->password, 0, sizeof(char) * FIELD_SIZE);
+	std::strcpy(&this->password[0], md5(password));
 
 	// Reset the amount of cash this account holds to 0.
 	this->money = 0;
@@ -28,12 +15,6 @@ dsa::account::account(const char* username, const char* password)
 
 dsa::account::~account()
 {
-	std::cerr << "...destructor called, for " << this->username << std::endl;
-
-	// Delete the char pointers.
-	delete [] this->username;
-	delete [] this->password;
-
 	// Reset the amount of cash.
 	this->money = 0;
 
@@ -87,7 +68,7 @@ std::pair<bool, int> dsa::account::withdraw(int value)
 
 char* dsa::account::get_name() const
 {
-	return username;
+	return const_cast<char*>(&username[0]);
 }
 
 int dsa::account::get_money() const

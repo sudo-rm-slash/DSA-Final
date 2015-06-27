@@ -29,6 +29,10 @@ void dsa::login()
 	if (!accounts[last_login].authenticate(password))
 	{
 		std::cout << "wrong password" << std::endl;
+
+		// Reset last_login to undefined(-1).
+		last_login = -1;
+		
 		return;
 	}
 

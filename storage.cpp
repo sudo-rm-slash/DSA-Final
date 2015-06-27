@@ -14,7 +14,7 @@ dsa::storage::~storage()
 
 int dsa::storage::insert(const char* username, const char* password)
 {
-	this->container.emplace(std::end(this->container), username, md5(password));
+	this->container.emplace_back(username, password);
 	return this->container.size() - 1;
 }
 
