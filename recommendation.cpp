@@ -1,15 +1,17 @@
-#include "hardcoded_recommendation.hpp"
+#include "recommendation.hpp"
 
 #define ADD_RECOMMENDATION( candidate_string, length ) \
 	recommendations.push_back( new char[ length+1 ] ); \
-	strcpy( recommendations.last() , candidate_string ); 						
+	strcpy( recommendations.back() , candidate_string ); 						
 
-#define PROBE( candidate_string )               \
-	if(hashmap[ candidate_string ])             \
-	{                                           \
-		ADD_RECOMMENDATION( candidate_string )  \
-		CHECK_RETURN()                          \
+
+#define PROBE( candidate_string, length )             			\
+	if(container.exist(std::string(candidate_string)))			\
+	{                                           				\
+		ADD_RECOMMENDATION( candidate_string, length ) 			\
+		CHECK_RETURN()                          				\
 	}
+
 	
 #define RECOVER_STRING( candidate_string, position ) \
 	candidate_string[ position ] = original_text[ position ];
@@ -20,7 +22,11 @@
 #define CHECK_RETURN() \
 	if( recommendations.size() > RECOMMENDATION_NUMBER )return; 
 
-void dsa::hardcoded_recommendation::character_to_index( char ch )
+template<class T>
+const char dsa::recommendation<T>::candidates_characters[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+template<class T>
+int dsa::recommendation<T>::character_to_index( char ch )
 {
 	if( ch < 'A' )
 		// ch is digit: ch - '0'
@@ -33,25 +39,28 @@ void dsa::hardcoded_recommendation::character_to_index( char ch )
 	return ch - 61;
 }
 
-void dsa::hardcoded_recommendation::enumerate_single_character_with_upperbound( char* candidate_string, int position, char upperbound = '\0')
+template<class T>
+void dsa::recommendation<T>::enumerate_single_character_with_upperbound( char* candidate_string, int position, int length, char upperbound)
 {
 	for( int i = 0; candidates_characters[i] != upperbound ; ++i )
 	{
 		candidate_string[ position ] = candidates_characters[i];
-		PROBE( candidate_string )
+		PROBE( candidate_string, length )
 	}
 }
 
-void dsa::hardcoded_recommendation::enumerate_single_character_with_lowerbound( char* candidate_string, int position, char lowerbound)
+template<class T>
+void dsa::recommendation<T>::enumerate_single_character_with_lowerbound( char* candidate_string, int position, int length, char lowerbound)
 {
 	for( int i = character_to_index(lowerbound) ; i < CANDIDATES_SIZE ; ++i )
 	{
 		candidate_string[ position ] = candidates_characters[i];
-		PROBE( candidate_string )
+		PROBE( candidate_string, length )
 	}
 }
 
-void dsa::hardcoded_recommendation::enumerate_double_character( char* candidate_string, int first, int second )
+template<class T>
+void dsa::recommendation<T>::enumerate_double_character( char* candidate_string, int length, int first, int second )
 {
 	for( int i = 0; i < CANDIDATES_SIZE ; ++i )
 	{
@@ -59,12 +68,13 @@ void dsa::hardcoded_recommendation::enumerate_double_character( char* candidate_
 		for( int j = 0; i < CANDIDATES_SIZE ; ++j )
 		{
 			candidate_string[ second ] = candidates_characters[j];
-			PROBE( candidate_string )
+			PROBE( candidate_string, length )
 		}			
 	}
 }
 
-void dsa::hardcoded_recommendation::recommenend(const char* original_text)
+template<class T>
+void dsa::recommendation<T>::recommend(const char* original_text)
 {
 
 	std::vector<char*> recommendations;
@@ -79,7 +89,7 @@ void dsa::hardcoded_recommendation::recommenend(const char* original_text)
 //
 /*----------------------------------------------------*/
 	candidate_string[ text_length-1 ] = '\0';
-	PROBE( candidate_string )
+	PROBE( candidate_string, text_length-1 )
 	RECOVER_STRING( candidate_string , text_length-1 )
 /*----------------------------------------------------*/
 
@@ -90,7 +100,7 @@ void dsa::hardcoded_recommendation::recommenend(const char* original_text)
 //	Score 1: □  □  □  ✖  |
 //
 /*----------------------------------------------------*/
-	enumerate_single_character_with_upperbound( candidate_string, text_length-1, original_text[ text_length-1 ] );
+	enumerate_single_character_with_upperbound( candidate_string, text_length-1, text_length, original_text[ text_length-1 ] );
 	CHECK_RETURN()
 	RECOVER_STRING( candidate_string , text_length-1 )
 /*----------------------------------------------------*/
@@ -101,7 +111,7 @@ void dsa::hardcoded_recommendation::recommenend(const char* original_text)
 //	Score 1: □  □  □  □  | ✖ 
 //
 /*----------------------------------------------------*/
-	enumerate_single_character_with_upperbound( candidate_string, text_length );
+	enumerate_single_character_with_upperbound( candidate_string, text_length+1, text_length );
 	CHECK_RETURN()
 	RECOVER_STRING( candidate_string , text_length )
 /*----------------------------------------------------*/
@@ -113,7 +123,7 @@ void dsa::hardcoded_recommendation::recommenend(const char* original_text)
 //	Score 1: □  □  □  ✖  |
 //
 /*----------------------------------------------------*/
-	enumerate_single_character_with_lowerbound( candidate_string, text_length-1, original_text[ text_length-1 ] );
+	enumerate_single_character_with_lowerbound( candidate_string, text_length-1, text_length, original_text[ text_length-1 ] );
 	CHECK_RETURN()
 	RECOVER_STRING( candidate_string , text_length-1 )
 /*----------------------------------------------------*/
@@ -126,7 +136,7 @@ void dsa::hardcoded_recommendation::recommenend(const char* original_text)
 /*----------------------------------------------------*/
 	CHECK_LENGTH( text_length, 2 )
 	candidate_string[ text_length-1 ] = '\0';
-	enumerate_single_character_with_upperbound( candidate_string, text_length-2, original_text[text_length-2] );
+	enumerate_single_character_with_upperbound( candidate_string, text_length-2, text_length-1, original_text[text_length-2] );
 	CHECK_RETURN()
 	RECOVER_STRING( candidate_string , text_length-2 )
 	RECOVER_STRING( candidate_string , text_length-1 )
@@ -138,7 +148,7 @@ void dsa::hardcoded_recommendation::recommenend(const char* original_text)
 //	Score 2: □  □  ✖  □  |
 //
 /*----------------------------------------------------*/
-	enumerate_single_character_with_upperbound( candidate_string, text_length-2, original_text[text_length-2] );
+	enumerate_single_character_with_upperbound( candidate_string, text_length-2, text_length, original_text[text_length-2] );
 	CHECK_RETURN()
 	RECOVER_STRING( candidate_string , text_length-2 )
 /*----------------------------------------------------*/
@@ -170,10 +180,17 @@ void dsa::hardcoded_recommendation::recommenend(const char* original_text)
 }
 
 
-void dsa::hardcoded_recommendation::print_recommendation()
+template<class T>
+void dsa::recommendation<T>::print_recommendation()
 {
 	for( auto recommendation:recommendations )
 	{
 		std::cout << recommendation << " ";
 	}
+}
+
+template<class T>
+void dsa::recommendation<T>::flush()
+{
+	recommendations.clear();
 }
