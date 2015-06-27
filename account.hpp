@@ -24,7 +24,6 @@ namespace dsa
 		std::vector<int> related_history;    // A list of indices, showing which history entry it has participated in.
 	
     public:
-		account();
         account(const char* username, const char* password);
         virtual ~account();
 

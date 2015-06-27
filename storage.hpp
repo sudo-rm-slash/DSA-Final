@@ -4,7 +4,6 @@
 #include <vector>		// std::vector
 
 #include "account.hpp"	// dsa::account
-#include "md5.hpp"		// md5
 
 namespace dsa 
 {
