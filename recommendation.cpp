@@ -117,7 +117,7 @@ void dsa::recommendation<T>::enumerate_double_character( char* candidate_string,
 {
 	// TODO 
 	// WARNING: this function will not work!
-	// Does that take alphabetic order into account!
+	// it does not take alphabetic order into account!
 	for( int i = 0; i < CANDIDATES_SIZE ; ++i )
 	{
 		candidate_string[ first ] = candidates_characters[i];
