@@ -83,7 +83,6 @@ std::vector<int>& dsa::account::get_related_history()
 
 void dsa::account::add_related_history(const int& history_index)
 {
-	std::cerr << "...add new related history=" << history_index << std::endl;
 	this->related_history.push_back(history_index);
 }
 

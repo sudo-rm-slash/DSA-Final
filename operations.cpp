@@ -23,8 +23,6 @@ void dsa::login()
 		return;
 	}
 
-	std::cerr << "...user_id=" << last_login << std::endl;
-
 	// Authenticate the account's password.
 	if (!accounts[last_login].authenticate(password))
 	{
@@ -32,7 +30,7 @@ void dsa::login()
 
 		// Reset last_login to undefined(-1).
 		last_login = -1;
-		
+
 		return;
 	}
 
@@ -51,8 +49,6 @@ void dsa::create()
 	int user_id = lookup_table.find(username);
 	if (user_id != -1)
 	{
-		std::cerr << "...user exists." << std::endl;
-
 		//
 		// TODO: Recommends 10 best unused ids
 		//
@@ -62,15 +58,12 @@ void dsa::create()
 
 	// Acqurie the pointer to account in the storage.
 	int storage_index = accounts.insert(username, password);
-	std::cerr << "...pointer acquired" << std::endl;
 
 	// Add the pointer to disjoint set, and acquire the generated ID(int).
 	int generated_id = relationships.make_set(storage_index);
-	std::cerr << "...new relationship in the disjoint set" << std::endl;
 
 	// Store the generated ID(int) along with the account name(string) in TRIE.
 	lookup_table.insert(username, generated_id);
-	std::cerr << "...inserted in TRIE" << std::endl;
 
 	// Print create success message.
 	std::cout << "success" << std::endl;
@@ -276,8 +269,6 @@ void dsa::search()
 	}
 	else
 	{
-		std::cerr << "...start finding intersection." << std::endl;
-
 		// Find the intersected items in the list, which means it's a pair of transaction history.
 		std::vector<int> common;
 		std::vector<int> list_1 = accounts[last_login].get_related_history();
@@ -285,8 +276,6 @@ void dsa::search()
 		std::set_intersection(std::begin(list_1), std::end(list_1),
 		                      std::begin(list_2), std::end(list_2),
 		                      std::back_inserter(common));
-
-		std::cerr << "...list_1.size()=" << list_1.size() << ", list_2.size()=" << list_2.size() << std::endl;
 
 		if (common.empty())
 		{
