@@ -154,6 +154,7 @@ std::list<int> dsa::trie::wildcard_node( traveler& node, char* str ){
 
 	}
 	else if( *str == '\0' ){
+<<<<<<< HEAD
 		std::cerr << "...end of string" << std::endl;
 		
 		traveler leaf = tr_node.child('\0');		
@@ -164,6 +165,9 @@ std::list<int> dsa::trie::wildcard_node( traveler& node, char* str ){
 			
 			list.push_back( leaf.get_data() );
 		}
+=======
+		//print_full_id();
+>>>>>>> 7303eafeba9653394656282f67dd5aeaac1e247f
 	}
 	else{
 		traveler tr_child = tr_node.child( *str );

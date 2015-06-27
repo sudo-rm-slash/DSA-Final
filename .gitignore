@@ -13,6 +13,15 @@ build/*
 bin/
 bin/*
 
+# VIM swap file
+*.swp
+
+# Spec PDFs
+*.pdf
+
+# Timing log files
+*time
+
 # Project specific names
 final_project
 

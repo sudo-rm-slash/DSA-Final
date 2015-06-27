@@ -1,0 +1,10 @@
+create g1 dsa2015
+create ab0 dsa1337
+create aabb dsa1126
+create g1 dsa2115
+login g1 dsa2016
+login g1 dsa2015
+deposit 5000
+transfer aabb 2000
+withdraw 1
+search aabb
