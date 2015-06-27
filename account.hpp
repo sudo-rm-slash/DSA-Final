@@ -16,7 +16,6 @@ namespace dsa
 	class account
 	{
 	private:
-		char username[FIELD_SIZE];    // Username(string).
         char password[FIELD_SIZE];    // MD5 encoded password.
 
         int money;                    // Amount of cash stored in this account.
@@ -24,7 +23,7 @@ namespace dsa
 		std::vector<int> related_history;    // A list of indices, showing which history entry it has participated in.
 	
     public:
-        account(const char* username, const char* password);
+        account(const char* password);
         virtual ~account();
 
         /*
@@ -38,11 +37,10 @@ namespace dsa
         /*
          * @brief Setup the account with designated info.
          *
-         * @param username The username to assign.
          * @param password The password to assign.
          * @return Void.
          */
-        void set_account(const char* username, const char* password);
+        void set_account(const char* password);
         
         /*
          * @brief Wipe the account, aka, the reset the account to contain no cash.
@@ -67,13 +65,6 @@ namespace dsa
          *         operation succeed or not.
          */
         std::pair<bool, int> withdraw(int value);
-
-        /*
-         * @brief Get the username of this account.
-         *
-         * @return Return the username(string) of this account.
-         */
-		char* get_name() const;
 
         /*
          * @brief Get the amount of cash in this account.

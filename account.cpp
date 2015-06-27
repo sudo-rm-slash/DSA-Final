@@ -1,11 +1,8 @@
 #include "account.hpp"
 
-dsa::account::account(const char* username, const char* password)
+dsa::account::account(const char* password)
 {
-	// Set username and password.
-	std::memset(this->username, 0, sizeof(char) * FIELD_SIZE);
-	std::strcpy(&this->username[0], username);
-
+	// Set password.
 	std::memset(this->password, 0, sizeof(char) * FIELD_SIZE);
 	std::strcpy(&this->password[0], md5(password));
 
@@ -28,9 +25,8 @@ bool dsa::account::authenticate(const char* password) const
 	return (std::strcmp(this->password, md5(password)) == 0);
 }
 
-void dsa::account::set_account(const char* username, const char* password)
+void dsa::account::set_account(const char* password)
 {
-	std::strcpy(this->username, username);
 	std::strcpy(this->password, password);
 }
 
@@ -64,11 +60,6 @@ std::pair<bool, int> dsa::account::withdraw(int value)
 
 		return std::make_pair(true, this->money);
 	}
-}
-
-char* dsa::account::get_name() const
-{
-	return const_cast<char*>(&username[0]);
 }
 
 int dsa::account::get_money() const

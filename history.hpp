@@ -4,7 +4,7 @@
 #include <vector>				// std::vector
 #include <algorithm>			// std::find_if
 #include <iostream>				// std::ostream, std::cout
-#include <utility>				// std::tuple
+#include <utility>				// std::pair
 
 #include "disjoint_sets.hpp"	// dsa::disjoint_sets
 #include "storage.hpp"			// dsa::storage
@@ -66,7 +66,7 @@ namespace dsa
 		 * @return First field is the name, second field indicates the direction, last one is the amount of cash.
 		 *		   0: To; 1: From.
 		 */
-		std::tuple<const char*, int, int> operator[](const int& associated_id);
+		std::pair<int, int> operator[](const int& associated_id);
 
 		/*
 		 * DEPRECATED

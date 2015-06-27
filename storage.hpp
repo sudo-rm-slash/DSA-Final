@@ -19,11 +19,10 @@ namespace dsa
 		/*
 		 * @brief Insert a new item into the storage.
 		 *
-		 * @param username Username of the new account.
 		 * @param password Password of the new account.
 		 * @return The address of the newly inserted item.
 		 */
-		int insert(const char* username, const char* password);
+		int insert(const char* password);
 
 		/*
 		 * @brief Subscripting operator overload to easily acquire specific account.

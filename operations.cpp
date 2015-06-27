@@ -57,7 +57,7 @@ void dsa::create()
 	}
 
 	// Acqurie the pointer to account in the storage.
-	int storage_index = accounts.insert(username, password);
+	int storage_index = accounts.insert(password);
 
 	// Add the pointer to disjoint set, and acquire the generated ID(int).
 	int generated_id = relationships.make_set(storage_index);
@@ -155,10 +155,10 @@ void dsa::merge()
 	relationships.link(user_id_1, user_id_2);
 
 	// Remove the entry of the second account in TRIE.
-	lookup_table.remove(accounts[user_id_2].get_name());
+	lookup_table.remove(username_2);
 
 	// Print transfer sucess message.
-	std::cout << "success, " << accounts[user_id_1].get_name() << " has " << accounts[user_id_1].get_money() << " dollars" << std::endl;
+	std::cout << "success, " << username_1 << " has " << accounts[user_id_1].get_money() << " dollars" << std::endl;
 }
 
 void dsa::deposit()
@@ -287,8 +287,7 @@ void dsa::search()
 			for (const auto& index : common)
 			{
 				auto temp = transaction_history[index];
-				std::cout << ((std::get<1>(temp) == 0) ? "To " : "From ");
-				std::cout << std::get<0>(temp) << " " << std::get<2>(temp);
+				std::cout << ((temp.first == 0) ? "To " : "From ") << username << " " << temp.second;
 			}
 		}
 	}

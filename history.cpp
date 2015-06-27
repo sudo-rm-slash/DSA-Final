@@ -45,7 +45,7 @@ void dsa::history::set_criteria(const int& base_id)
 	this->base_id = base_id;
 }
 
-std::tuple<const char*, int, int> dsa::history::operator[](const int& history_index)
+std::pair<int, int> dsa::history::operator[](const int& history_index)
 {
 	// Get the raw entry in the container.
 	entry* pulled_history = this->container[history_index];
@@ -71,5 +71,5 @@ std::tuple<const char*, int, int> dsa::history::operator[](const int& history_in
 	int user_id = relationships.find_root(query_id);
 
 	// Return the reverse lookup-ed history info.
-	return std::make_tuple(accounts[user_id].get_name(), direction, pulled_history->value);
+	return std::make_pair(direction, pulled_history->value);
 }

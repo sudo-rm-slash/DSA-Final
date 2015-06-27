@@ -12,9 +12,9 @@ dsa::storage::~storage()
 	this->container.clear();
 }
 
-int dsa::storage::insert(const char* username, const char* password)
+int dsa::storage::insert(const char* password)
 {
-	this->container.emplace_back(username, password);
+	this->container.emplace_back(password);
 	return this->container.size() - 1;
 }
 
