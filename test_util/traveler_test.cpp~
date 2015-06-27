@@ -1,0 +1,28 @@
+#include "util.hpp"
+#include "../trie.hpp"
+#include <iostream>
+#include <string>
+
+#define N_TEST 10
+
+
+char rand_strs[N_TEST][STR_MAX_LENGTH];
+
+int main(){
+	for( int i = 0 ; i < N_TEST ; ++i ){
+		get_random_string( rand_strs[i] );
+	}
+	
+	str_assign( rand_strs[0], "123" );
+
+	dsa::trie tr;
+	for( int i = 0 ; i < 1 ; ++i ){
+		tr.insert( rand_strs[i], i );
+	}
+
+	dsa::trie::traveler traveler = tr.get_traveler();
+	
+
+	while( std::cin >>
+}
+

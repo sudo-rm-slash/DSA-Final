@@ -1,0 +1,68 @@
+#include <string.h>
+#include <cstring>
+#include "trie.hpp"
+
+
+void* trie::find( char* str ){
+		
+	uint str_length = strlen( str );
+	uint depth = 0;
+	char key = str[depth++];
+	trie_node* node = root -> children -> find( key ) ;
+	while( node != NULL && key != '\0' ){
+		key = str[depth++];	
+		node = node -> children -> find( key );
+	}
+	return node -> ptr_account;
+}
+
+void trie::insert( char* str, account* ptr_account ){
+	
+	uint str_length = strlen( str );
+	uint depth = 0;
+	char key = str[depth++];		
+	trie_node* parent = root;
+	trie_node* node = parent -> children -> find( key );	
+	while( key != '\0' ){
+		if( node == NULL ){
+			trie::trie_node* new_node = new trie::trie_node;			
+		        parent -> children -> insert( children, str[depth], new_node );
+			node = new_node;
+			//Can do compression here.
+		}
+		key = str[depth++];
+		parent = node;
+		node = node -> children -> find( key );		
+	}
+	node -> ptr_account = ptr;
+
+}
+	
+#define MAX_LENGTH 100		
+void trie::remove( char* str ){
+
+	trie_node* node_stack[MAX_LENGTH];
+	uint str_length = strlen( str );
+	uint depth = 0;
+	node_stack[depth] = root;
+	char key = str[depth];
+	trie_node* node = root -> children -> find( key );	
+	depth++;
+	while( node != NULL && key != '\0' ){
+		node_stack[depth] = node;				
+		key = str[depth];
+		depth++;
+		node = node -> children -> find( key );
+	}
+	node -> ptr_account = NULL;
+
+	depth --;
+	
+	while( depth > 0 ){
+			
+		node_stack[depth] = node_now;
+		char_stack[depth] = str[depth];
+		depth += 1;
+		node_now = map_find( trie_obj -> children , str[depth] );		
+	}
+}
