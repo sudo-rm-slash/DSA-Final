@@ -237,7 +237,7 @@ void dsa::find()
 	std::cin >> username;
 
 	// Find the matches ID by TRIE.
-	lookup_table.wildcard_print(username);
+	//lookup_table.wildcard_print(username);
 }
 
 void dsa::search()
