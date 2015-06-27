@@ -11,6 +11,7 @@ public:
 		unsigned int index = 0;
 		char_map<T>*map;
 	public:
+		iterator();
 		//Constructor. Move index to the first element.
 		iterator(char_map<T>*);
 		//Return the data. If there is no corresponding data, it will return 0.
@@ -31,7 +32,7 @@ private:
 	int size = 0;
 	T array[ARR_SIZE] = {0} ;
 	static unsigned int key_to_ind( char key );
-
+	static char key_to_ind_map[256];
 };
 
 
@@ -49,6 +50,7 @@ unsigned char_map<T>::key_to_ind( char key ){
 	if( key == '\0' ){
 		return 62;
 	}
+	return -1;
 }
 
 template <class T>
@@ -66,6 +68,9 @@ int char_map<T>::insert( char key, T data ){
 
 template <class T>
 typename char_map<T>::iterator char_map<T>::get_iterator(){
+	if( this == nullptr ){
+		return nullptr;
+	}
 	return iterator( this );
 }
 
@@ -84,7 +89,7 @@ T char_map<T>::remove( char key ){
 		size -= 1;
 		return tmp;
 	}
-
+	return 0;
 
 #ifdef _DEBUG
 	//	assert( size >= 0 );
@@ -99,28 +104,43 @@ unsigned int char_map<T>::get_size(){
 }
 
 template <class T>
+char_map<T>::iterator::iterator(){
+}
+
+
+template <class T>
 char_map<T>::iterator::iterator(char_map<T>* map){
+	if( map == nullptr ){
+		return;
+	}
 	this -> map = map;
-	while( map -> array[index] == 0 && index < ARR_SIZE){
+	while( index < ARR_SIZE && map -> array[index] == 0  ){
 		index +=1;
 	}
 }
 
 template <class T>
 T char_map<T>::iterator::get_data(){
+	if( index >= ARR_SIZE ){
+		return 0;
+	}
 	return map -> array[index];
 }
 
 template <class T>
 bool char_map<T>::iterator::next(){
-	if( index == ARR_SIZE -1 ){
+	if( index >= ARR_SIZE -1 ){
+		index = ARR_SIZE;
 		return false;
 	}
+	index += 1;		
 	while( map -> array[index] == 0 ){
 		if( index == ARR_SIZE - 1 ){
 			return false;
 		}
-		index += 1;
+		while( index < ARR_SIZE && map -> array[index] == 0 ){
+		      index += 1;
+		}
 	}
 	return true;
 }
