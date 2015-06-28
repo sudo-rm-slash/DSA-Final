@@ -70,3 +70,8 @@ void dsa::account::merge_with(dsa::account& slave)
     // ...copy
     this->related_history = temp;
 }
+
+const std::string& dsa::account::get_username() const
+{
+	return this->username;
+}
