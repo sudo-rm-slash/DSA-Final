@@ -160,7 +160,7 @@ void dsa::recommendation<T>::recommend(const char* _original_text)
 /*----------------------------------------------------*/
 	if( text_length > 0 )
 	{
-		APPEND_END_CHARACTER( candidate_string, text_length-1 );
+		APPEND_END_CHARACTER( candidate_string, text_length-1 )
 		PROBE( candidate_string, text_length-1 )
 		RECOVER_STRING( candidate_string , text_length-1 )
 	}
@@ -221,13 +221,13 @@ void dsa::recommendation<T>::recommend(const char* _original_text)
 //
 /*----------------------------------------------------*/
 	APPEND_END_CHARACTER( candidate_string, text_length+1 ) 
-	if(!enumerate_double_character( candidate_string, std::make_pair(text_length-1, text_length+1), 
+	if(!enumerate_double_character( candidate_string, text_length+1, std::make_pair(text_length-1, text_length+1), 
 				std::make_pair(
 						std::make_pair( 0, original_text[text_length-1] ),
 						std::make_pair( 0,'\0' )
 					)
 		return;
-	if(!enumerate_double_character( candidate_string, std::make_pair(text_length-1, text_length+1), 
+	if(!enumerate_double_character( candidate_string, text_length+1, std::make_pair(text_length-1, text_length+1), 
 				std::make_pair(
 						std::make_pair(original_text[text_length-1],'\0' ),
 						std::make_pair( 0,'\0' )
@@ -277,7 +277,7 @@ void dsa::recommendation<T>::recommend(const char* _original_text)
 //	Score 3: □  □  ✖  ✖  |
 //
 /*----------------------------------------------------*/
-	if(!enumerate_double_character( candidate_string, std::make_pair(text_length-2, text_length-1), 
+	if(!enumerate_double_character( candidate_string, text_length, std::make_pair(text_length-2, text_length-1), 
 				std::make_pair(
 						std::make_pair( 0, original_text[text_length-2] ),
 						std::make_pair( 0, original_text[text_length-1] )
@@ -288,18 +288,60 @@ void dsa::recommendation<T>::recommend(const char* _original_text)
 //	Score 3: □  □  ✖  □   | ✖
 //
 /*----------------------------------------------------*/
-	if(!enumerate_double_character( candidate_string, std::make_pair(text_length-2, text_length-1), 
+	APPEND_END_CHARACTER( candidate_string, text_length+1 );
+	if(!enumerate_double_character( candidate_string, text_length+1, std::make_pair(text_length-2, text_length), 
 				std::make_pair(
 						std::make_pair( 0, original_text[text_length-2] ),
-						std::make_pair( 0, original_text[text_length-1] )
+						std::make_pair( 0, '\0' )
 					)
 		return;
-	//Score 3: □  □  □  □   | ✖  ✖
-	
-	//Score 3: □  □  ✖  □   | ✖
-	
-}
 
+//
+//	Score 3: □  □  □  □   | ✖  ✖ 
+//
+/*----------------------------------------------------*/
+	APPEND_END_CHARACTER( candidate_string, text_length+1 );
+	if(!enumerate_double_character( candidate_string, text_length+2, std::make_pair(text_length, text_length+1), 
+				std::make_pair(
+						std::make_pair( 0, '\0' ),
+						std::make_pair( 0, '\0' )
+					)
+		return;
+	
+//
+//	Score 3: □  ✖  □  □  | 
+//
+/*----------------------------------------------------*/
+	if(!enumerate_single_character_with_upperbound( candidate_string, text_length-3, text_length, std::make_pair(original_text[text_length-3],'\0') ))
+		return;
+
+
+
+	
+//
+//	Score 3: □  □  ✖  □   | ✖
+//
+/*----------------------------------------------------*/
+	APPEND_END_CHARACTER( candidate_string, text_length+1 );
+	if(!enumerate_double_character( candidate_string, text_length+1, std::make_pair(text_length-2, text_length), 
+				std::make_pair(
+						std::make_pair( original_text[text_length-2], '\0' ),
+						std::make_pair( 0, '\0' )
+					)
+		return;
+
+//
+//	Score 3: □  □  ✖  ✖  |
+//
+/*----------------------------------------------------*/
+	if(!enumerate_double_character( candidate_string, text_length, std::make_pair(text_length-2, text_length-1), 
+				std::make_pair(
+						std::make_pair( original_text[text_length-2], '\0' ),
+						std::make_pair( original_text[text_length-1], '\0' )
+					)
+		return;
+
+}
 
 
 // Print the recommendations
