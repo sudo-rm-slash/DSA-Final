@@ -6,7 +6,7 @@ dsa::relationships dsa::ownerships;			// The ownership between accounts.
 dsa::lookup_table dsa::finder;				// Support functions to find accounts.
 
 dsa::history dsa::transaction_history;		// The grand transaction history.
-											// History is dependent on accounts and ownerships.
+// History is dependent on accounts and ownerships.
 
 std::string dsa::username, dsa::password;	// Username and password for reuse.
 unsigned int dsa::last_login_id;			// Last login ID (relationship ID).
@@ -19,9 +19,11 @@ void dsa::login()
 	std::cin >> username >> password;
 
 	// Check the existance of the username.
+	unsigned int id;
 	if (finder.exists(username))
 	{
-		last_login_id = finder.find_specific(username);
+		id = finder.find_specific(username);
+		std::cerr << "...id = " << id << std::endl;
 	}
 	else
 	{
@@ -33,16 +35,14 @@ void dsa::login()
 	// Do I need to reverse lookup for it?
 
 	// Authenticate the password.
-	if (accounts[last_login_id].authenticate(password))
+	if (accounts[id].authenticate(password))
 	{
 		std::cout << "success" << std::endl;
+		last_login_id = id;
 	}
 	else
 	{
 		std::cout << "wrong password" << std::endl;
-
-		// Reset the last_login
-		last_login_id = -1;
 	}
 }
 
@@ -75,6 +75,7 @@ void dsa::create()
 
 	// Add the relationship of this account.
 	unsigned int id = ownerships.add_user(index);
+	std::cerr << "...id = " << id << std::endl;
 
 	// Store the account into the lookup table.
 	finder.insert(username, id);
@@ -145,7 +146,18 @@ void dsa::transfer()
 
 void dsa::find()
 {
+	std::cin >> username;
 
+	finder.find_wildcard(username, suggestions);
+	if (suggestions.size() > 0)
+	{
+		std::cout << suggestions[0];
+		for (auto itr = std::begin(suggestions); itr != std::end(suggestions); ++itr)
+		{
+			std::cout << ',' << *itr;
+		}
+	}
+	std::cout << std::endl;
 }
 
 void dsa::search()
