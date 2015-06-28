@@ -1,14 +1,5 @@
 #include "storage.hpp"
 
-dsa::storage::storage()
-{
-
-}
-
-dsa::storage::~storage()
-{
-
-}
 
 unsigned int dsa::storage::new_account(std::string& username, std::string& password)
 {

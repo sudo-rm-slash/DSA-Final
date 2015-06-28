@@ -1,5 +1,6 @@
 #include "history.hpp"
 
+
 unsigned int dsa::history::insert(unsigned int from_id, unsigned int to_id, unsigned int cash)
 {
 	this->container.emplace_back(from_id, to_id, cash);

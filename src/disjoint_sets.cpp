@@ -1,5 +1,6 @@
 #include "disjoint_sets.hpp"
 
+
 dsa::disjoint_sets::disjoint_sets()
 {
 	// Initialize the vector.

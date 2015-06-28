@@ -1,5 +1,6 @@
 #include "account.hpp"
 
+
 dsa::account::account(std::string& password)
 {
 	// Save a blank username.

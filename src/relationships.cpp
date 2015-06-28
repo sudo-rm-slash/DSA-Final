@@ -1,16 +1,6 @@
 #include "relationships.hpp"
 
 
-dsa::relationships::relationships()
-{
-
-}
-
-dsa::relationships::~relationships()
-{
-
-}
-
 unsigned int dsa::relationships::add_user(unsigned int index)
 {
 	return container.make_set(index);
