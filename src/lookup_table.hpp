@@ -8,7 +8,7 @@
 #elif ART
 // TODO: include "art.hpp"
 #endif
-//#include "recommendation.hpp"	// dsa::recommendation
+#include "recommendation.hpp"	// dsa::recommendation
 #include "storage.hpp"			// dsa::storage
 
 #include <unordered_map>		// std::unordered_map
@@ -30,13 +30,15 @@ namespace dsa
 
 	class lookup_table
 	{
+		friend class recommendation;
+		
 	private:
 #ifdef TRIE
 		dsa::trie tree_lookup;
 #elif ART
 #endif
 		std::unordered_map<std::string, unsigned int> hashtable_lookup;
-		//dsa::recommendation<std::unordered_map<std::string, unsigned int> > suggestion_factory(hashtable_lookup);
+		dsa::recommendation suggestion_factory(hashtable_lookup);
 
 		std::set<std::pair<unsigned int, std::string> > suggestions_buffer;
 
