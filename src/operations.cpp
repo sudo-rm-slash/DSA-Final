@@ -5,8 +5,7 @@ dsa::storage dsa::accounts;					// The accounts themselves.
 dsa::relationships dsa::ownerships;			// The ownership between accounts.
 dsa::lookup_table dsa::finder;				// Support functions to find accounts.
 
-dsa::history dsa::transaction_history;		// The grand transaction history.
-// History is dependent on accounts and ownerships.
+dsa::history dsa::transaction_history;		// The grand transaction history. History depends on accounts and ownerships.
 
 std::string dsa::username, dsa::password;	// Username and password for reuse.
 std::string dsa::username2, dsa::password2;	// Secondary username and password storage for merge() to reuse.

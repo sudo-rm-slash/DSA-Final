@@ -19,9 +19,8 @@ namespace dsa
 	extern relationships ownerships;				// The ownership between accounts.
 	extern lookup_table finder;						// Support functions to find accounts.
 
-	extern history transaction_history;				// The grand transaction history.
-													// History is dependent on accounts and ownerships.
-	
+	extern history transaction_history;				// The grand transaction history. History depends on accounts and ownerships.
+
 	extern std::string username, password;			// Username and password for reuse. 
 	extern std::string username2, password2;		// Secondary username and password storage for merge() to reuse.
 	extern unsigned int last_login_id;				// Last login ID (relationship ID).
