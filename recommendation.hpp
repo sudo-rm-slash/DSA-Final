@@ -25,9 +25,9 @@ namespace dsa
 
 	public:
 
-		recommendation(T& _container):(container(_container){}
+		recommendation(T& _container):container(_container){}
 
-		void recommend(std::vector<std::string> _recommendations, const char* _original_text);
+		void recommend(std::vector<std::string>& _recommendations, const char* _original_text);
 		void print_recommendation();
 		void flush();
 
