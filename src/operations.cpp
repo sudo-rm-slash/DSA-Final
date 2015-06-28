@@ -71,7 +71,29 @@ void dsa::create()
 
 void dsa::delete_()
 {
+	std::cin >> username >> password;
 
+	unsigned int id;
+	if (finder.exists(username))
+	{
+		id = finder.find_specific(username);
+	}
+	else
+	{
+		std::cout << "ID " << username << " not found" << std::endl;
+		return;
+	}
+
+	// Authenticate the account's password.
+	if (accounts[id].authenticate(password))
+	{
+		finder.remove(username);
+		std::cout << "success" << std::endl;
+	}
+	else
+	{
+		std::cout << "wrong password" << std::endl;
+	}
 }
 
 void dsa::merge()
