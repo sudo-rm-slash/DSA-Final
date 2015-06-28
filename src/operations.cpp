@@ -221,6 +221,9 @@ void dsa::transfer()
 
 	// Add an entry in the history.
 	unsigned int index = transaction_history.insert(last_login_id, id, value);
+	std::cerr << "...index = " << index << std::endl;
+
+	// Add the history index to both accounts.
 	accounts[last_login_id].add_related_history(index);
 	accounts[id].add_related_history(index);
 }
@@ -251,16 +254,33 @@ void dsa::search()
 	if (finder.exists(username))
 	{
 		id = finder.find_specific(username);
+
+		std::cerr << "...id = " << id << std::endl;
 	}
 	else
 	{
-		std::cout << "ID " << username << " not found" << std::endl;
+		std::cout << "ID " << username << " not found, ";
+
+		// Get suggestions and print them.
+		finder.suggest_exists(username, suggestions);
+		if (suggestions.size() > 0)
+		{
+			std::cout << suggestions[0];
+			for (auto itr = std::next(std::begin(suggestions)); itr != std::end(suggestions); ++itr)
+			{
+				std::cout << ',' << *itr;
+			}
+		}
+		std::cout << std::endl;
+
 		return;
 	}
 
 	// Find their common history.
 	std::vector<unsigned int> results;
 	accounts[last_login_id].get_common_history(accounts[id], results);
+
+	std::cerr << "...history_length = " << results.size() << std::endl;
 
 	if (results.size() == 0)
 	{
@@ -270,7 +290,7 @@ void dsa::search()
 	{
 		for (const auto& index : results)
 		{
-			std::cout << transaction_history.find(last_login_id, index) << std::endl;
+			std::cout << transaction_history.find(index, id) << std::endl;
 		}
 	}
 }
