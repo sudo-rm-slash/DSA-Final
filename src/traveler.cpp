@@ -70,23 +70,32 @@ dsa::traveler dsa::traveler::child_next(){
 			art_node48 *p48;
 			art_node256 *p256;
 		} p;
-
-		if( node -> type == NODE4 ){
-			if( child_index < 4 ){
-				return traveler( p.p4 -> children[child_index++], depth + 1 );
-			}
-			else if( node -> type == NODE4 )
-				( child_index < 16 ){
-				return traveler( p.p16 -> children[child_index++], depth + 1 );
-			}else if( child_index < 48 ){
-				return traveler( p.p48 -> children[child_index++], depth + 1 );
-			}else if( child_index < 256 ){
-				return traveler( p.p256 -> children[child_index++], depth + 1 );
-			}else{
-				return traveler();
-			}
-		}
+		
+		switch( node -> type ){
+	case NODE4:
+		if( child_index < 4 ){
+		return traveler( p.p4 -> children[child_index++], depth + 1 );
+	}		
+		break;
+	case NODE16:
+		if( child_index < 16 ){
+		return traveler( p.p16 -> children[child_index++], depth + 1 );
 	}
+		break;
+	case NODE48:
+		if( child_index < 48 ){
+		return traveler( p.p48 -> children[child_index++], depth + 1 );
+	}
+		break;
+	case NODE256:
+	        if( child_index < 256 ){
+		return traveler( p.p256 -> children[child_index++], depth + 1 );
+	}
+		break;
+	}
+	
+	}
+		return traveler();
 
 }		
 
