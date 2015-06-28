@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 
 	test( recommendation_test, "000" );
 	test( recommendation_test, "213" );
-	test( recommendation_test, "444" );
+	test( recommendation_test, "222" );
 	// test( recommendation_test, "01a" );
 	// test( recommendation_test, "113" );
 	// test( recommendation_test, "359" );

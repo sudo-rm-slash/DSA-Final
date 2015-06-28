@@ -30,11 +30,12 @@ using namespace std;
 
 // Check if candidate_string exists in our target container
 #define PROBE( candidate_string, length )             			\
-		std::cout << " --> " << candidate_string << endl; \
+	/*std::cout << " --> " << candidate_string << endl;*/ 		\
 	if(container.find(std::string(candidate_string)) == container.end())			\
 	{                                           				\
 		ADD_RECOMMENDATION( candidate_string, length ) 			\
 	}
+
 
 /* Front identifier for candidates_characters */
 #define FRONT (char)0
@@ -153,8 +154,8 @@ bool dsa::recommendation::enumerate_double_character( std::vector<std::string>& 
 }
 
 bool dsa::recommendation::enumerate_triple_character( std::vector<std::string>& recommendations, 
-														 std::vector<int>& positions, 
-														 std::vector<bound_t>& bounds )
+														 std::vector<int>&& positions, 
+														 std::vector<bound_t>&& bounds )
 {
 	for( int i = bounds[0].first ? character_to_index(bounds[0].first)+1 : 0; candidates_characters[i] != bounds[0].second ; ++i )
 	{
@@ -219,7 +220,9 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 //	Score 1: □  □  □  □  | ✖ 
 //
 /*----------------------------------------------------*/
+#ifdef DEBUG
 	 std::cout<<"Score 1: □  □  □  □  | ✖  \n";
+#endif
 	APPEND_END_CHARACTER( candidate_string, text_length+1 )
 	if(!enumerate_single_character( recommendations , text_length , std::make_pair(FRONT,END)  ))
 		return;
@@ -232,7 +235,9 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 //
 /*----------------------------------------------------*/
 
+#ifdef DEBUG
 	 std::cout<<"Score 1: □  □  □  ✖  \n";
+#endif
 	if( text_length > 0 )
 	{
 		if(!enumerate_single_character( recommendations , text_length-1 , std::make_pair(original_text[ text_length-1 ],END) ))
@@ -244,7 +249,9 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 //	Score 2: □  □  ✖  ○  | 
 //
 /*----------------------------------------------------*/
+#ifdef DEBUG
 	std::cout<<"Score 2: □  □  ✖  ○  | \n";
+#endif
 	if( text_length > 1 )
 	{
 		APPEND_END_CHARACTER( candidate_string, text_length-1 )
@@ -258,7 +265,9 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 //	Score 2: □  □  ✖  □  |
 //
 /*----------------------------------------------------*/
+#ifdef DEBUG
 	std::cout<<"Score 2: □  □  ✖  □  |\n";
+#endif
 	if( text_length > 1 )
 	{
 		if(!enumerate_single_character( recommendations , text_length-2, std::make_pair(FRONT,original_text[text_length-2]) ))
@@ -271,7 +280,9 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 //	Score 2: □  □  □  ✖  | ✖ 
 //
 /*----------------------------------------------------*/
+#ifdef DEBUG
 	std::cout<<"Score 2: □  □  □  ✖  | ✖  \n";
+#endif
 	if( text_length > 0 )
 	{
 		APPEND_END_CHARACTER( candidate_string, text_length+1 ) 
@@ -295,7 +306,9 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 //	Score 2: □  □  ✖  ○  | 
 //
 /*----------------------------------------------------*/
+#ifdef DEBUG
 	std::cout <<"Score 2: □  □  ✖  ○  | \n";
+#endif
 	if( text_length > 1 )
 	{
 		APPEND_END_CHARACTER( candidate_string, text_length-1 )
@@ -307,7 +320,9 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 //	Score 2: □  □  ✖  □  |
 //
 /*----------------------------------------------------*/
+#ifdef DEBUG
 	std::cout << "Score 2: □  □  ✖  □  |\n";
+#endif
 	if( text_length > 1 )
 	{
 		if(!enumerate_single_character( recommendations , text_length-2, std::make_pair(original_text[text_length-2],END) ))
@@ -319,7 +334,9 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 //	Score 3: □  ✖  □  □  | 
 //
 /*----------------------------------------------------*/
+#ifdef DEBUG
 	std::cout<<"Score 3: □  ✖  □  □  | \n";
+#endif
 	if( text_length > 2 )
 	{
 		if(!enumerate_single_character( recommendations , text_length-3, std::make_pair(0,original_text[text_length-3]) ))
@@ -331,7 +348,9 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 //	Score 3: □  □  ○  ○  |
 //
 /*----------------------------------------------------*/
+#ifdef DEBUG
 	std::cout<<"Score 3: □  □  ○  ○  |\n";
+#endif
 	if( text_length > 2 )
 	{
 		APPEND_END_CHARACTER( candidate_string, text_length-2 );
@@ -339,11 +358,33 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 		RECOVER_STRING( candidate_string , text_length-2 )
 	}
 
-{ std::make_pair(FRONT,CUR), std::make_pair(FRONT,CUR), std::make_pair(FRONT,END) }
+//
+//	Score 3: □  □  ✖  ✖  |
+//	Score 3: □  □  ✖  □   | ✖
+//
+/*----------------------------------------------------*/
+
+#ifdef DEBUG
+	std::cout<<"Score 3: □  □  ✖  ✖   + Score 3: □  □  ✖  □   | ✖  \n";
+#endif
+	if( text_length > 1 )
+	{
+		APPEND_END_CHARACTER( candidate_string, text_length+1 );
+		if(!enumerate_triple_character( recommendations, 
+										{text_length-2,text_length-1,text_length},
+										{ std::make_pair(FRONT,original_text[text_length-2]), 
+										  std::make_pair(FRONT,original_text[text_length-1]), 
+										  std::make_pair(FRONT,END) 
+										}))
+		return;
+		RECOVER_STRING( candidate_string, text_length+1 );
+	}
+
 //
 //	Score 3: □  □  ✖  ✖  |
 //
 /*----------------------------------------------------*/
+/*
 	std::cout<<"Score 3: □  □  ✖  ✖  |\n";
 	if( text_length > 1 )
 	{
@@ -354,11 +395,12 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 						)))
 			return;
 	}
-	
+*/	
 //
 //	Score 3: □  □  ✖  □   | ✖
 //
 /*----------------------------------------------------*/
+/*
 	std::cout<<"Score 3: □  □  ✖  □   | ✖  \n";
 	if( text_length > 1 )
 	{
@@ -370,12 +412,15 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 						)))
 			return;
 	}
+*/
 //
 //	Score 3: □  □  □  □   | ✖  ✖ 
 //
 /*----------------------------------------------------*/
+#ifdef DEBUG
 	std::cout<<"Score 3: □  □  □  □   | ✖  ✖  \n";
-	APPEND_END_CHARACTER( candidate_string, text_length+1 );
+#endif
+	APPEND_END_CHARACTER( candidate_string, text_length+2 );
 	if(!enumerate_double_character( recommendations , std::make_pair(text_length, text_length+1), 
 				std::make_pair(
 						std::make_pair(FRONT, END ),
@@ -387,7 +432,9 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 //	Score 3: □  ✖  □  □  | 
 //
 /*----------------------------------------------------*/
+#ifdef DEBUG
 	std::cout<<"Score 3: □  ✖  □  □  | \n";
+#endif
 	if( text_length > 2 )
 	{
 		if(!enumerate_single_character( recommendations , text_length-3, std::make_pair(original_text[text_length-3],END) ))
@@ -395,12 +442,32 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 	}
 
 
-
+//
+//	Score 3: □  □  ✖  □   | ✖  +  Score 3:  □  □  ✖  ✖  |
+//
+/*----------------------------------------------------*/
+#ifdef DEBUG
+	std::cout<<"Score 3: □  □  ✖  ✖   + Score 3: □  □  ✖  □   | ✖  \n";
+#endif
+	if( text_length > 1 )
+	{
+		APPEND_END_CHARACTER( candidate_string, text_length+1);
+		if(!enumerate_triple_character( recommendations, 
+										{text_length-2,text_length-1,text_length},
+										{ std::make_pair(original_text[text_length-2],END), 
+										  std::make_pair(FRONT,END),
+										  std::make_pair(original_text[text_length-1],END)
+										}))
+		return;
+		RECOVER_STRING( candidate_string, text_length+1);
+	}
 	
 //
 //	Score 3: □  □  ✖  □   | ✖
 //
 /*----------------------------------------------------*/
+/*
+	std::cout<<"Score 3: □  □  ✖  □   | ✖ \n";
 	if( text_length > 1 )
 	{
 		APPEND_END_CHARACTER( candidate_string, text_length+1 );
@@ -411,11 +478,13 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 						)))
 			return;
 	}
-
+*/
 //
 //	Score 3: □  □  ✖  ✖  |
 //
 /*----------------------------------------------------*/
+/*	
+	std::cout<<"Score 3: □  □  ✖  ✖  | \n";
 	if( text_length > 1 )
 	{
 		if(!enumerate_double_character( recommendations , std::make_pair(text_length-2, text_length-1), 
@@ -425,6 +494,7 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 						)))
 			return;
 	}
+*/
 
 }
 
