@@ -1,6 +1,19 @@
 #include "operations.hpp"
 
 
+dsa::storage dsa::accounts;					// The accounts themselves.
+dsa::relationships dsa::ownerships;			// The ownership between accounts.
+dsa::lookup_table dsa::finder;				// Support functions to find accounts.
+
+dsa::history dsa::transaction_history;		// The grand transaction history.
+											// History is dependent on accounts and ownerships.
+
+std::string dsa::username, dsa::password;	// Username and password for reuse.
+unsigned int dsa::last_login_id;			// Last login ID (relationship ID).
+
+std::vector<std::string> dsa::suggestions;	// Container to store all the suggestions.
+
+
 void dsa::login()
 {
 	std::cin >> username >> password;
