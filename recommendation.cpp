@@ -1,12 +1,14 @@
+#include "recommendation.hpp"
 
 // Extra space reserved for candidate strings
 #define EXTRA_SPACE 4
 
 // Candidate has been confirmed and can be added into recommendation lists.
 #define ADD_RECOMMENDATION( candidate_string, length ) \
-	recommendations->push_back( std::string(candidate_string) ); \
+	recommendations.push_back( std::string( candidate_string ) ); 
+
 //#define ADD_RECOMMENDATION( candidate_string, length ) \
-	recommendations->push_back( new char[ length+1 ] ); \
+	recommendations.push_back( new char[ length+1 ] ); \
 	strcpy( recommendations.back() , candidate_string ); 						
 
 // Append '\0' to some position so that candidate_string ends there
@@ -23,24 +25,24 @@
 
 // Check if we have reached the required number of recommendations
 #define CHECK_RETURN() \
-	if( recommendations->size() > RECOMMENDATION_NUMBER )return; 
+	if( recommendations.size() > RECOMMENDATION_NUMBER )return; 
 
 // Check if candidate_string exists in our target container
 #define PROBE( candidate_string, length )             			\
-	if(!container.exist(std::string(candidate_string)))			\
+	if(container.find(std::string(candidate_string)) == container.end())			\
 	{                                           				\
 		ADD_RECOMMENDATION( candidate_string, length ) 			\
+		std::cout << " --> "<< candidate_string << std::endl;  \
 	}
 
 /* Front identifier for candidates_characters */
 #define FRONT (char)0
 /* End   identifier for candidates_characters */
 #define END   '\0'
-	
 
-template<class T>
-const char dsa::recommendation<T>::candidates_characters[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-
+#define CANDIDATE_NUMBER 9
+// const char dsa::recommendation::candidates_characters[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+ const char dsa::recommendation::candidates_characters[] = "012ABCabc";
 /** 
  * @Function: map character to its corresponding index in static variable 'candidates_characters' 
  * 
@@ -48,19 +50,30 @@ const char dsa::recommendation<T>::candidates_characters[] = "0123456789ABCDEFGH
  * 
  * @Return: index
  */
-template<class T>
-int dsa::recommendation<T>::character_to_index( char ch )
+int dsa::recommendation::character_to_index( char ch )
 {
 	if( ch < 'A' )
 		// ch is digit: ch - '0'
 		return ch - '0';
 	if( ch < 'a' )
-		// ch is uppercase alphabet: ch - 'A' + 10 ( ch - 65 + 10 )
-		return ch - 55;
+		// ch is uppercase alphabet
+		return ch - 'A' + 3;
 	
-	// ch is lowercase alphabet: ch - 'a' + 10 + 26 ( ch - 97 + 10 + 26 )
-	return ch - 61;
+	// ch is lowercase alphabet
+	return ch - 'a' + 3 + 3;
 }
+// int dsa::recommendation::character_to_index( char ch )
+// {
+	// if( ch < 'A' )
+		// // ch is digit: ch - '0'
+		// return ch - '0';
+	// if( ch < 'a' )
+		// // ch is uppercase alphabet: ch - 'A' + 10 ( ch - 65 + 10 )
+		// return ch - 55;
+	
+	// // ch is lowercase alphabet: ch - 'a' + 10 + 26 ( ch - 97 + 10 + 26 )
+	// return ch - 61;
+// }
 
 /** 
  * @Function:  enumerate all possible characters of a single slot
@@ -87,8 +100,7 @@ int dsa::recommendation<T>::character_to_index( char ch )
  * @Param:     upperbound ( upperbound to the enumeration ) 
  */
 
-template<class T>
-bool dsa::recommendation<T>::enumerate_single_character( char* candidate_string, int position, int length, bound_t bounds )
+bool dsa::recommendation::enumerate_single_character( std::vector<std::string>& recommendations, int position, int length, bound_t bounds )
 {
 	if( position < 0 )
 		return true;
@@ -96,7 +108,7 @@ bool dsa::recommendation<T>::enumerate_single_character( char* candidate_string,
 	{
 		candidate_string[ position ] = candidates_characters[i];
 		PROBE( candidate_string, length )
-		if( recommendations->size() > RECOMMENDATION_NUMBER )
+		if( recommendations.size() > RECOMMENDATION_NUMBER )
 			return false; 
 	}
 
@@ -116,8 +128,7 @@ bool dsa::recommendation<T>::enumerate_single_character( char* candidate_string,
  * 
  * @Return:    
  */
-template<class T>
-bool dsa::recommendation<T>::enumerate_double_character( char* candidate_string, 
+bool dsa::recommendation::enumerate_double_character( std::vector<std::string>& recommendations, 
 														 int length, 
 														 std::pair<int,int> positions, 
 														 std::pair<bound_t,bound_t>&& bounds_pair )
@@ -129,7 +140,7 @@ bool dsa::recommendation<T>::enumerate_double_character( char* candidate_string,
 	{
 		candidate_string[ positions.first ] = candidates_characters[i];
 
-		if(!enumerate_single_character( candidate_string, length, positions.second, bounds_pair.second ))
+		if(!enumerate_single_character( recommendations , length, positions.second, bounds_pair.second ))
 			return false;
 	}
 
@@ -139,15 +150,13 @@ bool dsa::recommendation<T>::enumerate_double_character( char* candidate_string,
 	return true;
 }
 
-template<class T>
-void dsa::recommendation<T>::recommend(std::vector<std::string>& _recommendations, const char* _original_text)
+void dsa::recommendation::recommend(std::vector<std::string>& recommendations, const char* _original_text)
 {
-	this->original_text = _original_text;
-	this->recommendations = &_recommendations; 
 	int  text_length = std::strlen( _original_text );
-	auto candidate_string = new char[ text_length + EXTRA_SPACE + 1 ];
-	std::strcpy( candidate_string, _original_text );
 
+	this->original_text = _original_text;
+	this->candidate_string = new char[ text_length + EXTRA_SPACE + 1 ];
+	std::strcpy( candidate_string, _original_text );
 
 /*
  * 
@@ -164,7 +173,7 @@ void dsa::recommendation<T>::recommend(std::vector<std::string>& _recommendation
 //	Score 1: □  □  □  ○  |
 //
 /*----------------------------------------------------*/
-	if( text_length > 0 )
+	if( text_length > 1 )
 	{
 		APPEND_END_CHARACTER( candidate_string, text_length-1 )
 		PROBE( candidate_string, text_length-1 )
@@ -178,16 +187,20 @@ void dsa::recommendation<T>::recommend(std::vector<std::string>& _recommendation
 //	Score 1: □  □  □  ✖  |
 //
 /*----------------------------------------------------*/
-	if(!enumerate_single_character( candidate_string , text_length-1 , text_length, std::make_pair( FRONT,original_text[ text_length-1 ]) ))
-		return;
+	if( text_length > 1 )
+	{
+		if(!enumerate_single_character( recommendations , text_length-1 , text_length, std::make_pair( FRONT,original_text[ text_length-1 ]) ))
+			return;
+	}
 /*----------------------------------------------------*/
 
 //
 //	Score 1: □  □  □  □  | ✖ 
 //
 /*----------------------------------------------------*/
+	std::cout<<" Score 1:  □  □  □  □  | ✖  \n";
 	APPEND_END_CHARACTER( candidate_string, text_length+1 )
-	if(!enumerate_single_character( candidate_string , text_length , text_length , std::make_pair(FRONT,END)  ))
+	if(!enumerate_single_character( recommendations , text_length , text_length , std::make_pair(FRONT,END)  ))
 		return;
 /*----------------------------------------------------*/
 
@@ -197,18 +210,24 @@ void dsa::recommendation<T>::recommend(std::vector<std::string>& _recommendation
 //	Score 1: □  □  □  ✖  |
 //
 /*----------------------------------------------------*/
-	if(!enumerate_single_character( candidate_string , text_length-1 , text_length , std::make_pair(original_text[ text_length-1 ],END) ))
-		return;
+
+	std::cout<<" Score 1: □  □  □  ✖  \n";
+	if( text_length > 0 )
+	{
+		if(!enumerate_single_character( recommendations , text_length-1 , text_length , std::make_pair(original_text[ text_length-1 ],END) ))
+			return;
+	}
 /*----------------------------------------------------*/
 
 //
 //	Score 2: □  □  ✖  ○  | 
 //
 /*----------------------------------------------------*/
-	if( text_length > 0 )
+	std::cout<<" Score 2: □  □  ✖  ○  | \n";
+	if( text_length > 1 )
 	{
 		APPEND_END_CHARACTER( candidate_string, text_length-1 )
-		if(!enumerate_single_character( candidate_string , text_length-2 , text_length-1, std::make_pair(FRONT, original_text[text_length-2]) ))
+		if(!enumerate_single_character( recommendations , text_length-2 , text_length-1, std::make_pair(FRONT, original_text[text_length-2]) ))
 			return;
 	}
 /*----------------------------------------------------*/
@@ -217,8 +236,11 @@ void dsa::recommendation<T>::recommend(std::vector<std::string>& _recommendation
 //	Score 2: □  □  ✖  □  |
 //
 /*----------------------------------------------------*/
-	if(!enumerate_single_character( candidate_string , text_length-2 , text_length, std::make_pair(FRONT,original_text[text_length-2]) ))
-		return;
+	if( text_length > 1 )
+	{
+		if(!enumerate_single_character( recommendations , text_length-2 , text_length, std::make_pair(FRONT,original_text[text_length-2]) ))
+			return;
+	}
 /*----------------------------------------------------*/
 
 
@@ -226,19 +248,22 @@ void dsa::recommendation<T>::recommend(std::vector<std::string>& _recommendation
 //	Score 2: □  □  □  ✖  | ✖ 
 //
 /*----------------------------------------------------*/
-	APPEND_END_CHARACTER( candidate_string, text_length+1 ) 
-	if(!enumerate_double_character( candidate_string, text_length+1, std::make_pair(text_length-1, text_length+1), 
-				std::make_pair(
-						std::make_pair( FRONT, original_text[text_length-1] ),
-						std::make_pair( FRONT,END )
-					)))
-		return;
-	if(!enumerate_double_character( candidate_string, text_length+1, std::make_pair(text_length-1, text_length+1), 
-				std::make_pair(
-						std::make_pair(original_text[text_length-1],END ),
-						std::make_pair( FRONT,END )
-					)))
-		return;
+	if( text_length > 0 )
+	{
+		APPEND_END_CHARACTER( candidate_string, text_length+1 ) 
+		if(!enumerate_double_character( recommendations , text_length+1, std::make_pair(text_length-1, text_length+1), 
+					std::make_pair(
+							std::make_pair( FRONT, original_text[text_length-1] ),
+							std::make_pair( FRONT,END )
+						)))
+			return;
+		if(!enumerate_double_character( recommendations , text_length+1, std::make_pair(text_length-1, text_length+1), 
+					std::make_pair(
+							std::make_pair(original_text[text_length-1],END ),
+							std::make_pair( FRONT,END )
+						)))
+			return;
+	}
 	//RECOVER_STRING( candidate_string , text_length ) /* recover '\0' */
 /*----------------------------------------------------*/
 
@@ -246,33 +271,39 @@ void dsa::recommendation<T>::recommend(std::vector<std::string>& _recommendation
 //	Score 2: □  □  ✖  ○  | 
 //
 /*----------------------------------------------------*/
-	if( text_length > 0 )
+	if( text_length > 1 )
 	{
 		APPEND_END_CHARACTER( candidate_string, text_length-1 )
-		if(!enumerate_single_character( candidate_string , text_length-2 , text_length-1, std::make_pair(original_text[text_length-2],END ) ))
+		if(!enumerate_single_character( recommendations , text_length-2 , text_length-1, std::make_pair(original_text[text_length-2],END ) ))
 			return;
 	}
 //
 //	Score 2: □  □  ✖  □  |
 //
 /*----------------------------------------------------*/
-	if(!enumerate_single_character( candidate_string , text_length-2 , text_length, std::make_pair(original_text[text_length-2],END) ))
-		return;
+	if( text_length > 1 )
+	{
+		if(!enumerate_single_character( recommendations , text_length-2 , text_length, std::make_pair(original_text[text_length-2],END) ))
+			return;
+	}
 /*----------------------------------------------------*/
 
 //
 //	Score 3: □  ✖  □  □  | 
 //
 /*----------------------------------------------------*/
-	if(!enumerate_single_character( candidate_string, text_length-3, text_length, std::make_pair(0,original_text[text_length-3]) ))
-		return;
+	if( text_length > 2 )
+	{
+		if(!enumerate_single_character( recommendations , text_length-3, text_length, std::make_pair(0,original_text[text_length-3]) ))
+			return;
+	}
 
 
 //
 //	Score 3: □  □  ○  ○  |
 //
 /*----------------------------------------------------*/
-	if( text_length > 2 )
+	if( text_length > 3 )
 	{
 		APPEND_END_CHARACTER( candidate_string, text_length-2 );
 		PROBE( candidate_string, text_length-2 )
@@ -283,31 +314,36 @@ void dsa::recommendation<T>::recommend(std::vector<std::string>& _recommendation
 //	Score 3: □  □  ✖  ✖  |
 //
 /*----------------------------------------------------*/
-	if(!enumerate_double_character( candidate_string, text_length, std::make_pair(text_length-2, text_length-1), 
-				std::make_pair(
-						std::make_pair(FRONT, original_text[text_length-2] ),
-						std::make_pair(FRONT, original_text[text_length-1] )
-					)))
-		return;
+	if( text_length > 1 )
+	{
+		if(!enumerate_double_character( recommendations , text_length, std::make_pair(text_length-2, text_length-1), 
+					std::make_pair(
+							std::make_pair(FRONT, original_text[text_length-2] ),
+							std::make_pair(FRONT, original_text[text_length-1] )
+						)))
+			return;
+	}
 	
 //
 //	Score 3: □  □  ✖  □   | ✖
 //
 /*----------------------------------------------------*/
-	APPEND_END_CHARACTER( candidate_string, text_length+1 );
-	if(!enumerate_double_character( candidate_string, text_length+1, std::make_pair(text_length-2, text_length), 
-				std::make_pair(
-						std::make_pair(FRONT, original_text[text_length-2] ),
-						std::make_pair(FRONT, END )
-					)))
-		return;
-
+	if( text_length > 1 )
+	{
+		APPEND_END_CHARACTER( candidate_string, text_length+1 );
+		if(!enumerate_double_character( recommendations , text_length+1, std::make_pair(text_length-2, text_length), 
+					std::make_pair(
+							std::make_pair(FRONT, original_text[text_length-2] ),
+							std::make_pair(FRONT, END )
+						)))
+			return;
+	}
 //
 //	Score 3: □  □  □  □   | ✖  ✖ 
 //
 /*----------------------------------------------------*/
 	APPEND_END_CHARACTER( candidate_string, text_length+1 );
-	if(!enumerate_double_character( candidate_string, text_length+2, std::make_pair(text_length, text_length+1), 
+	if(!enumerate_double_character( recommendations , text_length+2, std::make_pair(text_length, text_length+1), 
 				std::make_pair(
 						std::make_pair(FRONT, END ),
 						std::make_pair(FRONT, END )
@@ -318,8 +354,11 @@ void dsa::recommendation<T>::recommend(std::vector<std::string>& _recommendation
 //	Score 3: □  ✖  □  □  | 
 //
 /*----------------------------------------------------*/
-	if(!enumerate_single_character( candidate_string, text_length-3, text_length, std::make_pair(original_text[text_length-3],END) ))
-		return;
+	if( text_length > 2 )
+	{
+		if(!enumerate_single_character( recommendations , text_length-3, text_length, std::make_pair(original_text[text_length-3],END) ))
+			return;
+	}
 
 
 
@@ -328,43 +367,31 @@ void dsa::recommendation<T>::recommend(std::vector<std::string>& _recommendation
 //	Score 3: □  □  ✖  □   | ✖
 //
 /*----------------------------------------------------*/
-	APPEND_END_CHARACTER( candidate_string, text_length+1 );
-	if(!enumerate_double_character( candidate_string, text_length+1, std::make_pair(text_length-2, text_length), 
-				std::make_pair(
-						std::make_pair( original_text[text_length-2], END ),
-						std::make_pair(FRONT, END )
-					)))
-		return;
+	if( text_length > 1 )
+	{
+		APPEND_END_CHARACTER( candidate_string, text_length+1 );
+		if(!enumerate_double_character( recommendations , text_length+1, std::make_pair(text_length-2, text_length), 
+					std::make_pair(
+							std::make_pair( original_text[text_length-2], END ),
+							std::make_pair(FRONT, END )
+						)))
+			return;
+	}
 
 //
 //	Score 3: □  □  ✖  ✖  |
 //
 /*----------------------------------------------------*/
-	if(!enumerate_double_character( candidate_string, text_length, std::make_pair(text_length-2, text_length-1), 
-				std::make_pair(
-						std::make_pair( original_text[text_length-2], END ),
-						std::make_pair( original_text[text_length-1], END )
-					)))
-		return;
+	if( text_length > 1 )
+	{
+		if(!enumerate_double_character( recommendations , text_length, std::make_pair(text_length-2, text_length-1), 
+					std::make_pair(
+							std::make_pair( original_text[text_length-2], END ),
+							std::make_pair( original_text[text_length-1], END )
+						)))
+			return;
+	}
 
 }
 
 
-// Print the recommendations
-// template<class T>
-// void dsa::recommendation<T>::print_recommendation()
-// {
-	// for( auto recommendation: recommendations )
-	// {
-		// std::cout << recommendation << " ";
-	// }
-
-	// std::cout << "\n";
-// }
-
-// // Clean the recommendation list
-// template<class T>
-// void dsa::recommendation<T>::flush()
-// {
-	// recommendations.clear();
-// }
