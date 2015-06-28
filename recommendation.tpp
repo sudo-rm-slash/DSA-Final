@@ -138,9 +138,10 @@ bool dsa::recommendation<T>::enumerate_double_character( char* candidate_string,
 }
 
 template<class T>
-void dsa::recommendation<T>::recommend(const char* _original_text)
+void dsa::recommendation<T>::recommend(std::vector<std::string>& _recommendations, const char* _original_text)
 {
-	this->original_text = _original_text;
+	this->original_text   = _original_text;
+	this->recommendations = _recommendations;
 	int  text_length = std::strlen( _original_text );
 	auto candidate_string = new char[ text_length + EXTRA_SPACE + 1 ];
 	std::strcpy( candidate_string, _original_text );

@@ -63,6 +63,24 @@ class test_hashmap
 
 };
 
+void insert_hashmap( char* test_case, int scale, int dept )
+{
+	if( dept < 0 )
+	{
+		if( rand() % 10 > 3 )
+		{
+			map.emplace( test_case, test_case );
+			std::cout << "Putting " <<test_case << std::endl;
+		}
+	}	
+	else
+	{
+		for( char i = 0; i < scale; ++i )
+			test_case[dept] = candidates_characters[i];
+		insert_hashmap( scale, dept-1 );
+	}
+
+}
 int test(const char* testcase)
 {
 	recommendation_test.recommend("ade");
