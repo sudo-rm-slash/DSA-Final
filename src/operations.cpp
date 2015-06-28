@@ -103,12 +103,26 @@ void dsa::merge()
 
 void dsa::deposit()
 {
+	unsigned int value;
+	std::cin >> value;
 
+	std::cout << "success, " << accounts[last_login_id].deposit(value) << " dollars in current account" << std::endl;
 }
 
 void dsa::withdraw()
 {
+	unsigned int value;
+	std::cin >> value;
 
+	auto status = accounts[last_login_id].withdraw(value);
+	if (status.first)
+	{
+		std::cout << "success, " << status.second << " dollars left in current account" << std::endl;
+	}
+	else
+	{
+		std::cout << "fail, " << status.second << " dollars only in current account" << std::endl;
+	}
 }
 
 void dsa::transfer()
