@@ -6,6 +6,11 @@ void dsa::lookup_table::insert(const std::string& username, unsigned int id)
 	hashtable_lookup.emplace(username, id);
 }
 
+void dsa::lookup_table::remove(const std::string& username)
+{
+	hashtable_lookup.erase(username);
+}
+
 bool dsa::lookup_table::exists(const std::string& username)
 {
 	bool found = false;

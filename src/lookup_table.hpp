@@ -45,6 +45,13 @@ namespace dsa
 		 */
 		void insert(const std::string& username, unsigned int id);
 
+		/**
+		 * Reomve an entry in the lookup table.
+		 * @arg username The string username.
+		 * @return Void.
+		 */
+		void remove(const std::string& username);
+
 		/*
 		 * Check whether specificed username exists in the table or not.
 		 * @arg username The username to search for.
