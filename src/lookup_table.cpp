@@ -25,6 +25,8 @@ bool dsa::lookup_table::exists(const std::string& username)
 	}
 	else
 	{
+		this->dirty_last_found_id = true;
+
 		return false;
 	}
 }
@@ -112,31 +114,33 @@ void dsa::lookup_table::suggest_exists(const std::string& username, std::vector<
 	suggestions.clear();
 
 	// Save the result to vector.
+	std::cout << std::endl;
 	for (const auto& candidate : this->suggestions_buffer)
 	{
+		std::cout << "...score = " << candidate.first << ", " << candidate.second << std::endl;
 		suggestions.push_back(candidate.second);
 	}
 }
 
 unsigned int dsa::lookup_table::calculate_score(const std::string& str1, const std::string& str2)
 {
-	unsigned int score = 0, length_diff, max_length;
+	unsigned int score = 0, length_diff, min_length;
 
 	// Note: Bet the size difference won't be large.
 	if (str1.size() > str2.size())
 	{
 		length_diff = str1.size() - str2.size();
-		max_length = str2.size();
+		min_length = str2.size();
 	}
 	else
 	{
 		length_diff = str2.size() - str1.size();
-		max_length = str1.size();
+		min_length = str1.size();
 	}
 
 	auto itr1 = str1.rbegin();
 	auto itr2 = str2.rbegin();
-	for (unsigned int i = 0; i < max_length; ++itr1, ++itr2, i++)
+	for (unsigned int i = 1; i <= min_length; ++itr1, ++itr2, i++)
 	{
 		if (*itr1 != *itr2)
 		{
@@ -150,5 +154,5 @@ unsigned int dsa::lookup_table::calculate_score(const std::string& str1, const s
 void dsa::lookup_table::suggest_nonexists(const std::string& username, std::vector<std::string>& suggestions)
 {
 	suggestions.clear();
-	suggestion_factory.recommend(suggestions, username.c_str());
+	suggestion_factory->recommend(suggestions, username.c_str());
 }

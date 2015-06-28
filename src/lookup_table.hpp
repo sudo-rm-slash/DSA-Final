@@ -30,15 +30,13 @@ namespace dsa
 
 	class lookup_table
 	{
-		friend class recommendation;
-		
 	private:
 #ifdef TRIE
 		dsa::trie tree_lookup;
 #elif ART
 #endif
 		std::unordered_map<std::string, unsigned int> hashtable_lookup;
-		dsa::recommendation suggestion_factory(hashtable_lookup);
+		dsa::recommendation* suggestion_factory;
 
 		std::set<std::pair<unsigned int, std::string> > suggestions_buffer;
 
@@ -47,6 +45,17 @@ namespace dsa
 
 
 	public:
+		lookup_table()
+		{
+			suggestion_factory = new dsa::recommendation(hashtable_lookup);
+		}
+
+		~lookup_table()
+		{
+			delete suggestion_factory;
+		}
+
+		
 		/**
 		 * Insert a new account entry in the lookup table.
 		 * @arg username The string username.

@@ -55,7 +55,7 @@ void dsa::create()
 	// Check the existance of the username.
 	if (finder.exists(username))
 	{
-		std::cout << "ID " << username << " exists,";
+		std::cout << "ID " << username << " exists, ";
 
 		// Get suggestions and print them.
 		finder.suggest_nonexists(username, suggestions);
@@ -283,7 +283,8 @@ void dsa::search()
 	}
 	else
 	{
-		std::cout << "ID " << username << " not found" << std::endl;
+		std::cout << "no record" << std::endl;
+		//std::cout << "ID " << username << " not found" << std::endl;
 		return;
 	}
 
