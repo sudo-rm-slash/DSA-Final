@@ -120,29 +120,27 @@ void dsa::lookup_table::suggest_exists(const std::string& username, std::vector<
 
 unsigned int dsa::lookup_table::calculate_score(const std::string& str1, const std::string& str2)
 {
-	unsigned int length_diff, index;
+	unsigned int score = 0, length_diff, max_length;
 
-	std::string const* s1 = &str1;
-	std::string const* s2 = &str2;
-
-	if (s1->size() > s2->size())
+	// Note: Bet the size difference won't be large.
+	if (str1.size() > str2.size())
 	{
-		std::swap(s1, s2);
-		index = s2->size();
-		length_diff = s1->size() - s2->size();
+		length_diff = str1.size() - str2.size();
+		max_length = str2.size();
 	}
 	else
 	{
-		index = s1->size();
-		length_diff = s2->size() - s1->size();
+		length_diff = str2.size() - str1.size();
+		max_length = str1.size();
 	}
 
-	unsigned int score = 0;
-	for (auto it1 = s1->begin(), it2 = s2->begin(); it2 != s2->end(); ++it1, ++it2, --index)
+	auto itr1 = str1.rbegin();
+	auto itr2 = str2.rbegin();
+	for (unsigned int i = 0; i < max_length; ++itr1, ++itr2, i++)
 	{
-		if (*it1 != *it2)
+		if (*itr1 != *itr2)
 		{
-			score += index;
+			score += i;
 		}
 	}
 
