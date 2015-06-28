@@ -60,7 +60,7 @@ int dsa::recommendation<T>::character_to_index( char ch )
 /** 
  * @Function:  enumerate all possible characters of a single slot
  *             and probe them one by one into the hashmap.
- *             Note that there's an upperbound to the enumeration. By doing so, we can preserve alphabetical order 
+ *             Note that there's an bounds to the enumeration. By doing so, we can preserve alphabetical order 
  *             For example, take 'abcd' as original text:
  *             ....
  *             ....
@@ -79,40 +79,15 @@ int dsa::recommendation<T>::character_to_index( char ch )
  * @Param:     candidate_string
  * @Param:     position ( position of the character to be enumerated )
  * @Param:     length ( length of the resulting candidate string )
- * @Param:     upperbound ( upperbound to the enumeration ) ( default parameter: '\0' --> traverse all candidate characters )
+ * @Param:     upperbound ( upperbound to the enumeration ) 
  */
-template<class T>
-bool dsa::recommendation<T>::enumerate_single_character_with_upperbound( char* candidate_string, int position, int length, char upperbound /* = '\0' */)
-{
-	/* return if position is out of bound. Return true because it might enter another enumeration. */
-	if( position < 0 )
-		return true;
-	for( int i = 0; candidates_characters[i] != upperbound ; ++i )
-	{
-		candidate_string[ position ] = candidates_characters[i];
-		PROBE( candidate_string, length )
-		if( recommendations.size() > RECOMMENDATION_NUMBER )
-			return false; 
-	}
 
-	return true;
-}
-
-/** 
- * @Function:  enumerate all possible characters of a single slot
- *             and probe them one by one into the hashmap
- * 
- * @Param:     candidate_string
- * @Param:     position ( position of the character to be enumerated )
- * @Param:     length ( length of the resulting candidate string )
- * @Param:     lowerbound
- */
 template<class T>
-bool dsa::recommendation<T>::enumerate_single_character_with_lowerbound( char* candidate_string, int position, int length, char lowerbound)
+bool dsa::recommendation<T>::enumerate_single_character( char* candidate_string, int position, int length, bound_t bounds )
 {
 	if( position < 0 )
 		return true;
-	for( int i = character_to_index(lowerbound) ; i < CANDIDATES_SIZE ; ++i )
+	for( int i = bounds.first ? character_to_index(bounds.first)+1 : 0 ; candidates_characters[i] != bounds.second ; ++i )
 	{
 		candidate_string[ position ] = candidates_characters[i];
 		PROBE( candidate_string, length )
@@ -127,28 +102,28 @@ bool dsa::recommendation<T>::enumerate_single_character_with_lowerbound( char* c
  * @Function:  enumerate all possible characters of a pair of slots
  *             and probe them one by one into the hashmap
  * 
+ * @Param:     candidate_string
  * @Param:     length
- * @Param:     first ( first slot to be enumerated )
- * @Param:     second ( second slot to be enumerated )
+ * @Param:     positions
+ * @Param:     bounds_pair
+ * 
+ * @Return:    
  */
 template<class T>
-bool dsa::recommendation<T>::enumerate_double_character( char* candidate_string, int length, int first, int second, std::pair<char,char> lowerbounds )
+bool dsa::recommendation<T>::enumerate_double_character( char* candidate_string, 
+														 int length, 
+														 std::pair<int,int> positions, 
+														 std::pair<bound_t,bound_t>& bounds_pair )
 {
-	// TODO 
-	// WARNING: this function will not work!
-	// it does not take alphabetic order into account!
-	if( first < 0 || second < 0 )
+	if( positions.first < 0 || positions.second < 0 )
 		return true;
-	for( int i = 0; i < CANDIDATES_SIZE ; ++i )
+
+	for( int i = character_to_index(bounds_pair.first.first)+1; candidates_characters[i] != bounds_pair.first.second ; ++i )
 	{
-		candidate_string[ first ] = candidates_characters[i];
-		for( int j = 0; i < CANDIDATES_SIZE ; ++j )
-		{
-			candidate_string[ second ] = candidates_characters[j];
-			PROBE( candidate_string, length )
-		}			
-		if( recommendations.size() > RECOMMENDATION_NUMBER )
-			return false; 
+		candidate_string[ positions.first ] = candidates_characters[i];
+
+		if(!enumerate_single_character( candidate_string, length, positions.second, bounds_pair.second ))
+			return false;
 	}
 
 	return true;
@@ -192,8 +167,7 @@ void dsa::recommendation<T>::recommend(const char* original_text)
 //	Score 1: □  □  □  ✖  |
 //
 /*----------------------------------------------------*/
-	/*                                            | candidate string | position      | length of candidate | upperbound character |  */
-	if(!enumerate_single_character_with_upperbound( candidate_string , text_length-1 , text_length         , original_text[ text_length-1 ] ))
+	if(!enumerate_single_character( candidate_string , text_length-1 , text_length , text_length, std::make_pair(0,original_text[ text_length-1 ]) ))
 		return;
 	RECOVER_STRING( candidate_string , text_length-1 )
 /*----------------------------------------------------*/
@@ -203,8 +177,7 @@ void dsa::recommendation<T>::recommend(const char* original_text)
 //
 /*----------------------------------------------------*/
 	APPEND_END_CHARACTER( candidate_string, text_length+1 )
-	/*                                            | candidate string | position    | length of candidate | upperbound character |  */
-	if(!enumerate_single_character_with_upperbound( candidate_string , text_length , text_length      /* , default parameter: '\0' */  ))
+	if(!enumerate_single_character_with_upperbound( candidate_string , text_length , text_length /* , default parameter: std::pair( 0,'\0') */  ))
 		return;
 	RECOVER_STRING( candidate_string , text_length )
 /*----------------------------------------------------*/
@@ -215,8 +188,7 @@ void dsa::recommendation<T>::recommend(const char* original_text)
 //	Score 1: □  □  □  ✖  |
 //
 /*----------------------------------------------------*/
-	/*                                            | candidate string | position      | length of candidate | lowerbound character |  */
-	if(!enumerate_single_character_with_lowerbound( candidate_string , text_length-1 , text_length         , original_text[ text_length-1 ] ))
+	if(!enumerate_single_character_with_lowerbound( candidate_string , text_length-1 , text_length , std::make_pair(original_text[ text_length-1 ],'\0') ))
 		return;
 	RECOVER_STRING( candidate_string , text_length-1 )
 /*----------------------------------------------------*/
@@ -228,8 +200,7 @@ void dsa::recommendation<T>::recommend(const char* original_text)
 	if( text_length > 0 )
 	{
 		APPEND_END_CHARACTER( candidate_string, text_length-1 )
-	/*                                                | candidate string | position      | length of candidate | upperbound character |  */
-		if(!enumerate_single_character_with_upperbound( candidate_string , text_length-2 , text_length-1       , original_text[text_length-2] ))
+		if(!enumerate_single_character_with_upperbound( candidate_string , text_length-2 , text_length-1, std::make_pair(0, original_text[text_length-2]) ))
 			return;
 		RECOVER_STRING( candidate_string , text_length-2 )
 		RECOVER_STRING( candidate_string , text_length-1 )
@@ -240,8 +211,7 @@ void dsa::recommendation<T>::recommend(const char* original_text)
 //	Score 2: □  □  ✖  □  |
 //
 /*----------------------------------------------------*/
-	/*                                            | candidate string | position      | length of candidate | upperbound character |  */
-	if(!enumerate_single_character_with_upperbound( candidate_string , text_length-2 , text_length         , original_text[text_length-2] ))
+	if(!enumerate_single_character_with_upperbound( candidate_string , text_length-2 , text_length, std::make_pair(0,original_text[text_length-2]) ))
 		return;
 	RECOVER_STRING( candidate_string , text_length-2 )
 /*----------------------------------------------------*/
@@ -252,12 +222,38 @@ void dsa::recommendation<T>::recommend(const char* original_text)
 //
 /*----------------------------------------------------*/
 	APPEND_END_CHARACTER( candidate_string, text_length+1 ) 
-	if(!enumerate_double_character( candidate_string, text_length-1, text_length+1 ))
+	if(!enumerate_double_character( candidate_string, text_length-1, text_length+1, 
+				std::make_pair(
+						std::make_pair(original_text[text_length-1],'\0' ),
+						std::make_pair( 0,'\0' )
+					)
 		return;
 	RECOVER_STRING( candidate_string , text_length-1 )
 	RECOVER_STRING( candidate_string , text_length ) /* recover '\0' */
 /*----------------------------------------------------*/
 
+//
+//	Score 2: □  □  ✖  □  |
+//
+/*----------------------------------------------------*/
+	if(!enumerate_single_character_with_upperbound( candidate_string , text_length-2 , text_length, std::make_pair(original_text[text_length-2],'\0') ))
+		return;
+	RECOVER_STRING( candidate_string , text_length-2 )
+/*----------------------------------------------------*/
+
+//
+//	Score 2: □  □  □  ✖  | ✖ 
+//
+/*----------------------------------------------------*/
+	APPEND_END_CHARACTER( candidate_string, text_length+1 ) 
+	if(!enumerate_double_character( candidate_string, text_length-1, text_length+1, 
+				std::make_pair(
+						std::make_pair( 0,'\0' ),
+						std::make_pair( 0,'\0' )
+					)
+		return;
+	RECOVER_STRING( candidate_string , text_length-1 )
+	RECOVER_STRING( candidate_string , text_length ) /* recover '\0' */
 
 //
 //	Score 3: □  ✖  □  □  | 

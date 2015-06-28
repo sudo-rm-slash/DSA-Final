@@ -10,6 +10,8 @@
 #define RECOMMENDATION_NUMBER 10
 #endif
 
+typdef std::pair<char,char> bound_t
+
 #define CANDIDATES_SIZE 62
 namespace dsa 
 {
