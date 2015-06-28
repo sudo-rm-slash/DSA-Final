@@ -22,6 +22,7 @@ namespace dsa
 	private:
 		static const char candidates_characters[];
 		std::vector<char*> recommendations;
+		char* original_text;
 		T& container; 
 #ifdef DEBUG
 		int RECOMMENDATION_NUMBER;
@@ -35,7 +36,7 @@ namespace dsa
 		recommendation(T& _container):container(_container){}
 #endif
 
-		void recommend(const char* original_text);
+		void recommend(const char* _original_text);
 		void print_recommendation();
 		void flush();
 
