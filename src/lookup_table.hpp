@@ -8,7 +8,7 @@
 #elif ART
 // TODO: include "art.hpp"
 #endif
-#include "recommendation.hpp"	// dsa::recommendation
+//#include "recommendation.hpp"	// dsa::recommendation
 
 #include <unordered_map>		// std::unordered_map
 #include <set>					// std::priority_queue
@@ -31,7 +31,7 @@ namespace dsa
 #elif ART
 #endif
 		std::unordered_map<std::string, unsigned int> hashtable_lookup;
-		dsa::recommendation<std::unordered_map<std::string, unsigned int> > suggestion_factory(hashtable_lookup);
+		//dsa::recommendation<std::unordered_map<std::string, unsigned int> > suggestion_factory(hashtable_lookup);
 
 		struct suggestion
 		{
