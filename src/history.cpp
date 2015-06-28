@@ -24,12 +24,13 @@ std::string dsa::history::find(unsigned int index, unsigned int associated_id)
 	}
 	else
 	{
-		throw std::invalid_argument("Invalid argument: Query ID isn't in the requested history entry.\n");
+		//throw std::invalid_argument("Invalid argument: Query ID isn't in the requested history entry.\n");
+		return "";
 	}
 
 	// Reverse lookup the username.
 	int root = ownerships.find_root(associated_id);
-	this->string_builder << accounts[root].get_username();
+	this->string_builder << accounts[root].get_username() << ' ';
 
 	// Print the amount of money.
 	this->string_builder << this->container[index].amount;
