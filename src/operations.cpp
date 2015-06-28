@@ -28,7 +28,6 @@ void dsa::login()
 		std::cout << "ID " << username << " not found" << std::endl;
 		return;
 	}
-
 	// TODO:
 	// Wil the user the master owner after the lookup?
 	// Do I need to reverse lookup for it?
