@@ -47,7 +47,7 @@ int main()
 		// Execute the function.
 		search->second();
 
-		std::cerr << ">>> END <<<" << std::endl;
+		std::cerr << ">>> END <<<" << std::endl << std::endl;
 	}
 
 	return 0;
