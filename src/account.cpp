@@ -78,6 +78,8 @@ unsigned int dsa::account::merge_with(dsa::account& slave)
 void dsa::account::add_related_history(unsigned int index)
 {
 	this->related_history.push_back(index);
+
+	std::cerr << "...new history added, new size = " << this->related_history.size() << std::endl;
 }
 
 const std::string& dsa::account::get_username() const
@@ -93,6 +95,6 @@ void dsa::account::get_common_history(dsa::account& compared_account, std::vecto
 	                      std::begin(compared_account.related_history), std::end(compared_account.related_history),
 	                      std::back_inserter(temp));
 
-	// Copy to output.
-	results = temp;
+	// Swap the vectors.
+	results.swap(temp);
 }
