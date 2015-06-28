@@ -9,12 +9,17 @@
 
 namespace dsa
 {
+	/**
+	 * Global variables in namespace "dsa".
+	 */
 	dsa::storage accounts;				// The accounts themselves.
 	dsa::relationships ownerships;		// The ownership between accounts.
 	dsa::lookup_table finder;			// Support functions to find accounts.
 
 	dsa::history transaction_history;	// The grand transaction history.
 										// History is dependent on accounts and ownerships.
+	
+	std::string username, password;		// Username and password for reuse. 
 	unsigned int last_login_id;			// Last login ID (relationship ID).
 
 
