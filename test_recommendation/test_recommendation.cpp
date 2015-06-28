@@ -32,7 +32,7 @@ class test_hashmap
 			}
 		}
 
-		void insert_hashmap( char* test_case, int scale, int dept )
+		void insert( char* test_case, int scale, int dept )
 		{
 			if( dept < 0 )
 			{
@@ -46,7 +46,7 @@ class test_hashmap
 			{
 				for( char i = 0; i < scale; ++i )
 					test_case[dept] = candidates_characters[i];
-				insert_hashmap( scale, dept-1 );
+				insert( test_case, scale, dept-1 );
 			}
 
 		}
@@ -63,31 +63,15 @@ class test_hashmap
 
 };
 
-void insert_hashmap( char* test_case, int scale, int dept )
+void test(dsa::recommendation<test_hashmap>& recommendation_test, char* test_case )
 {
-	if( dept < 0 )
-	{
-		if( rand() % 10 > 3 )
-		{
-			map.emplace( test_case, test_case );
-			std::cout << "Putting " <<test_case << std::endl;
-		}
-	}	
-	else
-	{
-		for( char i = 0; i < scale; ++i )
-			test_case[dept] = candidates_characters[i];
-		insert_hashmap( scale, dept-1 );
-	}
-
-}
-int test(const char* testcase)
-{
-	recommendation_test.recommend("ade");
+	std::vector<std::string> recommendations;
+	recommendation_test.recommend(recommendations, test_case);
 	std::cout << "Recommendation for " << test_case << ": ";
-	recommendation_test.print_recommendation();
-	recommendation_test.flush();
+	for( auto _recommendation: recommendations )
+		std::cout << _recommendation << " ";
 }
+
 int main(int argc, char *argv[])
 {
 
@@ -97,26 +81,20 @@ int main(int argc, char *argv[])
 	srand (time(NULL));
 	char* test_case = new char[ TEST_LENGTH+1 ];
 	test_case[ TEST_LENGTH ] = '\0';
-	insert_hashmap( test_case, 5, TEST_LENGTH );
+	hashmap.insert( test_case, 5, TEST_LENGTH );
 
 	dsa::recommendation<test_hashmap> recommendation_test(hashmap);
 
-
-	void insert_hashmap( char* test_case, int scale, int dept )
-	{
-		if( dept < 0 )
-		{
-			map.emplace( test_case, test_case );
-			std::cout << "Putting " <<test_case << std::endl;
-		}	
-		else
-		{
-			for( char i = 0; i < scale; ++i )
-				test_case[dept] = candidates_characters[i];
-			insert_hashmap( scale, dept-1 );
-		}
-
-	}
+	test( recommendation_test, "019" );
+	test( recommendation_test, "123" );
+	test( recommendation_test, "345" );
+	test( recommendation_test, "k00" );
+	test( recommendation_test, "000" );
+	test( recommendation_test, "019f04092409" );
+	test( recommendation_test, "0050920" );
+	test( recommendation_test, "00044" );
+	test( recommendation_test, "019f48" );
+	test( recommendation_test, "014924" );
 	 
 
 	return 0;

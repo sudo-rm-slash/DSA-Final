@@ -4,7 +4,9 @@
 
 // Candidate has been confirmed and can be added into recommendation lists.
 #define ADD_RECOMMENDATION( candidate_string, length ) \
-	recommendations.push_back( new char[ length+1 ] ); \
+	recommendations->push_back( std::string(candidate_string) ); \
+//#define ADD_RECOMMENDATION( candidate_string, length ) \
+	recommendations->push_back( new char[ length+1 ] ); \
 	strcpy( recommendations.back() , candidate_string ); 						
 
 // Append '\0' to some position so that candidate_string ends there
@@ -21,7 +23,7 @@
 
 // Check if we have reached the required number of recommendations
 #define CHECK_RETURN() \
-	if( recommendations.size() > RECOMMENDATION_NUMBER )return; 
+	if( recommendations->size() > RECOMMENDATION_NUMBER )return; 
 
 // Check if candidate_string exists in our target container
 #define PROBE( candidate_string, length )             			\
@@ -94,7 +96,7 @@ bool dsa::recommendation<T>::enumerate_single_character( char* candidate_string,
 	{
 		candidate_string[ position ] = candidates_characters[i];
 		PROBE( candidate_string, length )
-		if( recommendations.size() > RECOMMENDATION_NUMBER )
+		if( recommendations->size() > RECOMMENDATION_NUMBER )
 			return false; 
 	}
 
@@ -140,8 +142,8 @@ bool dsa::recommendation<T>::enumerate_double_character( char* candidate_string,
 template<class T>
 void dsa::recommendation<T>::recommend(std::vector<std::string>& _recommendations, const char* _original_text)
 {
-	this->original_text   = _original_text;
-	this->recommendations = _recommendations;
+	this->original_text = _original_text;
+	this->recommendations = &_recommendations; 
 	int  text_length = std::strlen( _original_text );
 	auto candidate_string = new char[ text_length + EXTRA_SPACE + 1 ];
 	std::strcpy( candidate_string, _original_text );
@@ -349,20 +351,20 @@ void dsa::recommendation<T>::recommend(std::vector<std::string>& _recommendation
 
 
 // Print the recommendations
-template<class T>
-void dsa::recommendation<T>::print_recommendation()
-{
-	for( auto recommendation: recommendations )
-	{
-		std::cout << recommendation << " ";
-	}
+// template<class T>
+// void dsa::recommendation<T>::print_recommendation()
+// {
+	// for( auto recommendation: recommendations )
+	// {
+		// std::cout << recommendation << " ";
+	// }
 
-	std::cout << "\n";
-}
+	// std::cout << "\n";
+// }
 
-// Clean the recommendation list
-template<class T>
-void dsa::recommendation<T>::flush()
-{
-	recommendations.clear();
-}
+// // Clean the recommendation list
+// template<class T>
+// void dsa::recommendation<T>::flush()
+// {
+	// recommendations.clear();
+// }

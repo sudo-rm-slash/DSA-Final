@@ -19,7 +19,7 @@ namespace dsa
 
 	private:
 		static const char candidates_characters[];
-		std::vector<std::string>& recommendations;
+		std::vector<std::string>* recommendations;
 		const char* original_text;
 		T& container; 
 
