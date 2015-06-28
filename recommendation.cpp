@@ -1,9 +1,16 @@
 #include "recommendation.hpp"
 
+// Extra space for candidate strings
+#define EXTRA_SPACE 4
+
 // Candidate has been confirmed and can be added into recommendation lists.
 #define ADD_RECOMMENDATION( candidate_string, length ) \
 	recommendations.push_back( new char[ length+1 ] ); \
 	strcpy( recommendations.back() , candidate_string ); 						
+
+// Append '\0' to some position so that candidate_string ends there
+#define APPEND_END_CHARACTER( candidate_string, position ) \
+		candidate_string[ position ] = '\0';
 
 // Recover the candidate_string to original text in convenience of later enumeration
 #define RECOVER_STRING( candidate_string, position ) \
@@ -22,7 +29,6 @@
 	if(container.exist(std::string(candidate_string)))			\
 	{                                           				\
 		ADD_RECOMMENDATION( candidate_string, length ) 			\
-		CHECK_RETURN()                          				\
 	}
 
 	
@@ -73,16 +79,23 @@ int dsa::recommendation<T>::character_to_index( char ch )
  * @Param:     candidate_string
  * @Param:     position ( position of the character to be enumerated )
  * @Param:     length ( length of the resulting candidate string )
- * @Param:     upperbound ( upperbound to the enumeration )
+ * @Param:     upperbound ( upperbound to the enumeration ) ( default parameter: '\0' )
  */
 template<class T>
-void dsa::recommendation<T>::enumerate_single_character_with_upperbound( char* candidate_string, int position, int length, char upperbound)
+bool dsa::recommendation<T>::enumerate_single_character_with_upperbound( char* candidate_string, int position, int length, char upperbound /* = '\0' */)
 {
+	/* return if position is out of bound. Return true because it might enter another enumeration. */
+	if( position < 0 )
+		return true;
 	for( int i = 0; candidates_characters[i] != upperbound ; ++i )
 	{
 		candidate_string[ position ] = candidates_characters[i];
 		PROBE( candidate_string, length )
+		if( recommendations.size() > RECOMMENDATION_NUMBER )
+			return false; 
 	}
+
+	return true;
 }
 
 /** 
@@ -95,13 +108,19 @@ void dsa::recommendation<T>::enumerate_single_character_with_upperbound( char* c
  * @Param:     lowerbound
  */
 template<class T>
-void dsa::recommendation<T>::enumerate_single_character_with_lowerbound( char* candidate_string, int position, int length, char lowerbound)
+bool dsa::recommendation<T>::enumerate_single_character_with_lowerbound( char* candidate_string, int position, int length, char lowerbound)
 {
+	if( position < 0 )
+		return true;
 	for( int i = character_to_index(lowerbound) ; i < CANDIDATES_SIZE ; ++i )
 	{
 		candidate_string[ position ] = candidates_characters[i];
 		PROBE( candidate_string, length )
+		if( recommendations.size() > RECOMMENDATION_NUMBER )
+			return false; 
 	}
+
+	return true;
 }
 
 /** 
@@ -113,11 +132,13 @@ void dsa::recommendation<T>::enumerate_single_character_with_lowerbound( char* c
  * @Param:     second ( second slot to be enumerated )
  */
 template<class T>
-void dsa::recommendation<T>::enumerate_double_character( char* candidate_string, int length, int first, int second )
+bool dsa::recommendation<T>::enumerate_double_character( char* candidate_string, int length, int first, int second )
 {
 	// TODO 
 	// WARNING: this function will not work!
 	// it does not take alphabetic order into account!
+	if( first < 0 || second < 0 )
+		return true;
 	for( int i = 0; i < CANDIDATES_SIZE ; ++i )
 	{
 		candidate_string[ first ] = candidates_characters[i];
@@ -126,7 +147,11 @@ void dsa::recommendation<T>::enumerate_double_character( char* candidate_string,
 			candidate_string[ second ] = candidates_characters[j];
 			PROBE( candidate_string, length )
 		}			
+		if( recommendations.size() > RECOMMENDATION_NUMBER )
+			return false; 
 	}
+
+	return true;
 }
 
 template<class T>
@@ -135,7 +160,7 @@ void dsa::recommendation<T>::recommend(const char* original_text)
 
 	std::vector<char*> recommendations;
 	int  text_length = std::strlen( original_text );
-	auto candidate_string = new char[ text_length+1 ];
+	auto candidate_string = new char[ text_length + EXTRA_SPACE + 1 ];
 	std::strcpy( candidate_string, original_text );
 
 
@@ -156,9 +181,12 @@ void dsa::recommendation<T>::recommend(const char* original_text)
 //	Score 1: □  □  □  ○  |
 //
 /*----------------------------------------------------*/
-	candidate_string[ text_length-1 ] = '\0';
-	PROBE( candidate_string, text_length-1 )
-	RECOVER_STRING( candidate_string , text_length-1 )
+	if( text_length > 0 )
+	{
+		APPEND_END_CHARACTER( candidate_string, text_length-1 );
+		PROBE( candidate_string, text_length-1 )
+		RECOVER_STRING( candidate_string , text_length-1 )
+	}
 /*----------------------------------------------------*/
 
 //
@@ -168,8 +196,8 @@ void dsa::recommendation<T>::recommend(const char* original_text)
 //	Score 1: □  □  □  ✖  |
 //
 /*----------------------------------------------------*/
-	enumerate_single_character_with_upperbound( candidate_string, text_length-1, text_length, original_text[ text_length-1 ] );
-	CHECK_RETURN()
+	if(!enumerate_single_character_with_upperbound( candidate_string, text_length-1, text_length, original_text[ text_length-1 ] ))
+		return;
 	RECOVER_STRING( candidate_string , text_length-1 )
 /*----------------------------------------------------*/
 
@@ -179,8 +207,8 @@ void dsa::recommendation<T>::recommend(const char* original_text)
 //	Score 1: □  □  □  □  | ✖ 
 //
 /*----------------------------------------------------*/
-	enumerate_single_character_with_upperbound( candidate_string, text_length+1, text_length );
-	CHECK_RETURN()
+	if(!enumerate_single_character_with_upperbound( candidate_string, text_length+1, text_length ))
+		return;
 	RECOVER_STRING( candidate_string , text_length )
 /*----------------------------------------------------*/
 
@@ -191,8 +219,8 @@ void dsa::recommendation<T>::recommend(const char* original_text)
 //	Score 1: □  □  □  ✖  |
 //
 /*----------------------------------------------------*/
-	enumerate_single_character_with_lowerbound( candidate_string, text_length-1, text_length, original_text[ text_length-1 ] );
-	CHECK_RETURN()
+	if(!enumerate_single_character_with_lowerbound( candidate_string, text_length-1, text_length, original_text[ text_length-1 ] ))
+		return;
 	RECOVER_STRING( candidate_string , text_length-1 )
 /*----------------------------------------------------*/
 
@@ -202,12 +230,14 @@ void dsa::recommendation<T>::recommend(const char* original_text)
 //	Score 2: □  □  ✖  ○  | 
 //
 /*----------------------------------------------------*/
-	CHECK_LENGTH( text_length, 2 )
-	candidate_string[ text_length-1 ] = '\0';
-	enumerate_single_character_with_upperbound( candidate_string, text_length-2, text_length-1, original_text[text_length-2] );
-	CHECK_RETURN()
-	RECOVER_STRING( candidate_string , text_length-2 )
-	RECOVER_STRING( candidate_string , text_length-1 )
+	if( text_length > 0 )
+	{
+		APPEND_END_CHARACTER( candidate_string, text_length-1 )
+		if(!enumerate_single_character_with_upperbound( candidate_string, text_length-2, text_length-1, original_text[text_length-2] ))
+			return;
+		RECOVER_STRING( candidate_string , text_length-2 )
+		RECOVER_STRING( candidate_string , text_length-1 )
+	}
 /*----------------------------------------------------*/
 
 //
@@ -216,8 +246,8 @@ void dsa::recommendation<T>::recommend(const char* original_text)
 //	Score 2: □  □  ✖  □  |
 //
 /*----------------------------------------------------*/
-	enumerate_single_character_with_upperbound( candidate_string, text_length-2, text_length, original_text[text_length-2] );
-	CHECK_RETURN()
+	if(!enumerate_single_character_with_upperbound( candidate_string, text_length-2, text_length, original_text[text_length-2] ))
+		return;
 	RECOVER_STRING( candidate_string , text_length-2 )
 /*----------------------------------------------------*/
 
@@ -228,17 +258,29 @@ void dsa::recommendation<T>::recommend(const char* original_text)
 //	Score 2: □  □  □  ✖  | ✖ 
 //
 /*----------------------------------------------------*/
-	// enumerate_double_character( candidate_string, text_length-1, text_length );
-	// CHECK_RETURN()
-	// RECOVER_STRING( candidate_string , text_length-1 )
+	APPEND_END_CHARACTER( candidate_string, text_length+1 ) 
+	if(!enumerate_double_character( candidate_string, text_length-1, text_length+1 ))
+		return;
+	RECOVER_STRING( candidate_string , text_length-1 )
 	// RECOVER_STRING( candidate_string , text_length )
+	// ---> commented out because the original text is not that long
 /*----------------------------------------------------*/
+
+
+//
+//	Hardcoded spagetti
+//
+//	Score 3: □  ✖  □  □  | 
+//
+/*----------------------------------------------------*/
+	if(!enumerate_single_character_with_upperbound( candidate_string, text_length-2, text_length, original_text[text_length-2] ))
+		return;
+	RECOVER_STRING( candidate_string , text_length-2 )
 
 
 	//Score 3: □  □  ○  ○  |
 	//CHECK_LENGTH( text_length, 2 )
 	
-	//Score 3: □  ✖  □  □  | 
 
 	//Score 3: □  □  ✖  ✖  |
 	

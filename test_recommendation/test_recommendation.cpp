@@ -1,6 +1,6 @@
 #include <unordered_map>
 #include <iostream>
-#include "../hardcoded_recommendation.hpp"
+#include "../recommendation.hpp"
 
 class test_hashmap
 {

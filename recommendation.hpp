@@ -13,7 +13,7 @@
 #define CANDIDATES_SIZE 62
 namespace dsa 
 {
-	templat<class T>
+	template<class T>
 	class recommendation
 	{
 
