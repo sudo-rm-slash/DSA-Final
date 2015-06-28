@@ -1,12 +1,20 @@
 #ifndef __LOOKUP_TABLE_HPP__
 #define __LOOKUP_TABLE_HPP__
 
-//#include "trie.hpp"			// dsa::trie
+#define TRIE 					// Hard coded include choice.
 
-#include <unordered_map>	// std::unordered_map
-#include <set>			// std::priority_queue
-#include <string>			// std::string
-#include <vector>			// std::vector
+#ifdef TRIE
+#include "trie.hpp"				// dsa::trie
+#elif ART
+// TODO: include "art.hpp"
+#endif
+#include "recommendation.hpp"	// dsa::recommendation
+
+#include <unordered_map>		// std::unordered_map
+#include <set>					// std::priority_queue
+#include <string>				// std::string
+#include <vector>				// std::vector
+#include <algorithm>			// std::swap
 
 
 #define WIPING_FACTOR	20	// When the size of queue equals this, wipe the queue until its size equals WANTED_AMOUNT.
@@ -17,7 +25,10 @@ namespace dsa
 	class lookup_table
 	{
 	private:
-		//dsa::trie tree_lookup;
+#ifdef TRIE
+		dsa::trie tree_lookup;
+#elif ART
+#endif
 		std::unordered_map<std::string, unsigned int> hashtable_lookup;
 		dsa::recommendation<std::unordered_map<std::string, unsigned int> > suggestion_factory(hashtable_lookup);
 

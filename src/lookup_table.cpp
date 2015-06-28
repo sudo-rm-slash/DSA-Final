@@ -3,7 +3,7 @@
 
 void dsa::lookup_table::insert(const std::string& username, unsigned int id)
 {
-	//tree_lookup.insert(username, id);
+	tree_lookup.insert(username.c_str(), id);
 	hashtable_lookup.emplace(username, id);
 }
 
@@ -14,20 +14,23 @@ void dsa::lookup_table::remove(const std::string& username)
 
 bool dsa::lookup_table::exists(const std::string& username)
 {
-	bool found = false;
+	auto itr = this->hashtable_lookup.find(username);
+	if (itr != std::end(hashtable_lookup))
+	{
+		this->last_found_id = itr->second;
+		this->dirty_last_found_id = false;
 
-	// TODO: Lookup from hash table.
-	// Store the search result in last_found_id.
-
-	// Reset the dirty flag.
-	this->dirty_last_found_id = false;
-
-	return found;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 unsigned int dsa::lookup_table::find_specific(const std::string& username)
 {
-	if(dirty_last_found_id)
+	if (dirty_last_found_id)
 	{
 		// TODO: Search again from the hash table and return.
 		this->last_found_id = 0;
@@ -42,7 +45,8 @@ unsigned int dsa::lookup_table::find_specific(const std::string& username)
 
 void dsa::lookup_table::find_wildcard(const std::string& pattern, std::vector<unsigned int>& results)
 {
-	//results = tree_lookup.wildcard(pattern.c_str());
+	results.clear();
+	tree_lookup.wildcard(results, pattern.c_str());
 }
 
 void dsa::lookup_table::suggest_exists(const std::string& username, std::vector<std::string>& suggestions)
@@ -79,12 +83,39 @@ void dsa::lookup_table::suggest_exists(const std::string& username, std::vector<
 	*/
 }
 
-unsigned int dsa::lookup_table::calculate_score(const std::string& str1, const std::string& str2)
+unsigned int calculate_score(const std::string& str1, const std::string& str2)
 {
-	return -1;
+	unsigned int length_diff, index;
+
+	std::string const* s1 = &str1;
+	std::string const* s2 = &str2;
+
+	if (s1->size() > s2->size())
+	{
+		std::swap(s1, s2);
+		index = s2->size();
+		length_diff = s1->size() - s2->size();
+	}
+	else
+	{
+		index = s1->size();
+		length_diff = s2->size() - s1->size();
+	}
+
+	unsigned int score = 0;
+	for (auto it1 = s1->begin(), it2 = s2->begin(); it2 != s2->end(); ++it1, ++it2, --index)
+	{
+		if (*it1 != *it2)
+		{
+			score += index;
+		}
+	}
+
+	return score + (length_diff * (length_diff + 1)) / 2;
 }
 
 void dsa::lookup_table::suggest_nonexists(const std::string& username, std::vector<std::string>& suggestions)
 {
+	suggestions.clear();
 	suggestion_factory.recommend(suggestions, username.c_str());
 }
