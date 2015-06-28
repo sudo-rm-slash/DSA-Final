@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 	srand (time(NULL));
 	char* test_case = new char[ TEST_LENGTH+1 ];
 	test_case[ TEST_LENGTH ] = '\0';
-	insert_hashmap( 5, TEST_LENGTH );
+	insert_hashmap( test_case, 5, TEST_LENGTH );
 
 	dsa::recommendation<test_hashmap> recommendation_test(hashmap);
 
