@@ -18,6 +18,8 @@
  * Allocates a node of the given type,
  * initializes to zero and sets the type.
  */
+
+
 static art_node* alloc_node(uint8_t type)
 {
 	art_node* n;
@@ -141,7 +143,7 @@ int art_tree_destroy(art_tree *t)
 extern inline uint64_t art_size(art_tree *t);
 #endif
 
-static art_node** find_child(art_node *n, unsigned char c)
+art_node** find_child(art_node *n, unsigned char c)
 {
 	int i, mask, bitfield;
 	union

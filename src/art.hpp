@@ -1,5 +1,4 @@
 #include <stdint.h>
-#include "traveler.hpp"
 #ifndef ART_H
 #define ART_H
 
@@ -11,6 +10,7 @@ extern "C" {
 #define NODE16  2
 #define NODE48  3
 #define NODE256 4
+
 
 #define MAX_PREFIX_LEN 10
 
@@ -79,9 +79,10 @@ typedef struct {
  * of arbitrary size, as they include the key.
  */
 typedef struct {
-    void *value;
-    uint32_t key_len;
-    unsigned char key[];
+	void *value;
+	uint32_t key_len;
+	unsigned char key[];
+	unsigned int search_id = 0; //Added by DSA final. 
 } art_leaf;
 
 /**
@@ -90,7 +91,6 @@ typedef struct {
 typedef struct {
 	art_node *root;
 	uint64_t size;
-	unsigned int search_id = 0; //Added by DSA final. 
 } art_tree;
 
 /**
@@ -204,4 +204,7 @@ int art_iter_prefix(art_tree *t, const unsigned char *prefix, int prefix_len, ar
 #endif
 
 #endif
+
+art_node** find_child(art_node*, unsigned char);
+
 

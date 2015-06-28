@@ -1,7 +1,23 @@
 #include "traveler.hpp"
+#ifdef DEBUG
+#include <iostream>
+#endif
+
+/**
+ * Macros to manipulate pointer tags
+ */
+#define IS_LEAF(x) (((uintptr_t)x & 1))
+#define SET_LEAF(x) (static_cast<art_leaf*>((void*)((uintptr_t)x | 1)))
+#define LEAF_RAW(x) (static_cast<art_leaf*>((void*)((uintptr_t)x & ~1)))
+
+/**
+ * Allocates a node of the given type,
+ * initializes to zero and sets the type.
+ */
+
 
 bool dsa::traveler::valid() const {
-	if( node == NULL ){
+	if( node == nullptr ){
 		return 0;
 	}
 	return 1;
@@ -11,19 +27,19 @@ bool dsa::traveler::valid() const {
 dsa::traveler::traveler(){
 }
 
-dsa::traveler::traveler( const art_tree*art, const unsigned int depth ){
-	node = art -> root;
+dsa::traveler::traveler(  art_node* const node, const unsigned int depth ){
+	this -> node = node;
 	this -> depth = depth;
 }
 
-dsa::traveler::traveler( const art_node* node ){
-	this -> node = node ;
+dsa::traveler::traveler( art_tree* const art ){
+	this -> node = art -> root ;	
 }
 
 dsa::traveler dsa::traveler::child_next(){
 	if( IS_LEAF( node ) ){
-		art_leaf*leaf = LEAF_RAW( node );
 #ifdef DEBUG
+		art_leaf* leaf = (art_leaf*) LEAF_RAW( node );
 		if( depth >= leaf -> key_len ){
 			std::cerr << "WW traveler.cpp get_char(): assert depth < key_length wrong!!" << std::endl;
 			return traveler();
@@ -35,7 +51,7 @@ dsa::traveler dsa::traveler::child_next(){
 		new_traveler.depth += 1;
 		return new_traveler;
 	        
-	}else if( str_index < partial_len ){
+	}else if( str_index < this -> node -> partial_len ){
 		if( child_index < 1 ){
 			traveler new_traveler = *this;
 			new_traveler.str_index += 1;
@@ -58,7 +74,9 @@ dsa::traveler dsa::traveler::child_next(){
 		if( node -> type == NODE4 ){
 			if( child_index < 4 ){
 				return traveler( p.p4 -> children[child_index++], depth + 1 );
-			}else if( child_index < 16 ){
+			}
+			else if( node -> type == NODE4 )
+				( child_index < 16 ){
 				return traveler( p.p16 -> children[child_index++], depth + 1 );
 			}else if( child_index < 48 ){
 				return traveler( p.p48 -> children[child_index++], depth + 1 );
@@ -72,10 +90,10 @@ dsa::traveler dsa::traveler::child_next(){
 
 }		
 
-dsa::traveler dsa::traveler::child( const char child_char ) const{
+dsa::traveler dsa::traveler::child( char child_char ) const{
 
-	if( str_index < partial_len ){
-		if( child_index < 1 && partial[str_index + 1] == child_char ){
+	if( str_index < node -> partial_len ){
+		if( child_index < 1 && node -> partial[str_index + 1] == child_char ){
 			traveler new_traveler = *this;
 			new_traveler.str_index += 1;
 			return new_traveler;
@@ -85,7 +103,7 @@ dsa::traveler dsa::traveler::child( const char child_char ) const{
 	}
 
 	else{
-		return traveler( *find_child( node, child_char ) );
+		return traveler( *( find_child( node, child_char ) ), depth + 1 );
 	}
 }
 
@@ -93,13 +111,13 @@ const void* dsa::traveler::get_data() const {
 	return ( (art_leaf*) LEAF_RAW( node ) )->value;
 }
 	
-const char dsa::traveler::get_char() const {
+char dsa::traveler::get_char() const {
 	if( IS_LEAF( node ) ){
 		art_leaf*leaf = LEAF_RAW( node );
 #ifdef DEBUG
 		if( depth >= leaf -> key_len ){
 			std::cerr << "WW traveler.cpp get_char(): assert depth < key_length wrong!!" << std::endl;
-			return NULL;
+			return (char) 0;
 		}
 #endif
 		return leaf -> key[depth];
@@ -107,12 +125,12 @@ const char dsa::traveler::get_char() const {
 		return this -> node -> partial[str_index];
 	}
 }
-
-const unsigned int dsa::traveler::get_search_id() const {
-	art_leaf*leaf = LEAF_RAW( node );
-	return leaf -> search_id;
+ 
+ unsigned int dsa::traveler::get_search_id() const {		
+		art_leaf*leaf = (art_leaf*) LEAF_RAW( node );
+		return leaf -> search_id;
 }
-
+ 
 void dsa::traveler::update_search_id(){	
 	art_leaf*leaf = LEAF_RAW( node );
 	leaf -> search_id = now_search_id;

@@ -5,27 +5,27 @@ namespace dsa{
 	class traveler{
 		
 	public:
-		static now_search_id;
+		static unsigned int now_search_id;
 		traveler();
-		traveler( art_tree*, const unsigned int );
+		traveler( art_tree* const );
+		traveler( art_node* const , const unsigned int );
 		bool valid() const ;
-		traveler* child_next();
-		traveler*child( const char ) const;
+		traveler  child_next();
+		traveler child( char ) const;
 	        const void*get_data() const;
-		const char get_char() const;
-		const unsigned int get_search_id() const;
-		void update_search_id( unsigned int );
+		char get_char() const;
+		unsigned int get_search_id() const;
+		void update_search_id( );
 
 	private:
-		traveler( art_node );
-		art_node* node = NULL;
+		art_node* node = nullptr;
 		unsigned int str_index = 0;
 		unsigned int child_index = 0;
 		unsigned int depth = 0;
-		static int type_bound_table;
 		
 	};
 	
-  
+	unsigned int traveler::now_search_id = 0;
+	
 }
 
