@@ -189,7 +189,40 @@ void dsa::withdraw()
 
 void dsa::transfer()
 {
+	unsigned int value;
+	std::cin >> username >> value;
 
+	// Check the existance of the usernames.
+	unsigned int id;
+	if (finder.exists(username))
+	{
+		id = finder.find_specific(username);
+	}
+	else
+	{
+		std::cout << "ID " << username << " not found" << std::endl;
+		return;
+	}
+
+	// Withdraw from the source account.
+	auto status = accounts[last_login_id].withdraw(value);
+	if (status.first)
+	{
+		std::cout << "success, " << status.second << " dollars left in current account" << std::endl;
+	}
+	else
+	{
+		std::cout << "fail, " << status.second << " dollars only in current account" << std::endl;
+	}
+
+	// Deposit to the given account.
+	accounts[id].deposit(value);
+	//accounts[id].deposit(status.second);
+
+	// Add an entry in the history.
+	unsigned int index = transaction_history.insert(last_login_id, id, value);
+	accounts[last_login_id].add_related_history(index);
+	accounts[id].add_related_history(index);
 }
 
 void dsa::find()
