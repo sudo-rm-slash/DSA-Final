@@ -41,8 +41,6 @@ unsigned int dsa::lookup_table::find_specific(const std::string& username)
 		{
 			throw std::invalid_argument("Invalid argument: Username doesn't exsit.\n");
 		}
-
-		this->last_found_id = 0;
 	}
 	else
 	{
@@ -52,10 +50,19 @@ unsigned int dsa::lookup_table::find_specific(const std::string& username)
 	return this->last_found_id;
 }
 
-void dsa::lookup_table::find_wildcard(const std::string& pattern, std::vector<unsigned int>& results)
+void dsa::lookup_table::find_wildcard(const std::string& pattern, std::vector<std::string>& results)
 {
 	results.clear();
-	tree_lookup.wildcard(results, pattern.c_str());
+
+	// Acquire the ID of accounts.
+	std::vector<unsigned int> temp;
+	tree_lookup.wildcard(temp, pattern.c_str());
+
+	// Reverse lookup the IDs.
+	for(const auto& id : temp)
+	{
+		results.push_back(accounts[id].get_usernmae());
+	}
 }
 
 void dsa::lookup_table::suggest_exists(const std::string& username, std::vector<std::string>& suggestions)
@@ -65,7 +72,7 @@ void dsa::lookup_table::suggest_exists(const std::string& username, std::vector<
 
 	// Start iterate through the hash table.
 	unsigned int score;
-	for (const auto &account : hashtable_lookup)
+	for (const auto& account : this->hashtable_lookup)
 	{
 		// Calculate the score.
 		score = calculate_score(username, account.first);
@@ -86,11 +93,11 @@ void dsa::lookup_table::suggest_exists(const std::string& username, std::vector<
 	// Save the result to vector.
 	for (const auto& candidate : this->suggestions_buffer)
 	{
-		suggestions.push_back(candidate.username);
+		suggestions.push_back(candidate.second);
 	}
 }
 
-unsigned int calculate_score(const std::string& str1, const std::string& str2)
+unsigned int dsa::lookup_table::calculate_score(const std::string& str1, const std::string& str2)
 {
 	unsigned int length_diff, index;
 

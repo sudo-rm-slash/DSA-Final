@@ -12,6 +12,7 @@
 
 #include <unordered_map>		// std::unordered_map
 #include <set>					// std::priority_queue
+#include <utility>				// std::pair
 #include <string>				// std::string
 #include <vector>				// std::vector
 #include <exception>			// std::invalid_argument
@@ -33,18 +34,7 @@ namespace dsa
 		std::unordered_map<std::string, unsigned int> hashtable_lookup;
 		//dsa::recommendation<std::unordered_map<std::string, unsigned int> > suggestion_factory(hashtable_lookup);
 
-		struct suggestion
-		{
-			unsigned int score;
-			std::string username;
-
-			suggestion(unsigned int score, std::string& username)
-			{
-				this->score = score;
-				this->username = username;
-			}
-		};
-		std::set<suggestion> suggestions_buffer;
+		std::set<std::pair<unsigned int, std::string> > suggestions_buffer;
 
 		bool dirty_last_found_id = false;
 		unsigned int last_found_id;		// Store the last lookup ID.
