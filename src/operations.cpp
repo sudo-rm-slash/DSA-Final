@@ -244,5 +244,33 @@ void dsa::find()
 
 void dsa::search()
 {
+	std::cin >> username;
 
+	// Check the existance of the usernames.
+	unsigned int id;
+	if (finder.exists(username))
+	{
+		id = finder.find_specific(username);
+	}
+	else
+	{
+		std::cout << "ID " << username << " not found" << std::endl;
+		return;
+	}
+
+	// Find their common history.
+	std::vector<unsigned int> results;
+	accounts[last_login_id].get_common_history(accounts[id], results);
+
+	if (results.size() == 0)
+	{
+		std::cout << "no record" << std::endl;
+	}
+	else
+	{
+		for (const auto& index : results)
+		{
+			std::cout << transaction_history.find(last_login_id, index) << std::endl;
+		}
+	}
 }

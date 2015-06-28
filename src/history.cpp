@@ -7,7 +7,7 @@ unsigned int dsa::history::insert(unsigned int from_id, unsigned int to_id, unsi
 	return this->container.size() - 1;
 }
 
-std::string  dsa::history::find(unsigned int index, unsigned int associated_id)
+std::string dsa::history::find(unsigned int index, unsigned int associated_id)
 {
 	// Reset the string builder.
 	this->string_builder.str(std::string());
