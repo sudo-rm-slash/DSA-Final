@@ -10,7 +10,7 @@
 #define RECOMMENDATION_NUMBER 10
 #endif
 
-typdef std::pair<char,char> bound_t
+typedef std::pair<char,char> bound_t;
 
 #define CANDIDATES_SIZE 62
 namespace dsa 
@@ -42,9 +42,10 @@ namespace dsa
 
 	private:
 		int  character_to_index( char ch );
-		bool enumerate_single_character_with_upperbound( char* candidate_string, int position, int length, char upperbound = '\0');
-		bool enumerate_single_character_with_lowerbound( char* candidate_string, int position, int length, char lowerbound);
-		bool enumerate_double_character( char* candidate_string, int length, int first, int second );
+		bool enumerate_single_character( char* candidate_string, int position, int length, char upperbound = '\0');
+
+		bool enumerate_single_character( char* candidate_string, int position, int length, bound_t bounds );
+		bool enumerate_double_character( char* candidate_string, int length, std::pair<int,int> positions, std::pair<bound_t,bound_t>& bounds_pair );
 
 	};
 
