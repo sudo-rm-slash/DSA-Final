@@ -7,7 +7,7 @@ namespace dsa{
 	public:
 		static now_search_id;
 		traveler();
-		traveler( art_tree* );
+		traveler( art_tree*, const unsigned int );
 		bool valid() const ;
 		traveler* child_next();
 		traveler*child( const char ) const;
@@ -21,8 +21,9 @@ namespace dsa{
 		art_node* node = NULL;
 		unsigned int str_index = 0;
 		unsigned int child_index = 0;
+		unsigned int depth = 0;
 		static int type_bound_table;
-
+		
 	};
 	
   

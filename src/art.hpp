@@ -88,8 +88,9 @@ typedef struct {
  * Main struct, points to root.
  */
 typedef struct {
-    art_node *root;
-    uint64_t size;
+	art_node *root;
+	uint64_t size;
+	unsigned int search_id = 0; //Added by DSA final. 
 } art_tree;
 
 /**
