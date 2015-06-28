@@ -23,6 +23,7 @@ namespace dsa
 													// History is dependent on accounts and ownerships.
 	
 	extern std::string username, password;			// Username and password for reuse. 
+	extern std::string username2, password2;		// Secondary username and password storage for merge() to reuse.
 	extern unsigned int last_login_id;				// Last login ID (relationship ID).
 
 	extern std::vector<std::string> suggestions;	// Container to store all the suggestions.

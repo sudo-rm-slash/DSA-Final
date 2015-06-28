@@ -60,7 +60,7 @@ void dsa::create()
 		if (suggestions.size() > 0)
 		{
 			std::cout << suggestions[0];
-			for (auto itr = std::begin(suggestions); itr != std::end(suggestions); ++itr)
+			for (auto itr = std::next(std::begin(suggestions)); itr != std::end(suggestions); ++itr)
 			{
 				std::cout << ',' << *itr;
 			}
@@ -112,7 +112,55 @@ void dsa::delete_()
 
 void dsa::merge()
 {
+	std::cin >> username >> password;
+	std::cin >> username2 >> password2;
 
+	// Check the existance of the usernames.
+	unsigned int id, id2;
+	if (finder.exists(username))
+	{
+		id = finder.find_specific(username);
+		std::cerr << "...id = " << id << std::endl;
+	}
+	else
+	{
+		std::cout << "ID " << username << " not found" << std::endl;
+		return;
+	}
+	if (finder.exists(username2))
+	{
+		id2 = finder.find_specific(username2);
+		std::cerr << "...id = " << id << std::endl;
+	}
+	else
+	{
+		std::cout << "ID " << username2 << " not found" << std::endl;
+		return;
+	}
+
+	// Authenticate the passwords.
+	if (!accounts[id].authenticate(password))
+	{
+		std::cout << "wrong password1" << std::endl;
+		return;
+	}
+	if (!accounts[id2].authenticate(password2))
+	{
+		std::cout << "wrong password2" << std::endl;
+		return;
+	}
+
+	// Merge the accounts.
+	unsigned int new_stat = accounts[id].merge_with(accounts[id2]);
+
+	// Link the relationships.
+	ownerships.link_users(id, id2);
+
+	// Remove the entry of the second acccount.
+	finder.remove(username2);
+	//finder.remove(accounts[id2].get_username());
+
+	std::cout << "success, " << username << " has " << new_stat << std::endl;
 }
 
 void dsa::deposit()
@@ -152,7 +200,7 @@ void dsa::find()
 	if (suggestions.size() > 0)
 	{
 		std::cout << suggestions[0];
-		for (auto itr = std::begin(suggestions); itr != std::end(suggestions); ++itr)
+		for (auto itr = std::next(std::begin(suggestions)); itr != std::end(suggestions); ++itr)
 		{
 			std::cout << ',' << *itr;
 		}
