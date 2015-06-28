@@ -60,8 +60,7 @@ void dsa::lookup_table::find_wildcard(const std::string& pattern, std::vector<un
 
 void dsa::lookup_table::suggest_exists(const std::string& username, std::vector<std::string>& suggestions)
 {
-	/*
-	// Wipe the priority queue.
+	// Wipe the set.
 	this->suggestions_buffer.clear();
 
 	// Start iterate through the hash table.
@@ -77,7 +76,7 @@ void dsa::lookup_table::suggest_exists(const std::string& username, std::vector<
 		// Wipe the items that are out of interest (>10).
 		if (this->suggestions_buffer.size() > WANTED_AMOUNT)
 		{
-			this->suggestions_buffer.erase(--std::end(this->suggestions_buffer));
+			this->suggestions_buffer.erase(std::prev(std::end(this->suggestions_buffer)));
 		}
 	}
 
@@ -89,7 +88,6 @@ void dsa::lookup_table::suggest_exists(const std::string& username, std::vector<
 	{
 		suggestions.push_back(candidate.username);
 	}
-	*/
 }
 
 unsigned int calculate_score(const std::string& str1, const std::string& str2)
