@@ -54,7 +54,7 @@ std::pair<bool, unsigned int> dsa::account::withdraw(unsigned int value)
 	}
 }
 
-void dsa::account::merge_with(dsa::account& slave)
+unsigned int dsa::account::merge_with(dsa::account& slave)
 {
 	// Transfer the money.
 	this->cash += slave.cash;
@@ -70,6 +70,9 @@ void dsa::account::merge_with(dsa::account& slave)
     slave.related_history.clear();
     // ...copy
     this->related_history = temp;
+
+    // Return new cash statistics.
+    return this->cash;
 }
 
 const std::string& dsa::account::get_username() const

@@ -52,7 +52,7 @@ namespace dsa
 		 * Merge the contents of another account with current one.
 		 * @arg slave The target account to merge with this one.
 		 */
-		void merge_with(dsa::account& slave);
+		unsigned int merge_with(dsa::account& slave);
 
 		/**
 		 * Get the username of this account.
