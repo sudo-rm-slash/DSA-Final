@@ -24,8 +24,7 @@ std::string dsa::history::find(unsigned int index, unsigned int associated_id)
 	}
 	else
 	{
-		//throw std::invalid_argument("Invalid argument: Query ID isn't in the requested history entry.\n");
-		return "";
+		throw std::invalid_argument("Invalid argument: Query ID isn't in the requested history entry.\n");
 	}
 
 	// Reverse lookup the username.
