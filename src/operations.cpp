@@ -9,6 +9,7 @@ dsa::history dsa::transaction_history;		// The grand transaction history.
 // History is dependent on accounts and ownerships.
 
 std::string dsa::username, dsa::password;	// Username and password for reuse.
+std::string dsa::username2, dsa::password2;	// Secondary username and password storage for merge() to reuse.
 unsigned int dsa::last_login_id;			// Last login ID (relationship ID).
 
 std::vector<std::string> dsa::suggestions;	// Container to store all the suggestions.
