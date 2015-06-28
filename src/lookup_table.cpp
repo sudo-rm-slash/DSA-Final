@@ -82,7 +82,9 @@ void dsa::lookup_table::find_wildcard(const std::string& pattern, unsigned int i
 	{
 		if (id != ignored_id)
 		{
+#ifdef DEBUG
 			std::cerr << "...id = " << id << std::endl;
+#endif
 			results.push_back(accounts[id].get_username());
 		}
 	}
@@ -114,10 +116,9 @@ void dsa::lookup_table::suggest_exists(const std::string& username, std::vector<
 	suggestions.clear();
 
 	// Save the result to vector.
-	std::cout << std::endl;
 	for (const auto& candidate : this->suggestions_buffer)
 	{
-		std::cout << "...score = " << candidate.first << ", " << candidate.second << std::endl;
+		//std::cout << "...score = " << candidate.first << ", " << candidate.second << std::endl;
 		suggestions.push_back(candidate.second);
 	}
 }
@@ -138,9 +139,9 @@ unsigned int dsa::lookup_table::calculate_score(const std::string& str1, const s
 		min_length = str1.size();
 	}
 
-	auto itr1 = str1.rbegin();
-	auto itr2 = str2.rbegin();
-	for (unsigned int i = 1; i <= min_length; ++itr1, ++itr2, i++)
+	auto itr1 = str1.begin();
+	auto itr2 = str2.begin();
+	for (int i = min_length; i > 0; ++itr1, ++itr2, i--)
 	{
 		if (*itr1 != *itr2)
 		{
