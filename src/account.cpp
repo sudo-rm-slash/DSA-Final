@@ -23,7 +23,8 @@ dsa::account::account(std::string& username, std::string& password)
 	
 	//Save username and encrypted password.
 	this->username = username;
-	this->password = password;
+	//this->password = password;
+	this->password = md5(password);
 
 	// Initialize the cash counter.
 	this->cash = 0;
@@ -34,7 +35,7 @@ dsa::account::account(std::string& username, std::string& password)
 
 bool dsa::account::authenticate(const std::string& password) const
 {
-	return (this->password == password);
+	return (this->password == md5(password));
 }
 
 unsigned int dsa::account::deposit(unsigned int value)

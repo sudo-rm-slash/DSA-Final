@@ -1,7 +1,7 @@
 #ifndef __ACCOUNT_HPP__
 #define __ACCOUNT_HPP__
 
-//#include "md5.h"			// md5
+#include "md5.hpp"			// md5
 
 #include <string>			// std::string
 #include <vector>			// std::vector

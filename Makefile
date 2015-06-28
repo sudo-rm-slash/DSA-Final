@@ -7,7 +7,7 @@ CXX ?= clang++
 SRC_EXT = cpp
 # Path to the source directory, relative to the makefile
 SRC_PATH = .
-# Space-separated pkg-config libraries used by this project
+# Space-separated libraries used by this project
 LIBS =
 # General compiler flags
 COMPILE_FLAGS = -std=c++11 -Wall -Wextra
