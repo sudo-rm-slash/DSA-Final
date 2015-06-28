@@ -86,5 +86,5 @@ unsigned int dsa::lookup_table::calculate_score(const std::string& str1, const s
 
 void dsa::lookup_table::suggest_nonexists(const std::string& username, std::vector<std::string>& suggestions)
 {
-
+	suggestion_factory.recommend(suggestions, username.c_str());
 }

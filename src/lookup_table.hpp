@@ -19,6 +19,7 @@ namespace dsa
 	private:
 		//dsa::trie tree_lookup;
 		std::unordered_map<std::string, unsigned int> hashtable_lookup;
+		dsa::recommendation<std::unordered_map<std::string, unsigned int> > suggestion_factory(hashtable_lookup);
 
 		struct suggestion
 		{
@@ -84,7 +85,7 @@ namespace dsa
 		// @param suggestions The container to hold the suggestions.
 		//
 		void suggest_nonexists(const std::string& username, std::vector<std::string>& suggestions);
-	
+
 
 	private:
 		//
