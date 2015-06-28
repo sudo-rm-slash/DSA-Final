@@ -130,7 +130,7 @@ void dsa::merge()
 	if (finder.exists(username2))
 	{
 		id2 = finder.find_specific(username2);
-		std::cerr << "...id = " << id << std::endl;
+		std::cerr << "...id = " << id2 << std::endl;
 	}
 	else
 	{
