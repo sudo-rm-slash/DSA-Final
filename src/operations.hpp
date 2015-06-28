@@ -6,17 +6,21 @@
 #include "lookup_table.hpp"		// dsa::lookup_table
 #include "history.hpp"			// dsa::history
 
+
 namespace dsa
 {
 	dsa::storage accounts;				// The accounts themselves.
 	dsa::relationships ownerships;		// The ownership between accounts.
 	dsa::lookup_table finder;			// Support functions to find accounts.
+
 	dsa::history transaction_history;	// The grand transaction history.
+										// History is dependent on accounts and ownerships.
 	unsigned int last_login_id;			// Last login ID (relationship ID).
+
 
 	//
 	// @brief Login to a specific account.
-	// 
+	//
 	void login();
 
 	//

@@ -13,11 +13,11 @@ std::string  dsa::history::find(unsigned int index, unsigned int associated_id)
 	this->string_builder.clear();
 
 	// Identify the direction and push into the placeholder.
-	if (this->container[primary].from == slave)
+	if (this->container[index].from == associated_id)
 	{
 		string_builder << "From ";
 	}
-	else if (this->container[primary].to == slave)
+	else if (this->container[index].to == associated_id)
 	{
 		string_builder << "To ";
 	}
@@ -27,11 +27,11 @@ std::string  dsa::history::find(unsigned int index, unsigned int associated_id)
 	}
 
 	// Reverse lookup the username.
-	int root = relationships.find_root(slave);
-	this->string_builder << storage[root].get_username();
+	int root = ownerships.find_root(associated_id);
+	this->string_builder << accounts[root].get_username();
 
 	// Print the amount of money.
-	this->string_builder << this->container[primary];
+	this->string_builder << this->container[index].amount;
 
 	// Acquire the string.
 	return this->string_builder.str();

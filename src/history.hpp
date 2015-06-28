@@ -1,13 +1,20 @@
 #ifndef __HISTORY_HPP__
 #define __HISTORY_HPP__
 
-#include <vector>			// std::vector
-#include <sstream>			// std::ostringstream
-#include <exception>		// std::invalid_argument
+#include "storage.hpp"			// dsa::storage
+#include "relationships.hpp"	// dsa::relationships
+
+#include <vector>				// std::vector
+#include <sstream>				// std::ostringstream
+#include <exception>			// std::invalid_argument
 
 
 namespace dsa
 {
+	extern dsa::storage accounts;				// The accounts themselves.
+	extern dsa::relationships ownerships;		// The ownership between accounts.
+
+
 	class history
 	{
 	private:
