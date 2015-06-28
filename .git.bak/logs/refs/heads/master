@@ -1,0 +1,43 @@
+0000000000000000000000000000000000000000 b175e4a156fd50c58ff31bee0fb299c037abf04f Andy Liu <windows.linux.mac@gmail.com> 1435408847 +0800	commit (initial): Add .gitignore.
+b175e4a156fd50c58ff31bee0fb299c037abf04f def422f23b4a50647d03ff76e204f10d3027cb97 Andy Liu <windows.linux.mac@gmail.com> 1435409218 +0800	commit: 'nark-bone' library added to 'lib' folder.
+def422f23b4a50647d03ff76e204f10d3027cb97 800c4ac1accd865f605f3ffc2d6bc42746e63a3d Andy Liu <windows.linux.mac@gmail.com> 1435410146 +0800	commit: Complete main().
+800c4ac1accd865f605f3ffc2d6bc42746e63a3d 178619139ad14154660bbbf09fbcc59b16cf7337 Andy Liu <windows.linux.mac@gmail.com> 1435410202 +0800	commit: Add operation interface.
+178619139ad14154660bbbf09fbcc59b16cf7337 04542f16a74466e3a9fa7f200e1a972b928b7326 Andy Liu <windows.linux.mac@gmail.com> 1435410274 +0800	commit: Remove 'nark-bone' library for now.
+04542f16a74466e3a9fa7f200e1a972b928b7326 76120b6e4006d794586d0d83b07d875a4afc2545 Andy Liu <windows.linux.mac@gmail.com> 1435411004 +0800	commit: Initialize operations.cpp.
+76120b6e4006d794586d0d83b07d875a4afc2545 b20b48d21cd154991a632edc7dc89535adca99e2 Andy Liu <windows.linux.mac@gmail.com> 1435411019 +0800	commit: Add interface for relationships object.
+b20b48d21cd154991a632edc7dc89535adca99e2 7638304bd4ffca6ceb28c2adce6269b853bb98a2 Andy Liu <windows.linux.mac@gmail.com> 1435411107 +0800	commit: Add account.hpp include.
+7638304bd4ffca6ceb28c2adce6269b853bb98a2 267a043a5889b87fbc993419bd37b4b4146221b7 Andy Liu <windows.linux.mac@gmail.com> 1435411850 +0800	commit: Add interface for storage.
+267a043a5889b87fbc993419bd37b4b4146221b7 3ec1d0536f8cf508a75c974dcdc04e669a03493a Andy Liu <windows.linux.mac@gmail.com> 1435411865 +0800	commit: Edit relationships interface to comply with the storage.
+3ec1d0536f8cf508a75c974dcdc04e669a03493a de06e8d4e201d729b8d46cbbb235cc3df8a64d51 Andy Liu <windows.linux.mac@gmail.com> 1435412577 +0800	commit: Add the interface for account object.
+de06e8d4e201d729b8d46cbbb235cc3df8a64d51 c30488b21e8e5097a99c4187203c0b057ac205f9 Andy Liu <windows.linux.mac@gmail.com> 1435412673 +0800	commit: Include headers for account.hpp.
+c30488b21e8e5097a99c4187203c0b057ac205f9 3f5fec607c2654aae3abb4cec74c9ce75ec9f0fd Andy Liu <windows.linux.mac@gmail.com> 1435412725 +0800	commit: Add header files for storage.hpp.
+3f5fec607c2654aae3abb4cec74c9ce75ec9f0fd 86306ccbc1c7b80f8560d68704cb35a6df1daeb4 Andy Liu <windows.linux.mac@gmail.com> 1435413374 +0800	commit: Add interface for the lookup table.
+86306ccbc1c7b80f8560d68704cb35a6df1daeb4 bdbee4bf3bf1cc19dbd81824104c9e98c375fe05 Andy Liu <windows.linux.mac@gmail.com> 1435413524 +0800	commit: Add an interface to find the real account.
+bdbee4bf3bf1cc19dbd81824104c9e98c375fe05 eb475ba8b15d7240591b0fc58a5a142f8519a3ba Andy Liu <windows.linux.mac@gmail.com> 1435413547 +0800	commit: Adjust the index data type.
+eb475ba8b15d7240591b0fc58a5a142f8519a3ba 46ceed410b5957cf8abc65cdd0fe67f60a99ae71 Andy Liu <windows.linux.mac@gmail.com> 1435414281 +0800	commit: Move files to comply with the Makefile.
+46ceed410b5957cf8abc65cdd0fe67f60a99ae71 196c7cf9ce7811a04aea3c6756106e7ee4061ff5 Andy Liu <windows.linux.mac@gmail.com> 1435414318 +0800	commit: Move files to comply with the Makefile, again, deleted ones.
+196c7cf9ce7811a04aea3c6756106e7ee4061ff5 f8f93c1bf47a1c79a9d009210ed146e9a6d80266 Andy Liu <windows.linux.mac@gmail.com> 1435414931 +0800	commit: Use another version of Makefile.
+f8f93c1bf47a1c79a9d009210ed146e9a6d80266 a555b466fcddb33d3e299fe0cad87463c647cd17 Andy Liu <windows.linux.mac@gmail.com> 1435415018 +0800	commit: Change function name delete_().
+a555b466fcddb33d3e299fe0cad87463c647cd17 49af1aeffe50a797404b81dcbb284ca6caa44ed0 Andy Liu <windows.linux.mac@gmail.com> 1435415148 +0800	commit: Use original Makefile.
+49af1aeffe50a797404b81dcbb284ca6caa44ed0 1041ab6fe2460432f37a531200eb532770e4cc2b Andy Liu <windows.linux.mac@gmail.com> 1435415339 +0800	commit: Tune the Makefile for current folder structure.
+1041ab6fe2460432f37a531200eb532770e4cc2b 66b494182f8ea6e8ff6ffb754622cb27f0a0d5d2 Andy Liu <windows.linux.mac@gmail.com> 1435417371 +0800	commit: Implement accout object.
+66b494182f8ea6e8ff6ffb754622cb27f0a0d5d2 93168c40990ebe6afab5affdf02ac23d1488fa01 Andy Liu <windows.linux.mac@gmail.com> 1435417413 +0800	commit: Implement lookup table and adjust return method.
+93168c40990ebe6afab5affdf02ac23d1488fa01 14d2d6aea1876cd7809a9fe90c92e16305991f73 Andy Liu <windows.linux.mac@gmail.com> 1435417509 +0800	commit: Temporary remove TRIE related code.
+14d2d6aea1876cd7809a9fe90c92e16305991f73 24b8538ce60f4b752003817c6afeceae9f853b75 Andy Liu <windows.linux.mac@gmail.com> 1435426351 +0800	commit: Add function names in the impelmentation file.
+24b8538ce60f4b752003817c6afeceae9f853b75 7891dd01fdedee15c2b121aa2869e88a71072272 Andy Liu <windows.linux.mac@gmail.com> 1435426635 +0800	commit: Remove constant qualifier and references for integer parameters.
+7891dd01fdedee15c2b121aa2869e88a71072272 c75c04e2d8073c559d0c8e62ee08cfbf38096456 Andy Liu <windows.linux.mac@gmail.com> 1435426671 +0800	commit: Add void return type in operations.cpp functions.
+c75c04e2d8073c559d0c8e62ee08cfbf38096456 0fe942c23a95578e8bb928601c4c75f9c80b43dc Andy Liu <windows.linux.mac@gmail.com> 1435429201 +0800	commit: A problematic implementation of suggest_exists().
+0fe942c23a95578e8bb928601c4c75f9c80b43dc bbb6caab03abe2b66532bb2f73bc325e945caac4 Andy Liu <windows.linux.mac@gmail.com> 1435429214 +0800	commit: Edit comment.
+bbb6caab03abe2b66532bb2f73bc325e945caac4 49bdc77723bde128fbb17503a88ebaad473e347b Andy Liu <windows.linux.mac@gmail.com> 1435429781 +0800	commit: Implement disjoint sets.
+49bdc77723bde128fbb17503a88ebaad473e347b 66368ada7df55968b4c81d31ad2356819cefe830 Andy Liu <windows.linux.mac@gmail.com> 1435431530 +0800	commit: Update constant qualifiers.
+66368ada7df55968b4c81d31ad2356819cefe830 577b09a4458e821bf6eb0e84f2a017cc7b96eb9c Andy Liu <windows.linux.mac@gmail.com> 1435431556 +0800	commit: Comment out suggest_exists() for now.
+577b09a4458e821bf6eb0e84f2a017cc7b96eb9c 53a86ef6935354731097c40c9c93ba90e633b49b Andy Liu <windows.linux.mac@gmail.com> 1435431575 +0800	commit: Minor modification.
+53a86ef6935354731097c40c9c93ba90e633b49b 6a927a4efad9d50237c78f8c1fb883d7ed19c962 Andy Liu <windows.linux.mac@gmail.com> 1435431594 +0800	commit: Implement the usage of disjoint sets.
+6a927a4efad9d50237c78f8c1fb883d7ed19c962 5c346e940d695ab3be2473b881720ab9a2d81ec1 Andy Liu <windows.linux.mac@gmail.com> 1435431604 +0800	commit: Start implementing storage object.
+5c346e940d695ab3be2473b881720ab9a2d81ec1 1f9d6ea896e576cbae2167ac4bf087e43e230baf Andy Liu <windows.linux.mac@gmail.com> 1435432014 +0800	commit: Finish the implementation of storage.
+1f9d6ea896e576cbae2167ac4bf087e43e230baf 251682e5e8fdd5063b8e146e4cab9e2fb710153b Andy Liu <windows.linux.mac@gmail.com> 1435432571 +0800	commit: Start implementing history.
+251682e5e8fdd5063b8e146e4cab9e2fb710153b e8ae36f28680c7143ff9a16a6cdb2c3193c88e14 Andy Liu <windows.linux.mac@gmail.com> 1435473908 +0800	commit: Remove destructor.
+e8ae36f28680c7143ff9a16a6cdb2c3193c88e14 8db1f06059f34d1648067c4d08993b38b2d19875 Andy Liu <windows.linux.mac@gmail.com> 1435473922 +0800	commit: Implement insert history.
+8db1f06059f34d1648067c4d08993b38b2d19875 2246a11b3d048a4a4a6e705471f856356439997a Andy Liu <windows.linux.mac@gmail.com> 1435476196 +0800	commit: Remove constructor and destructor.
+2246a11b3d048a4a4a6e705471f856356439997a bf6f8a2d5e458ca416d7fdf56c67226308f56e6c Andy Liu <windows.linux.mac@gmail.com> 1435476219 +0800	commit: Convert comment style.
+bf6f8a2d5e458ca416d7fdf56c67226308f56e6c f05952b4c20967bb9e06e258c050f0929c7a8cf3 Andy Liu <windows.linux.mac@gmail.com> 1435476251 +0800	commit: Create history entry definition.

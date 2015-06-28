@@ -1,0 +1,20 @@
+# Swap files
+*~
+
+# Object files
+*.o
+obj/
+obj/*
+
+# Binaries
+*.out
+bin/
+bin/*
+
+# Profiling
+*time
+
+# Project specific files
+*.pdf
+final_project
+
