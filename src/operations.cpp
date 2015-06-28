@@ -200,7 +200,20 @@ void dsa::transfer()
 	}
 	else
 	{
-		std::cout << "ID " << username << " not found" << std::endl;
+		std::cout << "ID " << username << " not found, ";
+
+		// Get suggestions and print them.
+		finder.suggest_exists(username, suggestions);
+		if (suggestions.size() > 0)
+		{
+			std::cout << suggestions[0];
+			for (auto itr = std::next(std::begin(suggestions)); itr != std::end(suggestions); ++itr)
+			{
+				std::cout << ',' << *itr;
+			}
+		}
+		std::cout << std::endl;
+		
 		return;
 	}
 
@@ -259,20 +272,7 @@ void dsa::search()
 	}
 	else
 	{
-		std::cout << "ID " << username << " not found, ";
-
-		// Get suggestions and print them.
-		finder.suggest_exists(username, suggestions);
-		if (suggestions.size() > 0)
-		{
-			std::cout << suggestions[0];
-			for (auto itr = std::next(std::begin(suggestions)); itr != std::end(suggestions); ++itr)
-			{
-				std::cout << ',' << *itr;
-			}
-		}
-		std::cout << std::endl;
-
+		std::cout << "ID " << username << " not found" << std::endl;
 		return;
 	}
 
