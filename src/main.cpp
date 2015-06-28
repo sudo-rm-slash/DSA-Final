@@ -35,11 +35,13 @@ int main()
 	std::string operation;
 	while (std::cin >> operation)
 	{
+#ifdef DEBUG
 		std::cerr << ">>> \"" << operation << "\" START <<<" << std::endl;
+#endif
 
 		// Find the target function.
 		auto search = function_lookup.find(operation);
-		if(search == function_lookup.end())
+		if (search == function_lookup.end())
 		{
 			throw std::invalid_argument("Invalid argument: Invalid operation.\n");
 		}
@@ -47,7 +49,9 @@ int main()
 		// Execute the function.
 		search->second();
 
+#ifdef DEBUG
 		std::cerr << ">>> END <<<" << std::endl << std::endl;
+#endif
 	}
 
 	return 0;

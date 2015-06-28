@@ -23,7 +23,9 @@ void dsa::login()
 	if (finder.exists(username))
 	{
 		id = finder.find_specific(username);
+#ifdef DEBUG
 		std::cerr << "...id = " << id << std::endl;
+#endif
 	}
 	else
 	{
@@ -75,7 +77,9 @@ void dsa::create()
 
 	// Add the relationship of this account.
 	unsigned int id = ownerships.add_user(index);
+#ifdef DEBUG
 	std::cerr << "...id = " << id << std::endl;
+#endif
 
 	// Store the account into the lookup table.
 	finder.insert(username, id);
@@ -120,7 +124,9 @@ void dsa::merge()
 	if (finder.exists(username))
 	{
 		id = finder.find_specific(username);
+#ifdef DEBUG
 		std::cerr << "...id = " << id << std::endl;
+#endif
 	}
 	else
 	{
@@ -130,7 +136,9 @@ void dsa::merge()
 	if (finder.exists(username2))
 	{
 		id2 = finder.find_specific(username2);
+#ifdef DEBUG
 		std::cerr << "...id = " << id2 << std::endl;
+#endif
 	}
 	else
 	{
@@ -213,7 +221,7 @@ void dsa::transfer()
 			}
 		}
 		std::cout << std::endl;
-		
+
 		return;
 	}
 
@@ -234,7 +242,9 @@ void dsa::transfer()
 
 	// Add an entry in the history.
 	unsigned int index = transaction_history.insert(last_login_id, id, value);
+#ifdef DEBUG
 	std::cerr << "...index = " << index << std::endl;
+#endif
 
 	// Add the history index to both accounts.
 	accounts[last_login_id].add_related_history(index);
@@ -267,8 +277,9 @@ void dsa::search()
 	if (finder.exists(username))
 	{
 		id = finder.find_specific(username);
-
+#ifdef DEBUG
 		std::cerr << "...id = " << id << std::endl;
+#endif
 	}
 	else
 	{
@@ -280,7 +291,9 @@ void dsa::search()
 	std::vector<unsigned int> results;
 	accounts[last_login_id].get_common_history(accounts[id], results);
 
+#ifdef DEBUG
 	std::cerr << "...history_length = " << results.size() << std::endl;
+#endif
 
 	if (results.size() == 0)
 	{

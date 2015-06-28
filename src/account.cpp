@@ -17,8 +17,10 @@ dsa::account::account(std::string& password)
 }
 dsa::account::account(std::string& username, std::string& password)
 {
+#ifdef DEBUG
 	std::cerr << "DEPRECATED function, dsa::account::account(std::string&, std::string&)" << std::endl;
-
+#endif
+	
 	//Save username and encrypted password.
 	this->username = username;
 	this->password = password;
@@ -78,8 +80,9 @@ unsigned int dsa::account::merge_with(dsa::account& slave)
 void dsa::account::add_related_history(unsigned int index)
 {
 	this->related_history.push_back(index);
-
+#ifdef DEBUG
 	std::cerr << "...new history added, new size = " << this->related_history.size() << std::endl;
+#endif
 }
 
 const std::string& dsa::account::get_username() const
