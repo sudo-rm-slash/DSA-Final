@@ -32,7 +32,16 @@ unsigned int dsa::lookup_table::find_specific(const std::string& username)
 {
 	if (dirty_last_found_id)
 	{
-		// TODO: Search again from the hash table and return.
+		auto itr = this->hashtable_lookup.find(username);
+		if (itr != std::end(hashtable_lookup))
+		{
+			this->last_found_id = itr->second;
+		}
+		else
+		{
+			throw std::invalid_argument("Invalid argument: Username doesn't exsit.\n");
+		}
+
 		this->last_found_id = 0;
 	}
 	else

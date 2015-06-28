@@ -6,6 +6,7 @@
 #include <string>			// std::string
 #include <vector>			// std::vector
 #include <utility>			// std::pair
+#include <algorithm>		// std::set_union
 #include <iostream>			// std::cerr
 
 
