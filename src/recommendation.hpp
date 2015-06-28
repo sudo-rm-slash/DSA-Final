@@ -15,9 +15,8 @@ namespace dsa
 {
 	class recommendation
 	{
-
 	private:
-		static const char candidates_characters[];
+		const char candidate_characters[63] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 		std::vector<std::string> recommendations;
 		const char* original_text;
 		char* candidate_string;
@@ -34,7 +33,7 @@ namespace dsa
 		void flush();
 
 	private:
-		int  character_to_index(char ch);
+		int  character_to_index(const char c);
 		bool enumerate_single_character(std::vector<std::string>& recommendations, int position, bound_t bounds);
 		bool enumerate_double_character(std::vector<std::string>& recommendations, std::pair<int, int> positions, std::pair<bound_t, bound_t>&& bounds_pair);
 		bool enumerate_triple_character(std::vector<std::string>& recommendations, std::vector<int>&& positions, std::vector<bound_t>&& bounds);

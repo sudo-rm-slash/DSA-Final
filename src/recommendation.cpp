@@ -29,31 +29,31 @@
 	}
 
 
-/* Front identifier for candidates_characters */
+/* Front identifier for candidate_characters */
 #define FRONT (char)0
-/* End   identifier for candidates_characters */
+/* End   identifier for candidate_characters */
 #define END   '\0'
 
-const char dsa::recommendation::candidates_characters[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-
 /**
- * @Function: map character to its corresponding index in static variable 'candidates_characters'
- *
- * @Param: ch
- *
- * @Return: index
+ * Map character to its corresponding index in static variable 'candidate_characters'.
+ * @arg ch
+ * @return: index
  */
-int dsa::recommendation::character_to_index( char ch )
+int dsa::recommendation::character_to_index(const char c)
 {
-	if( ch < 'A' )
+	if (c < 'A')
 		// ch is digit: ch - '0'
-		return ch - '0';
-	if( ch < 'a' )
+	{
+		return c - '0';
+	}
+	if (c < 'a')
 		// ch is uppercase alphabet: ch - 'A' + 10 ( ch - 65 + 10 )
-		return ch - 55;
+	{
+		return c - 55;
+	}
 
 	// ch is lowercase alphabet: ch - 'a' + 10 + 26 ( ch - 97 + 10 + 26 )
-	return ch - 61;
+	return c - 61;
 }
 
 
@@ -84,10 +84,10 @@ int dsa::recommendation::character_to_index( char ch )
 
 bool dsa::recommendation::enumerate_single_character(std::vector<std::string>& recommendations, int position, bound_t bounds)
 {
-	for (int i = bounds.first ? character_to_index(bounds.first) + 1 : 0 ; candidates_characters[i] != bounds.second ; ++i)
+	for (int i = bounds.first ? character_to_index(bounds.first) + 1 : 0 ; candidate_characters[i] != bounds.second ; ++i)
 	{
-		candidate_string[ position ] = candidates_characters[i];
-		//std::cout  <<"Position: " << position << " Candidate character: " << candidates_characters[i] << std::endl;
+		candidate_string[ position ] = candidate_characters[i];
+		//std::cout  <<"Position: " << position << " Candidate character: " << candidate_characters[i] << std::endl;
 		PROBE(candidate_string, length)
 		if (recommendations.size() >= RECOMMENDATION_NUMBER)
 		{
@@ -115,12 +115,12 @@ bool dsa::recommendation::enumerate_double_character(std::vector<std::string>& r
         std::pair<int, int> positions,
         std::pair<bound_t, bound_t>&& bounds_pair)
 {
-	for (int i = bounds_pair.first.first ? character_to_index(bounds_pair.first.first) + 1 : 0; candidates_characters[i] != bounds_pair.first.second ; ++i)
+	for (int i = bounds_pair.first.first ? character_to_index(bounds_pair.first.first) + 1 : 0; candidate_characters[i] != bounds_pair.first.second ; ++i)
 	{
 		// std::cout << " First lower bound: " << bounds_pair.first.first << std::endl;
 		// std::cout << " Key: " << i << std::endl;
-		// std::cout <<"Position: " << positions.first << " Candidate character: " << candidates_characters[i] << std::endl;
-		candidate_string[ positions.first ] = candidates_characters[i];
+		// std::cout <<"Position: " << positions.first << " Candidate character: " << candidate_characters[i] << std::endl;
+		candidate_string[ positions.first ] = candidate_characters[i];
 
 		if (!enumerate_single_character(recommendations , positions.second,  bounds_pair.second))
 		{
@@ -137,9 +137,9 @@ bool dsa::recommendation::enumerate_triple_character(std::vector<std::string>& r
         std::vector<int>&& positions,
         std::vector<bound_t>&& bounds)
 {
-	for (int i = bounds[0].first ? character_to_index(bounds[0].first) + 1 : 0; candidates_characters[i] != bounds[0].second ; ++i)
+	for (int i = bounds[0].first ? character_to_index(bounds[0].first) + 1 : 0; candidate_characters[i] != bounds[0].second ; ++i)
 	{
-		candidate_string[ positions[0] ] = candidates_characters[i];
+		candidate_string[ positions[0] ] = candidate_characters[i];
 
 		if (!enumerate_single_character(recommendations , positions[1],  bounds[1]))
 		{
