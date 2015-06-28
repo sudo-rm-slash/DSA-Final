@@ -1,7 +1,7 @@
 #include <exception>
 #include <list>				// std::list
 #include <iostream>			// std::cerr
-
+#include <vector>
 #include "char_map.hpp"
 
 namespace dsa
@@ -75,7 +75,7 @@ namespace dsa
 		 * @param VAR EXPLANATIONS
 		 * @return RETURN
 		 */
-		std::list<const char*> wildcard(const char* str);
+		void wildcard(std::vector<unsigned int>&result, const char* str);
 		
 		/*
 		 * @brief EXPLANATIONS
@@ -92,7 +92,7 @@ namespace dsa
 		 * @param VAR EXPLANATIONS
 		 * @return RETURN
 		 */
-		std::list<const char*> wildcard_node(traveler& node, const char* str);
+		void wildcard_node( std::vector<int>& result, traveler& node, const char* str);
 		
 	};
 }

@@ -91,79 +91,79 @@ void dsa::trie::remove(const char* str)
 	}
 }
 
-std::list<const char*> dsa::trie::wildcard(const char* str)
+void  dsa::trie::wildcard(std::vector<unsigned int>&result, const char* str)
 {
 	now_search_id += 1;
 	traveler tr_root = this -> get_traveler();
-	return wildcard_node(tr_root , str);
+        wildcard_node(result, tr_root , str);
 }
 
-std::list<const char*> dsa::trie::wildcard_node( traveler& node, const char* str)
+void dsa::trie::wildcard_node( std::vector<int>&result, traveler& tr_node, const char* str)
 {
-	std::list<const char*> list;
-	traveler tr_node = node;
 
-	if (*str == '*')
+	switch( *str ){
+        case '*':
 	{
 		for (auto tr_child = tr_node.child_next(); tr_child.valid(); tr_child = tr_node.child_next())
 		{
 
 			if (*str == '*')
 			{
-				wildcard_node( tr_node, (str + 1) );				
-				wildcard_node( tr_child, (str + 1) );
-				wildcard_node( tr_child, str );
+				wildcard_node( list, tr_node, (str + 1) );				
+				wildcard_node( list, tr_child, (str + 1) );
+				wildcard_node( list, tr_child, str );
 
 			}
 		}
-	}else if( *str == '?' ){
+		break;
+	}
+	case '?':
+        {
 
 		for (auto tr_child = tr_node.child_next(); tr_child.valid(); tr_child = tr_node.child_next()){	       	
-			list.merge( wildcard_node( tr_child, (str + 1) ) );
+		        wildcard_node( list, tr_child, (str + 1) );
 		}
-
+		break;
 	}
-	else if (*str == '\0')
+	case '\0':
 	{
-		//std::cerr << "...at the leaf " << node.get_char() << std::endl;
 
 		traveler leaf = tr_node.child('\0');
 		if (leaf.valid() && leaf.get_search_id() < now_search_id )
 		{
 			leaf.update_search_id( now_search_id );
 			
-			//std::cerr << "...a valid leaf" << std::endl;
+			list.push_back( leaf.get_data() );
 
-			std::list<char> buffer;
-			traveler parent = tr_node;
-			while( parent.get_char() != '!')
-			{
-				//std::cerr << "...current_char=" << parent.get_char() << std::endl;
-				buffer.push_back( parent.get_char());
-				parent = parent.parent();
-			}
+			// std::list<char> buffer;
+			// traveler parent = tr_node;
+			// while( parent.get_char() != '!')
+			// {
+			// 	buffer.push_back( parent.get_char());
+			// 	parent = parent.parent();
+			// }
 
-			char* username = new char[101];
-			int i = 0;
-			for(auto itr = buffer.rbegin(); itr != buffer.rend(); ++itr)
-			{
-				std::cerr << *itr ;
-				username[i] = *itr;
-			}
-			std::cerr << std::endl;
+			// char* username = new char[101];
+			// int i = 0;
+			// for(auto itr = buffer.rbegin(); itr != buffer.rend(); ++itr)
+			// {
+			// 	std::cerr << *itr ;
+			// 	username[i] = *itr;
+			// }
+			// std::cerr << std::endl;
 
-			list.push_back(username);
 		}
 	}
-	else
+	default:
 	{
 		traveler tr_child = tr_node.child(*str);
 		if (tr_child.valid())
-		{
-			list.merge(wildcard_node(tr_child, str + 1));
-		}
+			{
+				wildcard_node(list, tr_child, ( str + 1 ));
+			}
+	
 	}
-
+	}
 
 	return list;
 }
