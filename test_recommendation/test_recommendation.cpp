@@ -6,10 +6,10 @@
 #include "../recommendation.hpp"
 
 #define TEST_LENGTH 2
-#define SCALE 9
+#define SCALE 6
 
 // const char candidates_characters[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-const char candidates_characters[] = "012ABCabc";
+const char candidates_characters[] = "012345";
 
 void test(dsa::recommendation& recommendation_test, const char string[] )
 {
@@ -33,7 +33,7 @@ void insert(std::unordered_map<std::string,unsigned int>& map, char* test_case, 
 	}	
 	else
 	{
-		for( char i = 0; i < scale; ++i )
+		for( char i = 0; i < scale ; ++i )
 		{
 			test_case[dept] = candidates_characters[i];
 			if( rand() % 10 < 7 )
@@ -57,8 +57,9 @@ int main(int argc, char *argv[])
 
 	dsa::recommendation recommendation_test(hashmap);
 
-	test( recommendation_test, "00a" );
-	test( recommendation_test, "01a" );
+	test( recommendation_test, "000" );
+	test( recommendation_test, "213" );
+	test( recommendation_test, "444" );
 	// test( recommendation_test, "01a" );
 	// test( recommendation_test, "113" );
 	// test( recommendation_test, "359" );

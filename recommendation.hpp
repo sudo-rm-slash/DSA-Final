@@ -7,7 +7,7 @@
 #include <iostream>
 #include <string>
 
-#define RECOMMENDATION_NUMBER 22
+#define RECOMMENDATION_NUMBER 70
 
 typedef std::pair<char,char> bound_t;
 
@@ -33,8 +33,8 @@ namespace dsa
 
 	private:
 		int  character_to_index( char ch );
-		bool enumerate_single_character( std::vector<std::string>& recommendations, int position, int length, bound_t bounds );
-		bool enumerate_double_character( std::vector<std::string>& recommendations, int length, std::pair<int,int> positions, std::pair<bound_t,bound_t>&& bounds_pair );
+		bool enumerate_single_character( std::vector<std::string>& recommendations, int position, bound_t bounds );
+		bool enumerate_double_character( std::vector<std::string>& recommendations, std::pair<int,int> positions, std::pair<bound_t,bound_t>&& bounds_pair );
 
 	};
 
