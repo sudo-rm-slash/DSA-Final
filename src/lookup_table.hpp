@@ -14,6 +14,7 @@
 #include <set>					// std::priority_queue
 #include <string>				// std::string
 #include <vector>				// std::vector
+#include <exception>			// std::invalid_argument
 #include <algorithm>			// std::swap
 
 

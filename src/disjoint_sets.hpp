@@ -2,6 +2,8 @@
 #define __DISJOINT_SETS_HPP__
 
 #include <vector>			// std::vector
+#include <cstddef>			// NULL
+
 
 namespace dsa
 {
