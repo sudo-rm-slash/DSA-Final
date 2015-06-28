@@ -9,6 +9,7 @@ void dsa::lookup_table::insert(const std::string& username, unsigned int id)
 
 void dsa::lookup_table::remove(const std::string& username)
 {
+	tree_lookup.remove(username.c_str());
 	hashtable_lookup.erase(username);
 }
 
@@ -61,7 +62,8 @@ void dsa::lookup_table::find_wildcard(const std::string& pattern, std::vector<st
 	// Reverse lookup the IDs.
 	for(const auto& id : temp)
 	{
-		results.push_back(accounts[id].get_usernmae());
+		std::cerr << "...id = " << id << std::endl;
+		results.push_back(accounts[id].get_username());
 	}
 }
 

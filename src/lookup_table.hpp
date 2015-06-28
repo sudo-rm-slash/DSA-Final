@@ -9,6 +9,7 @@
 // TODO: include "art.hpp"
 #endif
 //#include "recommendation.hpp"	// dsa::recommendation
+#include "storage.hpp"			// dsa::storage
 
 #include <unordered_map>		// std::unordered_map
 #include <set>					// std::priority_queue
@@ -24,6 +25,9 @@
 
 namespace dsa
 {
+	extern storage accounts;
+
+
 	class lookup_table
 	{
 	private:
@@ -71,7 +75,7 @@ namespace dsa
 		//
 		// @brief TODO
 		//
-		void find_wildcard(const std::string& pattern, std::vector<unsigned int>& results);
+		void find_wildcard(const std::string& pattern, std::vector<std::string>& results);
 
 		//
 		// @brief Suggest exists accounts in the system.
