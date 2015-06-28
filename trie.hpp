@@ -1,4 +1,6 @@
 #include "char_map.hpp"
+#include <list>
+//#include "link_list.hpp"
 
 namespace dsa
 {
@@ -10,11 +12,32 @@ namespace dsa
 			char_map<trie_node*> children;
 			int ptr_account = -1;
 			trie_node* parent;
+			char character = '!';
+			
 		};
 
 		trie_node root;
 		void wildcard_print_node( trie_node*node, char* str );
 	public:
+		class traveler{
+		private:
+			trie_node* node;			
+			char_map<trie_node*>::iterator map_iterator;			
+		public:
+
+			traveler();
+			traveler(trie_node*);
+			traveler child_next();
+			traveler child(char);
+			trie_node* get_node();
+			bool valid();//Check whether or not the node 
+			int get_data(); //Only meaningful when at leave. Get the index of account.
+			char get_char(); //TBA
+			traveler parent(); //TBA		       
+
+		};
+
+
 		/*
 		 * @brief Find the corresponding data with the string str.
 		 * 
@@ -41,17 +64,8 @@ namespace dsa
 		void remove(char* str);
 
 		void wildcard_print(char* str );
-
-		class traveler{
-		private:
-			trie_node* node;			
-			char_map<trie_node*>::iterator map_iterator;			
-		public:
-			traveler(trie_node*);
-			traveler child_next();
-			traveler child(char);
-			trie_node* get_node();
-			//traveler parent(); //TBA		       
-		};
+		std::list<int> wildcard(char* str );
+		std::list<int> wildcard_node( traveler& node, char* str );
+		traveler get_traveler();
 	};
 }

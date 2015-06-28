@@ -1,0 +1,21 @@
+#include "util.hpp"
+#include "../trie.hpp"
+
+
+#define N_TEST 10
+
+
+char rand_strs[N_TEST][STR_MAX_LENGTH];
+
+int main(){
+for( int i = 0 ; i < N_TEST ; ++i ){
+get_random_string( rand_strs[i] );
+}
+	
+dsa::trie tr;
+	for( int i = 0 ; i < N_TEST ; ++i ){
+		list.insert( rand_strs[i], i );
+	}
+
+	link_list<int> list = tr.wildcard( "*" );
+}
