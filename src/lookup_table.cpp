@@ -1,6 +1,16 @@
 #include "lookup_table.hpp"
 
 
+dsa::lookup_table::lookup_table()
+{
+	this->suggestion_factory = new dsa::recommendation(this->hashtable_lookup);
+}
+
+dsa::lookup_table::~lookup_table()
+{
+	delete this->suggestion_factory;
+}
+
 void dsa::lookup_table::insert(const std::string& username, unsigned int id)
 {
 	tree_lookup.insert(username.c_str(), id);

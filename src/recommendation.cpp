@@ -20,10 +20,6 @@
 #define CHECK_LENGTH( text_length, length ) \
 	if(  text_length < length )return;
 
-// Check if we have reached the required number of recommendations
-//#define CHECK_RETURN() \
-//	if( recommendations.size() >= RECOMMENDATION_NUMBER )return;
-
 // Check if candidate_string exists in our target container
 #define PROBE( candidate_string, length )             			\
 	/*std::cout << " --> " << candidate_string << endl;*/ 		\

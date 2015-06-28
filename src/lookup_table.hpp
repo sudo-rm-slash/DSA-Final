@@ -45,17 +45,10 @@ namespace dsa
 
 
 	public:
-		lookup_table()
-		{
-			suggestion_factory = new dsa::recommendation(hashtable_lookup);
-		}
+		lookup_table();
+		~lookup_table();
 
-		~lookup_table()
-		{
-			delete suggestion_factory;
-		}
 
-		
 		/**
 		 * Insert a new account entry in the lookup table.
 		 * @arg username The string username.
