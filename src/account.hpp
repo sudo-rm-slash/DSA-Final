@@ -55,6 +55,12 @@ namespace dsa
 		unsigned int merge_with(dsa::account& slave);
 
 		/**
+		 * Add a related history in the list.
+		 * @arg slave The target account to merge with this one.
+		 */
+		void add_related_history(unsigned int index);
+
+		/**
 		 * Get the username of this account.
 		 * @return The username.
 		 */

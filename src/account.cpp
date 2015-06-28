@@ -75,6 +75,11 @@ unsigned int dsa::account::merge_with(dsa::account& slave)
     return this->cash;
 }
 
+void dsa::account::add_related_history(unsigned int index)
+{
+	this->related_history.push_back(index);
+}
+
 const std::string& dsa::account::get_username() const
 {
 	return this->username;
