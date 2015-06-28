@@ -14,6 +14,7 @@ namespace dsa
 	private:
 		std::vector<dsa::account> container;
 	
+	
 	public:
 		//
 		// @brief Create a new account in the system.

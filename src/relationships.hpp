@@ -14,6 +14,7 @@ namespace dsa
 	private:
 		dsa::disjoint_sets container;
 
+
 	public:
 		//
 		// @brief Add a new account in the relationship chain.

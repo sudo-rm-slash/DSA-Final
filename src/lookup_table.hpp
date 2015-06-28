@@ -37,6 +37,7 @@ namespace dsa
 		bool dirty_last_found_id = false;
 		unsigned int last_found_id;		// Store the last lookup ID.
 
+
 	public:
 		/**
 		 * Insert a new account entry in the lookup table.
