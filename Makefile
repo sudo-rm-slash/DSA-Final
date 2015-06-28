@@ -6,7 +6,7 @@ CXX ?= clang++
 # Extension of source files used in the project
 SRC_EXT = cpp
 # Path to the source directory, relative to the makefile
-SRC_PATH = .
+SRC_PATH = src
 # Space-separated libraries used by this project
 LIBS =
 # General compiler flags
