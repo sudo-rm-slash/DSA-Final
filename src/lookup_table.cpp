@@ -60,10 +60,29 @@ void dsa::lookup_table::find_wildcard(const std::string& pattern, std::vector<st
 	tree_lookup.wildcard(temp, pattern.c_str());
 
 	// Reverse lookup the IDs.
-	for(const auto& id : temp)
+	for (const auto& id : temp)
 	{
 		std::cerr << "...id = " << id << std::endl;
 		results.push_back(accounts[id].get_username());
+	}
+}
+
+void dsa::lookup_table::find_wildcard(const std::string& pattern, unsigned int ignored_id, std::vector<std::string>& results)
+{
+	results.clear();
+
+	// Acquire the ID of accounts.
+	std::vector<unsigned int> temp;
+	tree_lookup.wildcard(temp, pattern.c_str());
+
+	// Reverse lookup the IDs.
+	for (const auto& id : temp)
+	{
+		if (id != ignored_id)
+		{
+			std::cerr << "...id = " << id << std::endl;
+			results.push_back(accounts[id].get_username());
+		}
 	}
 }
 

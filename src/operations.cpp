@@ -229,7 +229,8 @@ void dsa::find()
 {
 	std::cin >> username;
 
-	finder.find_wildcard(username, suggestions);
+	//finder.find_wildcard(username, suggestions);
+	finder.find_wildcard(username, last_login_id, suggestions);
 	if (suggestions.size() > 0)
 	{
 		std::cout << suggestions[0];
