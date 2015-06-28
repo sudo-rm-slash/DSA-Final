@@ -65,6 +65,13 @@ namespace dsa
 		 * @return The username.
 		 */
 		const std::string& get_username() const;
+
+		/**
+		 * Get the username of this account.
+		 * @arg compared_account The account to compare with.
+		 * @arg results The container to store the common history.
+		 */
+		void get_common_history(dsa::account& compared_account, std::vector<unsigned int>& results);
 	};
 }
 

@@ -64,15 +64,15 @@ unsigned int dsa::account::merge_with(dsa::account& slave)
 	// ...union
 	std::vector<unsigned int> temp;
 	std::set_union(std::begin(this->related_history), std::end(this->related_history),
-				   std::begin(slave.related_history), std::end(slave.related_history),
-				   std::back_inserter(temp));
-    // ...wipe the slave
-    slave.related_history.clear();
-    // ...copy
-    this->related_history = temp;
+	               std::begin(slave.related_history), std::end(slave.related_history),
+	               std::back_inserter(temp));
+	// ...wipe the slave
+	slave.related_history.clear();
+	// ...copy
+	this->related_history = temp;
 
-    // Return new cash statistics.
-    return this->cash;
+	// Return new cash statistics.
+	return this->cash;
 }
 
 void dsa::account::add_related_history(unsigned int index)
@@ -83,4 +83,16 @@ void dsa::account::add_related_history(unsigned int index)
 const std::string& dsa::account::get_username() const
 {
 	return this->username;
+}
+
+void dsa::account::get_common_history(dsa::account& compared_account, std::vector<unsigned int>& results)
+{
+	// Find common history.
+	std::vector<unsigned int> temp;
+	std::set_intersection(std::begin(this->related_history), std::end(this->related_history),
+	                      std::begin(compared_account.related_history), std::end(compared_account.related_history),
+	                      std::back_inserter(temp));
+
+	// Copy to output.
+	results = temp;
 }
