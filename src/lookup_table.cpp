@@ -6,10 +6,32 @@ void dsa::lookup_table::insert(const std::string& username, unsigned int id)
 	hashtable_lookup.emplace(username, id);
 }
 
-unsigned int dsa::lookup_table::find_specific(const std::string& username) const
+bool dsa::lookup_table::exists(const std::string& username)
 {
-	//return tree_lookup.find(username.c_str());
-	return -1;
+	bool found = false;
+
+	// TODO: Lookup from hash table.
+	// Store the search result in last_found_id.
+
+	// Reset the dirty flag.
+	this->dirty_last_found_id = false;
+
+	return found;
+}
+
+unsigned int dsa::lookup_table::find_specific(const std::string& username)
+{
+	if(dirty_last_found_id)
+	{
+		// TODO: Search again from the hash table and return.
+		this->last_found_id = 0;
+	}
+	else
+	{
+		dirty_last_found_id = true;
+	}
+
+	return this->last_found_id;
 }
 
 void dsa::lookup_table::find_wildcard(const std::string& pattern, std::vector<unsigned int>& results)

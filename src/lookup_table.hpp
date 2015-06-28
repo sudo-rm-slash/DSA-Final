@@ -33,6 +33,9 @@ namespace dsa
 		};
 		std::set<suggestion> suggestions_buffer;
 
+		bool dirty_last_found_id = false;
+		unsigned int last_found_id;		// Store the last lookup ID.
+
 	public:
 		/**
 		 * Insert a new account entry in the lookup table.
@@ -42,10 +45,17 @@ namespace dsa
 		 */
 		void insert(const std::string& username, unsigned int id);
 
+		/*
+		 * Check whether specificed username exists in the table or not.
+		 * @arg username The username to search for.
+		 * @return Boolean value indicates exists or not.
+		 */
+		bool exists(const std::string& username);
+
 		//
 		// @brief TODO
 		//
-		unsigned int find_specific(const std::string& username) const;
+		unsigned int find_specific(const std::string& username);
 
 		//
 		// @brief TODO
