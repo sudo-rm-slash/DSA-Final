@@ -6,11 +6,11 @@
 
 // Candidate has been confirmed and can be added into recommendation lists.
 #define ADD_RECOMMENDATION( candidate_string, length ) \
-	recommendations.push_back( std::string( candidate_string ) );
+	recommendations.emplace_back(candidate_string);
 
 // Append '\0' to some position so that candidate_string ends there
 #define APPEND_END_CHARACTER( candidate_string, position ) \
-		candidate_string[ position ] = '\0';
+	candidate_string[ position ] = '\0';
 
 // Recover the candidate_string to original text in convenience of later enumeration
 #define RECOVER_STRING( candidate_string, position ) \
@@ -39,21 +39,23 @@
  * @arg ch
  * @return: index
  */
-int dsa::recommendation::character_to_index(const char c)
+int dsa::recommendation::char_to_index(const char c)
 {
 	if (c < 'A')
-		// ch is digit: ch - '0'
 	{
+		// c is a digit
 		return c - '0';
 	}
-	if (c < 'a')
-		// ch is uppercase alphabet: ch - 'A' + 10 ( ch - 65 + 10 )
+	else if (c < 'a')
 	{
-		return c - 55;
+		// c is an uppercase alphabet.
+		return c - 'A' + 10;
 	}
-
-	// ch is lowercase alphabet: ch - 'a' + 10 + 26 ( ch - 97 + 10 + 26 )
-	return c - 61;
+	else
+	{
+		// c is a lowercase alphabet.
+		return c - 'a' + 10 + 26;
+	}
 }
 
 
@@ -84,7 +86,7 @@ int dsa::recommendation::character_to_index(const char c)
 
 bool dsa::recommendation::enumerate_single_character(std::vector<std::string>& recommendations, int position, bound_t bounds)
 {
-	for (int i = bounds.first ? character_to_index(bounds.first) + 1 : 0 ; candidate_characters[i] != bounds.second ; ++i)
+	for (int i = bounds.first ? char_to_index(bounds.first) + 1 : 0 ; candidate_characters[i] != bounds.second ; ++i)
 	{
 		candidate_string[ position ] = candidate_characters[i];
 		//std::cout  <<"Position: " << position << " Candidate character: " << candidate_characters[i] << std::endl;
@@ -115,7 +117,7 @@ bool dsa::recommendation::enumerate_double_character(std::vector<std::string>& r
         std::pair<int, int> positions,
         std::pair<bound_t, bound_t>&& bounds_pair)
 {
-	for (int i = bounds_pair.first.first ? character_to_index(bounds_pair.first.first) + 1 : 0; candidate_characters[i] != bounds_pair.first.second ; ++i)
+	for (int i = bounds_pair.first.first ? char_to_index(bounds_pair.first.first) + 1 : 0; candidate_characters[i] != bounds_pair.first.second ; ++i)
 	{
 		// std::cout << " First lower bound: " << bounds_pair.first.first << std::endl;
 		// std::cout << " Key: " << i << std::endl;
@@ -137,7 +139,7 @@ bool dsa::recommendation::enumerate_triple_character(std::vector<std::string>& r
         std::vector<int>&& positions,
         std::vector<bound_t>&& bounds)
 {
-	for (int i = bounds[0].first ? character_to_index(bounds[0].first) + 1 : 0; candidate_characters[i] != bounds[0].second ; ++i)
+	for (int i = bounds[0].first ? char_to_index(bounds[0].first) + 1 : 0; candidate_characters[i] != bounds[0].second ; ++i)
 	{
 		candidate_string[ positions[0] ] = candidate_characters[i];
 
@@ -471,41 +473,6 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 		return;
 		RECOVER_STRING(candidate_string, text_length + 1);
 	}
-
-//
-//	Score 3: □  □  ✖  □   | ✖
-//
-	/*----------------------------------------------------*/
-	/*
-		std::cout<<"Score 3: □  □  ✖  □   | ✖ \n";
-		if( text_length > 1 )
-		{
-			APPEND_END_CHARACTER( candidate_string, text_length+1 );
-			if(!enumerate_double_character( recommendations , std::make_pair(text_length-2, text_length),
-						std::make_pair(
-								std::make_pair( original_text[text_length-2], END ),
-								std::make_pair(FRONT, END )
-							)))
-				return;
-		}
-	*/
-//
-//	Score 3: □  □  ✖  ✖  |
-//
-	/*----------------------------------------------------*/
-	/*
-		std::cout<<"Score 3: □  □  ✖  ✖  | \n";
-		if( text_length > 1 )
-		{
-			if(!enumerate_double_character( recommendations , std::make_pair(text_length-2, text_length-1),
-						std::make_pair(
-								std::make_pair( original_text[text_length-2], END ),
-								std::make_pair( original_text[text_length-1], END )
-							)))
-				return;
-		}
-	*/
-
 }
 
 
