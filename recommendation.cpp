@@ -1,6 +1,6 @@
 #include "recommendation.hpp"
 
-// Extra space for candidate strings
+// Extra space reserved for candidate strings
 #define EXTRA_SPACE 4
 
 // Candidate has been confirmed and can be added into recommendation lists.
@@ -79,7 +79,7 @@ int dsa::recommendation<T>::character_to_index( char ch )
  * @Param:     candidate_string
  * @Param:     position ( position of the character to be enumerated )
  * @Param:     length ( length of the resulting candidate string )
- * @Param:     upperbound ( upperbound to the enumeration ) ( default parameter: '\0' )
+ * @Param:     upperbound ( upperbound to the enumeration ) ( default parameter: '\0' --> traverse all candidate characters )
  */
 template<class T>
 bool dsa::recommendation<T>::enumerate_single_character_with_upperbound( char* candidate_string, int position, int length, char upperbound /* = '\0' */)
@@ -132,7 +132,7 @@ bool dsa::recommendation<T>::enumerate_single_character_with_lowerbound( char* c
  * @Param:     second ( second slot to be enumerated )
  */
 template<class T>
-bool dsa::recommendation<T>::enumerate_double_character( char* candidate_string, int length, int first, int second )
+bool dsa::recommendation<T>::enumerate_double_character( char* candidate_string, int length, int first, int second, std::pair<char,char> lowerbounds )
 {
 	// TODO 
 	// WARNING: this function will not work!
@@ -158,7 +158,6 @@ template<class T>
 void dsa::recommendation<T>::recommend(const char* original_text)
 {
 
-	std::vector<char*> recommendations;
 	int  text_length = std::strlen( original_text );
 	auto candidate_string = new char[ text_length + EXTRA_SPACE + 1 ];
 	std::strcpy( candidate_string, original_text );
@@ -173,10 +172,8 @@ void dsa::recommendation<T>::recommend(const char* original_text)
  *
  *	○ : Empty slot
  *
- *
-*/
-//
-//	Hardcoded spagetti
+ **/
+
 //
 //	Score 1: □  □  □  ○  |
 //
@@ -190,42 +187,40 @@ void dsa::recommendation<T>::recommend(const char* original_text)
 /*----------------------------------------------------*/
 
 //
-//	Hardcoded spagetti
 //	Upper bound ( the character of the original text is chosen here ) on candidate character to preserve alphabetic order
 //
 //	Score 1: □  □  □  ✖  |
 //
 /*----------------------------------------------------*/
-	if(!enumerate_single_character_with_upperbound( candidate_string, text_length-1, text_length, original_text[ text_length-1 ] ))
+	/*                                            | candidate string | position      | length of candidate | upperbound character |  */
+	if(!enumerate_single_character_with_upperbound( candidate_string , text_length-1 , text_length         , original_text[ text_length-1 ] ))
 		return;
 	RECOVER_STRING( candidate_string , text_length-1 )
 /*----------------------------------------------------*/
 
 //
-//	Hardcoded spagetti
-//
 //	Score 1: □  □  □  □  | ✖ 
 //
 /*----------------------------------------------------*/
-	if(!enumerate_single_character_with_upperbound( candidate_string, text_length+1, text_length ))
+	APPEND_END_CHARACTER( candidate_string, text_length+1 )
+	/*                                            | candidate string | position    | length of candidate | upperbound character |  */
+	if(!enumerate_single_character_with_upperbound( candidate_string , text_length , text_length      /* , default parameter: '\0' */  ))
 		return;
 	RECOVER_STRING( candidate_string , text_length )
 /*----------------------------------------------------*/
 
 //
-//	Hardcoded spagetti
 //	Lower bound on candidate character to preserve alphabetic order
 //
 //	Score 1: □  □  □  ✖  |
 //
 /*----------------------------------------------------*/
-	if(!enumerate_single_character_with_lowerbound( candidate_string, text_length-1, text_length, original_text[ text_length-1 ] ))
+	/*                                            | candidate string | position      | length of candidate | lowerbound character |  */
+	if(!enumerate_single_character_with_lowerbound( candidate_string , text_length-1 , text_length         , original_text[ text_length-1 ] ))
 		return;
 	RECOVER_STRING( candidate_string , text_length-1 )
 /*----------------------------------------------------*/
 
-//
-//	Hardcoded spagetti
 //
 //	Score 2: □  □  ✖  ○  | 
 //
@@ -233,7 +228,8 @@ void dsa::recommendation<T>::recommend(const char* original_text)
 	if( text_length > 0 )
 	{
 		APPEND_END_CHARACTER( candidate_string, text_length-1 )
-		if(!enumerate_single_character_with_upperbound( candidate_string, text_length-2, text_length-1, original_text[text_length-2] ))
+	/*                                                | candidate string | position      | length of candidate | upperbound character |  */
+		if(!enumerate_single_character_with_upperbound( candidate_string , text_length-2 , text_length-1       , original_text[text_length-2] ))
 			return;
 		RECOVER_STRING( candidate_string , text_length-2 )
 		RECOVER_STRING( candidate_string , text_length-1 )
@@ -241,19 +237,16 @@ void dsa::recommendation<T>::recommend(const char* original_text)
 /*----------------------------------------------------*/
 
 //
-//	Hardcoded spagetti
-//
 //	Score 2: □  □  ✖  □  |
 //
 /*----------------------------------------------------*/
-	if(!enumerate_single_character_with_upperbound( candidate_string, text_length-2, text_length, original_text[text_length-2] ))
+	/*                                            | candidate string | position      | length of candidate | upperbound character |  */
+	if(!enumerate_single_character_with_upperbound( candidate_string , text_length-2 , text_length         , original_text[text_length-2] ))
 		return;
 	RECOVER_STRING( candidate_string , text_length-2 )
 /*----------------------------------------------------*/
 
 
-//
-//	Hardcoded spagetti
 //
 //	Score 2: □  □  □  ✖  | ✖ 
 //
@@ -262,31 +255,48 @@ void dsa::recommendation<T>::recommend(const char* original_text)
 	if(!enumerate_double_character( candidate_string, text_length-1, text_length+1 ))
 		return;
 	RECOVER_STRING( candidate_string , text_length-1 )
-	// RECOVER_STRING( candidate_string , text_length )
-	// ---> commented out because the original text is not that long
+	RECOVER_STRING( candidate_string , text_length ) /* recover '\0' */
 /*----------------------------------------------------*/
 
 
-//
-//	Hardcoded spagetti
 //
 //	Score 3: □  ✖  □  □  | 
 //
 /*----------------------------------------------------*/
-	if(!enumerate_single_character_with_upperbound( candidate_string, text_length-2, text_length, original_text[text_length-2] ))
+	if(!enumerate_single_character_with_upperbound( candidate_string, text_length-3, text_length, original_text[text_length-3] ))
 		return;
-	RECOVER_STRING( candidate_string , text_length-2 )
+	RECOVER_STRING( candidate_string , text_length-3 )
 
 
-	//Score 3: □  □  ○  ○  |
-	//CHECK_LENGTH( text_length, 2 )
-	
+//
+//	Score 3: □  □  ○  ○  |
+//
+/*----------------------------------------------------*/
+	if( text_length > 2 )
+	{
+		APPEND_END_CHARACTER( candidate_string, text_length-2 );
+		PROBE( candidate_string, text_length-2 )
+		RECOVER_STRING( candidate_string , text_length-2 )
+	}
 
-	//Score 3: □  □  ✖  ✖  |
+//
+//	Score 3: □  □  ✖  ✖  |
+//
+/*----------------------------------------------------*/
+	if(!enumerate_double_character( candidate_string, text_length-1, text_length+1, original_text[text_length))
+		return;
 	
-	//Score 3: □  □  □  □  | ✖  ✖
+	//Score 3: □  □  □  □   | ✖  ✖
 	
-	//Score 3: □  □  ✖  □  | ✖
+	//Score 3: □  □  ✖  □   | ✖
+	
+//
+//	Score 3: □  ✖  □  □  | 
+//
+/*----------------------------------------------------*/
+	if(!enumerate_single_character_with_upperbound( candidate_string, text_length-3, text_length, original_text[text_length-3] ))
+		return;
+	RECOVER_STRING( candidate_string , text_length-3 )
 }
 
 

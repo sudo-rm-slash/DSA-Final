@@ -38,11 +38,10 @@ namespace dsa
 		void flush();
 
 	private:
-		void enumerate_character( char* candidate_string, int position );
 		int  character_to_index( char ch );
-		void enumerate_single_character_with_upperbound( char* candidate_string, int position, int length, char upperbound = '\0');
-		void enumerate_single_character_with_lowerbound( char* candidate_string, int position, int length, char lowerbound);
-		void enumerate_double_character( char* candidate_string, int length, int first, int second );
+		bool enumerate_single_character_with_upperbound( char* candidate_string, int position, int length, char upperbound = '\0');
+		bool enumerate_single_character_with_lowerbound( char* candidate_string, int position, int length, char lowerbound);
+		bool enumerate_double_character( char* candidate_string, int length, int first, int second );
 
 	};
 
