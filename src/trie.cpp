@@ -98,22 +98,19 @@ void  dsa::trie::wildcard(std::vector<unsigned int>&result, const char* str)
         wildcard_node(result, tr_root , str);
 }
 
-void dsa::trie::wildcard_node( std::vector<int>&result, traveler& tr_node, const char* str)
+void dsa::trie::wildcard_node( std::vector<unsigned int>&result, traveler& tr_node, const char* str)
 {
 
 	switch( *str ){
         case '*':
 	{
+		wildcard_node( result, tr_node, (str + 1) );				
 		for (auto tr_child = tr_node.child_next(); tr_child.valid(); tr_child = tr_node.child_next())
 		{
 
-			if (*str == '*')
-			{
-				wildcard_node( list, tr_node, (str + 1) );				
-				wildcard_node( list, tr_child, (str + 1) );
-				wildcard_node( list, tr_child, str );
+			wildcard_node( result, tr_child, (str + 1) );
+			wildcard_node( result, tr_child, str );
 
-			}
 		}
 		break;
 	}
@@ -121,7 +118,7 @@ void dsa::trie::wildcard_node( std::vector<int>&result, traveler& tr_node, const
         {
 
 		for (auto tr_child = tr_node.child_next(); tr_child.valid(); tr_child = tr_node.child_next()){	       	
-		        wildcard_node( list, tr_child, (str + 1) );
+		        wildcard_node( result, tr_child, (str + 1) );
 		}
 		break;
 	}
@@ -133,7 +130,7 @@ void dsa::trie::wildcard_node( std::vector<int>&result, traveler& tr_node, const
 		{
 			leaf.update_search_id( now_search_id );
 			
-			list.push_back( leaf.get_data() );
+			result.push_back( leaf.get_data() );
 
 			// std::list<char> buffer;
 			// traveler parent = tr_node;
@@ -159,13 +156,11 @@ void dsa::trie::wildcard_node( std::vector<int>&result, traveler& tr_node, const
 		traveler tr_child = tr_node.child(*str);
 		if (tr_child.valid())
 			{
-				wildcard_node(list, tr_child, ( str + 1 ));
+				wildcard_node(result, tr_child, ( str + 1 ));
 			}
 	
 	}
 	}
-
-	return list;
 }
 
 dsa::trie::traveler::traveler()

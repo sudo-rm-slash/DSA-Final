@@ -92,7 +92,7 @@ namespace dsa
 		 * @param VAR EXPLANATIONS
 		 * @return RETURN
 		 */
-		void wildcard_node( std::vector<int>& result, traveler& node, const char* str);
+		void wildcard_node( std::vector<unsigned int>& result, traveler& node, const char* str);
 		
 	};
 }
