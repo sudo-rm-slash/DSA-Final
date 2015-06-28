@@ -2,7 +2,7 @@
 #define __HISTORY_HPP__
 
 #include <vector>			// std::vector
-#include <utility>			// std::pair
+#include <sstream>			// std::ostringstream
 #include <exception>		// std::invalid_argument
 
 
@@ -10,8 +10,6 @@ namespace dsa
 {
 	class history
 	{
-	public:
-		enum direction { FROM = 0, TO };
 	private:
 		struct entry
 		{
@@ -26,6 +24,8 @@ namespace dsa
 		};
 		std::vector<entry> container;
 
+		std::ostringstream string_builder;
+
 
 	public:
 		/**
@@ -38,12 +38,12 @@ namespace dsa
 		unsigned int insert(unsigned int from_id, unsigned int to_id, unsigned int cash);
 
 		/**
-		 * Subscripting operator overload to easily acquire A/B related entries.
-		 * (true for "to", false for "from")
-		 * @arg associated_id The associated ID.
-		 * @return First field is the name, second field indicates the direction, last one is the amount of cash.
+		 * Acquire an entry from specific index.
+		 * @arg index The index of the entry.
+		 * @arg The account of interest, which wil use to indicate the direction of the cash flow.
+		 * @return A history entry in the form of string.
 		 */
-		std::pair<unsigned int, bool> find(unsigned int primary, unsigned int slave);
+		std::string find(unsigned int index, unsigned int associated_id);
 	};
 }
 
