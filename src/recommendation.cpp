@@ -1,8 +1,5 @@
 #include "recommendation.hpp"
 
-// Extra space reserved for candidate strings
-#define EXTRA_SPACE 4
-
 #define PROBE( candidate ) 									\
 	if(container.find(candidate) == container.end()) 		\
 	{                                           			\
