@@ -311,7 +311,7 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 #endif
 	if (text_length > 1)
 	{
-		APPEND_END_CHARACTER(candidate_string, text_length - 1)
+		APPEND_END_CHARACTER(candidate_string, text_length - 1)]
 		if (!enumerate_single_character(recommendations , text_length - 2, std::make_pair(original_text[text_length - 2], END)))
 		{
 			return;
