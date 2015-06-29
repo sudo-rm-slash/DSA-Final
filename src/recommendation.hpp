@@ -6,8 +6,15 @@
 #include <unordered_map>
 #include <iostream>
 #include <string>
+#ifdef DEBUG
+
+#define RECOMMENDATION_NUMBER 50
+
+#else
 
 #define RECOMMENDATION_NUMBER 10
+
+#endif
 
 typedef std::pair<std::string::const_iterator, std::string::const_iterator> bound_t;
 
