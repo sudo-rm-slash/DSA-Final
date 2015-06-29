@@ -16,13 +16,10 @@
 #define RECOVER_STRING( candidate_string, position ) \
 	candidate_string[ position ] = this->original_text[ position ];
 
-// Check if we are going too far
-#define CHECK_LENGTH( text_length, length ) \
-	if(  text_length < length )return;
 
 // Check if candidate_string exists in our target container
 #define PROBE( candidate_string, length )             			\
-	/*std::cout << " --> " << candidate_string << endl;*/ 		\
+	/*std::cout << " --> " << candidate_string << std::endl;*/ 		\
 	if(container.find(std::string(candidate_string)) == container.end())			\
 	{                                           				\
 		ADD_RECOMMENDATION( candidate_string, length ) 			\
@@ -87,7 +84,6 @@ bool dsa::recommendation::enumerate_single_character(std::vector<std::string>& r
 	for (int i = bounds.first ? character_to_index(bounds.first) + 1 : 0 ; candidates_characters[i] != bounds.second ; ++i)
 	{
 		candidate_string[ position ] = candidates_characters[i];
-		//std::cout  <<"Position: " << position << " Candidate character: " << candidates_characters[i] << std::endl;
 		PROBE(candidate_string, length)
 		if (recommendations.size() >= RECOMMENDATION_NUMBER)
 		{
@@ -117,9 +113,6 @@ bool dsa::recommendation::enumerate_double_character(std::vector<std::string>& r
 {
 	for (int i = bounds_pair.first.first ? character_to_index(bounds_pair.first.first) + 1 : 0; candidates_characters[i] != bounds_pair.first.second ; ++i)
 	{
-		// std::cout << " First lower bound: " << bounds_pair.first.first << std::endl;
-		// std::cout << " Key: " << i << std::endl;
-		// std::cout <<"Position: " << positions.first << " Candidate character: " << candidates_characters[i] << std::endl;
 		candidate_string[ positions.first ] = candidates_characters[i];
 
 		if (!enumerate_single_character(recommendations , positions.second,  bounds_pair.second))
@@ -179,6 +172,9 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 //	Score 1: □  □  □  ○  |
 //
 	/*----------------------------------------------------*/
+#ifdef DEBUG
+	std::cout << "Score 1: □  □  □  ○  | \n";
+#endif
 	if (text_length > 1)
 	{
 		APPEND_END_CHARACTER(candidate_string, text_length - 1)
@@ -193,7 +189,10 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 //	Score 1: □  □  □  ✖  |
 //
 	/*----------------------------------------------------*/
-	if (text_length > 1)
+#ifdef DEBUG
+	std::cout << "Score 1: □  □  □  ✖  | \n";
+#endif
+	if (text_length > 0)
 	{
 		if (!enumerate_single_character(recommendations , text_length - 1 , std::make_pair(FRONT, original_text[ text_length - 1 ])))
 		{
