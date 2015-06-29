@@ -3,9 +3,12 @@
 // Extra space reserved for candidate strings
 #define EXTRA_SPACE 4
 
-// Recover the candidate to original text in convenience of later enumeration
-#define RECOVER_STRING( candidate, position ) \
-	candidate[ position ] = this->original_text[ position ];
+#define PROBE( candidate ) 									\
+	if(container.find(candidate) == container.end()) 		\
+	{                                           			\
+		recommendations.push_back( candidate );				\
+	}														\
+	/*std::cout << " --> " << candidate << std::endl;*/			
 
 /* Front identifier for candidate_characters */
 #define FRONT candidate_characters.cbegin()
@@ -14,16 +17,6 @@
 
 const std::string candidate_characters("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
 
-void dsa::recommendation::probe( std::string& candidate )
-{
-	if(container.find(candidate) == container.end())						
-	{                                           							
-		recommendations.push_back( candidate );
-	}
-#ifdef DEBUG_RECOMMENDATION
-	std::cout << " --> " << candidate << std::endl;
-#endif
-}
 
 /**
  * @Function: map character to its corresponding index in static variable 'candidate_characters'
@@ -48,7 +41,7 @@ std::string::const_iterator dsa::recommendation::get_iterator( char ch )
 
 /**
  * @Function:  enumerate all possible characters of a single slot
- *             and probe them one by one into the hashmap.
+ *             and PROBE them one by one into the hashmap.
  *             Note that there's an bounds to the enumeration. By doing so, we can preserve alphabetical order
  *             For example, take 'abcd' as original text:
  *             ....
@@ -71,14 +64,14 @@ std::string::const_iterator dsa::recommendation::get_iterator( char ch )
  * @Param:     upperbound ( upperbound to the enumeration )
  */
 
-bool dsa::recommendation::enumerate_single_character( std::string::reverse_iterator position, bound_t bounds)
+bool dsa::recommendation::enumerate_single_character( std::vector<std::string>& recommendations, std::string::reverse_iterator position, bound_t bounds)
 {
 	char original_character = *position;
 	//for (auto it = std::get<1>(bounds) ; it != std::get<2>(bounds) ; ++it)
 	for (auto it = bounds.first ; it != bounds.second ; ++it)
 	{
 		*position = *it;
-		probe( candidate );
+		PROBE( candidate );
 		if (recommendations.size() >= RECOMMENDATION_NUMBER)
 		{
 			return false;
@@ -92,7 +85,7 @@ bool dsa::recommendation::enumerate_single_character( std::string::reverse_itera
 
 /**
  * @Function:  enumerate all possible characters of a pair of slots
- *             and probe them one by one into the hashmap
+ *             and PROBE them one by one into the hashmap
  *
  * @Param:     candidate
  * @Param:     length
@@ -102,47 +95,49 @@ bool dsa::recommendation::enumerate_single_character( std::string::reverse_itera
  * @Return:
  */
 bool dsa::recommendation::enumerate_double_character(
+		std::vector<std::string>& recommendations,
         std::pair<std::string::reverse_iterator, std::string::reverse_iterator> positions,
         std::pair<bound_t, bound_t>&& bounds_pair)
 {
 
-	char original_character = *position;
-	for (auto it = bounds.first.first ; it != bounds.first.second ; ++it)
+	char original_character = *(positions.first);
+	for (auto it = bounds_pair.first.first ; it != bounds_pair.first.second ; ++it)
 	{
 		*(positions.first) = *it;
-		if (!enumerate_single_character(positions.second,  bounds_pair.second))
+		if (!enumerate_single_character( recommendations, positions.second,  bounds_pair.second))
 		{
 			return false;
 		}
 	}
-	*position = original_character;
+	*(positions.first) = original_character;
 
 	return true;
 }
 
 bool dsa::recommendation::enumerate_triple_character(
+		std::vector<std::string>& recommendations,
         std::vector<std::string::reverse_iterator>&& positions,
         std::vector<bound_t>&& bounds)
 {
-	char original_character = *position;
+	char original_character = *(positions[0]);
 	for (auto it = bounds[0].first ; it != bounds[0].second ; ++it)
 	{
-		*(position[0]) = *it;	
-		if (!enumerate_single_character(positions[1],  bounds[1]))
+		*(positions[0]) = *it;	
+		if (!enumerate_single_character( recommendations, positions[1],  bounds[1]))
 		{
 			return false;
 		}
-		if (!enumerate_single_character(positions[2],  bounds[2]))
+		if (!enumerate_single_character( recommendations, positions[2],  bounds[2]))
 		{
 			return false;
 		}
 	}
-	*position = original_character;
+	*(positions[0]) = original_character;
 
 	return true;
 }
 
-std::vector<std::string>& dsa::recommendation::recommend( std::string& original_text )
+void dsa::recommendation::recommend( std::vector<std::string>& recommendations, const std::string& original_text )
 {
 	this->candidate = original_text;
 
@@ -163,10 +158,10 @@ std::vector<std::string>& dsa::recommendation::recommend( std::string& original_
 #ifdef DEBUG_RECOMMENDATION
 	std::cout << "Score 1: □  □  □  ○  | \n";
 #endif
-	if (text_length > 1)
+	if (original_text.size() > 1)
 	{
 		candidate.resize( original_text.size()-1 );
-		probe( candidate );
+		PROBE( candidate );
 		candidate.resize( original_text.size() );
 	}
 	/*----------------------------------------------------*/
@@ -180,9 +175,9 @@ std::vector<std::string>& dsa::recommendation::recommend( std::string& original_
 #ifdef DEBUG_RECOMMENDATION
 	std::cout << "Score 1: □  □  □  ✖  | \n";
 #endif
-	if (text_length > 0)
+	if (original_text.size() > 0)
 	{
-		if (!enumerate_single_character(candidate.rbegin(), std::make_tuple(FRONT, get_iterator(candidate.back()) ))
+		if (!enumerate_single_character( recommendations, candidate.rbegin(), std::make_pair(FRONT, get_iterator( candidate.back() ) ) ) )
 		{
 			return;
 		}
@@ -197,7 +192,7 @@ std::vector<std::string>& dsa::recommendation::recommend( std::string& original_
 	std::cout << "Score 1: □  □  □  □  | ✖  \n";
 #endif
 	candidate.resize( original_text.size()+1 );
-	if (!enumerate_single_character( candidate.rbegin() , std::make_pair(FRONT,END)))
+	if (!enumerate_single_character( recommendations, candidate.rbegin() , std::make_pair(FRONT,END)))
 	{
 		return;
 	}
@@ -214,9 +209,9 @@ std::vector<std::string>& dsa::recommendation::recommend( std::string& original_
 #ifdef DEBUG_RECOMMENDATION
 	std::cout << "Score 1: □  □  □  ✖  \n";
 #endif
-	if (text_length > 0)
+	if (original_text.size() > 0)
 	{
-		if (!enumerate_single_character(candidate.rbegin() , std::make_pair(get_iterator(candidate.back()), END)))
+		if (!enumerate_single_character( recommendations, candidate.rbegin() , std::make_pair(get_iterator(candidate.back()), END)))
 		{
 			return;
 		}
@@ -230,10 +225,10 @@ std::vector<std::string>& dsa::recommendation::recommend( std::string& original_
 #ifdef DEBUG_RECOMMENDATION
 	std::cout << "Score 2: □  □  ✖  ○  | \n";
 #endif
-	if (text_length > 1)
+	if (original_text.size() > 1)
 	{
 		candidate.resize( original_text.size()-1 );
-		if (!enumerate_single_character(candidate.rbegin(), std::make_pair(FRONT,END)))
+		if (!enumerate_single_character( recommendations, candidate.rbegin(), std::make_pair(FRONT,END)))
 		{
 			return;
 		}
@@ -248,9 +243,9 @@ std::vector<std::string>& dsa::recommendation::recommend( std::string& original_
 #ifdef DEBUG_RECOMMENDATION
 	std::cout << "Score 2: □  □  ✖  □  |\n";
 #endif
-	if (text_length > 1)
+	if (original_text.size() > 1)
 	{
-		if (!enumerate_single_character(candidate.rbegin()+1, std::make_pair( FRONT, get_iterator(*(candidate.rbegin()+1)) )
+		if (!enumerate_single_character( recommendations, candidate.rbegin()+1, std::make_pair( FRONT, get_iterator(*(candidate.rbegin()+1)) ) ) )
 		{
 			return;
 		}
@@ -265,12 +260,12 @@ std::vector<std::string>& dsa::recommendation::recommend( std::string& original_
 #ifdef DEBUG_RECOMMENDATION
 	std::cout << "Score 2: □  □  □  ✖  | ✖  \n";
 #endif
-	if (text_length > 0)
+	if (original_text.size() > 0)
 	{
 		candidate.resize( original_text.size()+1 );
 		if (!enumerate_double_character(recommendations, std::make_pair( candidate.rbegin()+1, candidate.rbegin() ),
 		                                std::make_pair(
-		                                    std::make_pair(FRONT, get_iterator(*(candidate.rbegin+1))),
+		                                    std::make_pair(FRONT, get_iterator(*(candidate.rbegin()+1))),
 		                                    std::make_pair(FRONT, END)
 		                                )))
 		{
@@ -278,7 +273,7 @@ std::vector<std::string>& dsa::recommendation::recommend( std::string& original_
 		}
 		if (!enumerate_double_character(recommendations, std::make_pair( candidate.rbegin()+1, candidate.rbegin() ),
 		                                std::make_pair(
-		                                    std::make_pair(get_iterator(*(candidate.rbegin+1)), END),
+		                                    std::make_pair(get_iterator(*(candidate.rbegin()+1)), END),
 		                                    std::make_pair(FRONT, END)
 		                                )))
 		{
@@ -295,10 +290,10 @@ std::vector<std::string>& dsa::recommendation::recommend( std::string& original_
 #ifdef DEBUG_RECOMMENDATION
 	std::cout << "Score 2: □  □  ✖  ○  | \n";
 #endif
-	if (text_length > 1)
+	if (original_text.size() > 1)
 	{
 		candidate.resize( original_text.size()-1 );
-		if (!enumerate_single_character(candidate.rbegin(), std::make_pair(get_iterator(candidate.back()), END)))
+		if (!enumerate_single_character( recommendations, candidate.rbegin(), std::make_pair(get_iterator(candidate.back()), END)))
 		{
 			return;
 		}
@@ -311,9 +306,9 @@ std::vector<std::string>& dsa::recommendation::recommend( std::string& original_
 #ifdef DEBUG_RECOMMENDATION
 	std::cout << "Score 2: □  □  ✖  □  |\n";
 #endif
-	if (text_length > 1)
+	if (original_text.size() > 1)
 	{
-		if (!enumerate_single_character(candidate.rbegin()+1, std::make_pair(get_iterator(*(candidate.rbegin()+1)), END)))
+		if (!enumerate_single_character( recommendations, candidate.rbegin()+1, std::make_pair(get_iterator(*(candidate.rbegin()+1)), END)))
 		{
 			return;
 		}
@@ -327,9 +322,9 @@ std::vector<std::string>& dsa::recommendation::recommend( std::string& original_
 #ifdef DEBUG_RECOMMENDATION
 	std::cout << "Score 3: □  ✖  □  □  | \n";
 #endif
-	if (text_length > 2)
+	if (original_text.size() > 2)
 	{
-		if (!enumerate_single_character(candidate.rbegin()+2, std::make_pair( FRONT, get_iterator(*(candidate.rbegin()+2)))))
+		if (!enumerate_single_character( recommendations, candidate.rbegin()+2, std::make_pair( FRONT, get_iterator(*(candidate.rbegin()+2)))))
 		{
 			return;
 		}
@@ -343,10 +338,10 @@ std::vector<std::string>& dsa::recommendation::recommend( std::string& original_
 #ifdef DEBUG_RECOMMENDATION
 	std::cout << "Score 3: □  □  ○  ○  |\n";
 #endif
-	if (text_length > 2)
+	if (original_text.size() > 2)
 	{
 		candidate.resize( original_text.size() - 2 );
-		probe( candidate );
+		PROBE( candidate );
 		candidate.resize( original_text.size() );
 	}
 
@@ -359,20 +354,20 @@ std::vector<std::string>& dsa::recommendation::recommend( std::string& original_
 #ifdef DEBUG_RECOMMENDATION
 	std::cout << "Score 3: □  □  ✖  ✖   + Score 3: □  □  ✖  □   | ✖  \n";
 #endif
-	if (text_length > 1)
+	if (original_text.size() > 1)
 	{
-		candidate.resize( original_text+1 );
+		candidate.resize( original_text.size()+1 );
 		if (!enumerate_triple_character(recommendations,
 			{ candidate.rbegin()+2, candidate.rbegin()+1, candidate.rbegin()},
 			{
-				std::make_pair(FRONT, get_iterator( *(candidate.rbegin()+2)),
-				std::make_pair(FRONT, get_iterator( *(candidate.rbegin()+1)),
+				std::make_pair(FRONT, get_iterator( *(candidate.rbegin()+2))),
+				std::make_pair(FRONT, get_iterator( *(candidate.rbegin()+1))),
 				std::make_pair(FRONT, END)
 			}))
 		{
 			return;
 		}
-		candidate.resize( original_text );
+		candidate.resize( original_text.size() );
 	}
 
 //
@@ -382,9 +377,10 @@ std::vector<std::string>& dsa::recommendation::recommend( std::string& original_
 #ifdef DEBUG_RECOMMENDATION
 	std::cout << "Score 3: □  □  □  □   | ✖  ✖  \n";
 #endif
-	RESIZE(candidate, text_length + 2);
-	candidate.resize( original_text+2 );
-	if (!enumerate_double_character(std::make_pair( candidate.rbegin()+1, candidate.rbegin()),
+	candidate.resize( original_text.size()+2 );
+	if (!enumerate_double_character(
+									recommendations,
+									std::make_pair( candidate.rbegin()+1, candidate.rbegin()),
 	                                std::make_pair(
 	                                    std::make_pair(FRONT, END),
 	                                    std::make_pair(FRONT, END)
@@ -392,7 +388,7 @@ std::vector<std::string>& dsa::recommendation::recommend( std::string& original_
 	{
 		return;
 	}
-	candidate.resize( original_text );
+	candidate.resize( original_text.size() );
 
 //
 //	Score 3: □  ✖  □  □  |
@@ -401,9 +397,9 @@ std::vector<std::string>& dsa::recommendation::recommend( std::string& original_
 #ifdef DEBUG_RECOMMENDATION
 	std::cout << "Score 3: □  ✖  □  □  | \n";
 #endif
-	if (text_length > 2)
+	if (original_text.size() > 2)
 	{
-		if (!enumerate_single_character(candidate.rbegin()+2, std::make_pair(get_iterator(*(candidate.rbegin()+2)), END)))
+		if (!enumerate_single_character( recommendations, candidate.rbegin()+2, std::make_pair(get_iterator(*(candidate.rbegin()+2)), END)))
 		{
 			return;
 		}
@@ -417,21 +413,22 @@ std::vector<std::string>& dsa::recommendation::recommend( std::string& original_
 #ifdef DEBUG_RECOMMENDATION
 	std::cout << "Score 3: □  □  ✖  ✖   + Score 3: □  □  ✖  □   | ✖  \n";
 #endif
-	if (text_length > 1)
+	if (original_text.size() > 1)
 	{
-		candidate.resize( original_text+2 );
-		if (!enumerate_triple_character(recommendations,
+		candidate.resize( original_text.size()+2 );
+		if (!enumerate_triple_character(
+			recommendations,
 			{ candidate.rbegin()+2, candidate.rbegin()+1, candidate.rbegin()},
 			{
-				std::make_pair(get_iterator( *(candidate.rbegin()+2), END),
-				std::make_pair(FRONT, END),
-				std::make_pair(get_iterator( *(candidate.rbegin()+1), END),
+				std::make_pair( get_iterator(*(candidate.rbegin()+2)), END),
+				std::make_pair( FRONT, END),
+				std::make_pair( get_iterator(*(candidate.rbegin()+1)), END),
 			}))
 		{
 			return;
 		}
-		candidate.resize( original_text );
-
+		candidate.resize( original_text.size() );
+	}
 }
 
 
