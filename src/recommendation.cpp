@@ -5,22 +5,18 @@
 	{                                           			\
 		recommendations.push_back( candidate );				\
 	}														\
+<<<<<<< HEAD
 	std::cout << " --> " << candidate << std::endl;
+=======
+	/*std::cout << " --> " << candidate << std::endl;*/			
+>>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
 
 /* Front identifier for candidate_characters */
 #define FRONT candidate_characters.cbegin()
 /* End   identifier for candidate_characters */
 #define END   candidate_characters.cend()
-/* Boundary for candidate_characters */
-#define BOUNDARY(offset) get_iterator(*(candidate.rbegin()+offset))+1
-/* Get iterator for the last character of the current candidate */
-#define BACK (get_iterator(candidate.back())+1)
 
-#ifdef DEBUG
-const std::string candidate_characters("01234");
-#else
 const std::string candidate_characters("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
-#endif
 
 
 /**
@@ -76,6 +72,7 @@ std::string::const_iterator dsa::recommendation::get_iterator(char ch)
 bool dsa::recommendation::enumerate_single_character(std::vector<std::string>& recommendations, std::string::reverse_iterator position, bound_t bounds)
 {
 	char original_character = *position;
+	//for (auto it = std::get<1>(bounds) ; it != std::get<2>(bounds) ; ++it)
 	for (auto it = bounds.first ; it != bounds.second ; ++it)
 	{
 		*position = *it;
@@ -184,7 +181,11 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 #endif
 	if (original_text.size() > 0)
 	{
+<<<<<<< HEAD
 		if (!enumerate_single_character(recommendations, candidate.rbegin(), std::make_pair(FRONT, BACK)))
+=======
+		if (!enumerate_single_character( recommendations, candidate.rbegin(), std::make_pair(FRONT, get_iterator( candidate.back() ) ) ) )
+>>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
 		{
 			return;
 		}
@@ -218,7 +219,11 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 #endif
 	if (original_text.size() > 0)
 	{
+<<<<<<< HEAD
 		if (!enumerate_single_character(recommendations, candidate.rbegin() , std::make_pair(BACK, END)))
+=======
+		if (!enumerate_single_character( recommendations, candidate.rbegin() , std::make_pair(get_iterator(candidate.back()), END)))
+>>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
 		{
 			return;
 		}
@@ -252,7 +257,11 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 #endif
 	if (original_text.size() > 1)
 	{
+<<<<<<< HEAD
 		if (!enumerate_single_character(recommendations, candidate.rbegin() + 1, std::make_pair(FRONT, BOUNDARY(1))))
+=======
+		if (!enumerate_single_character( recommendations, candidate.rbegin()+1, std::make_pair( FRONT, get_iterator(*(candidate.rbegin()+1)) ) ) )
+>>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
 		{
 			return;
 		}
@@ -272,7 +281,7 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 		candidate.resize(original_text.size() + 1);
 		if (!enumerate_double_character(recommendations, std::make_pair(candidate.rbegin() + 1, candidate.rbegin()),
 		                                std::make_pair(
-		                                    std::make_pair(FRONT, BOUNDARY(1)),
+		                                    std::make_pair(FRONT, get_iterator(*(candidate.rbegin()+1))),
 		                                    std::make_pair(FRONT, END)
 		                                )))
 		{
@@ -280,7 +289,7 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 		}
 		if (!enumerate_double_character(recommendations, std::make_pair(candidate.rbegin() + 1, candidate.rbegin()),
 		                                std::make_pair(
-		                                    std::make_pair(BOUNDARY(1), END),
+		                                    std::make_pair(get_iterator(*(candidate.rbegin()+1)), END),
 		                                    std::make_pair(FRONT, END)
 		                                )))
 		{
@@ -299,8 +308,13 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 #endif
 	if (original_text.size() > 1)
 	{
+<<<<<<< HEAD
 		candidate.resize(original_text.size() - 1);
 		if (!enumerate_single_character(recommendations, candidate.rbegin(), std::make_pair(BACK, END)))
+=======
+		candidate.resize( original_text.size()-1 );
+		if (!enumerate_single_character( recommendations, candidate.rbegin(), std::make_pair(get_iterator(candidate.back()), END)))
+>>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
 		{
 			return;
 		}
@@ -315,7 +329,11 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 #endif
 	if (original_text.size() > 1)
 	{
+<<<<<<< HEAD
 		if (!enumerate_single_character(recommendations, candidate.rbegin() + 1, std::make_pair(BOUNDARY(1), END)))
+=======
+		if (!enumerate_single_character( recommendations, candidate.rbegin()+1, std::make_pair(get_iterator(*(candidate.rbegin()+1)), END)))
+>>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
 		{
 			return;
 		}
@@ -331,7 +349,11 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 #endif
 	if (original_text.size() > 2)
 	{
+<<<<<<< HEAD
 		if (!enumerate_single_character(recommendations, candidate.rbegin() + 2, std::make_pair(FRONT, BOUNDARY(2))))
+=======
+		if (!enumerate_single_character( recommendations, candidate.rbegin()+2, std::make_pair( FRONT, get_iterator(*(candidate.rbegin()+2)))))
+>>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
 		{
 			return;
 		}
@@ -365,12 +387,21 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 	{
 		candidate.resize(original_text.size() + 1);
 		if (!enumerate_triple_character(recommendations,
+<<<<<<< HEAD
 	{ candidate.rbegin() + 2, candidate.rbegin() + 1, candidate.rbegin()},
 		{
 			std::make_pair(FRONT, BOUNDARY(2)) ,
 			std::make_pair(FRONT, BOUNDARY(1)) ,
 			std::make_pair(FRONT, END)
 		}))
+=======
+			{ candidate.rbegin()+2, candidate.rbegin()+1, candidate.rbegin()},
+			{
+				std::make_pair(FRONT, get_iterator( *(candidate.rbegin()+2))),
+				std::make_pair(FRONT, get_iterator( *(candidate.rbegin()+1))),
+				std::make_pair(FRONT, END)
+			}))
+>>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
 		{
 			return;
 		}
@@ -406,7 +437,11 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 #endif
 	if (original_text.size() > 2)
 	{
+<<<<<<< HEAD
 		if (!enumerate_single_character(recommendations, candidate.rbegin() + 2, std::make_pair(BOUNDARY(2), END)))
+=======
+		if (!enumerate_single_character( recommendations, candidate.rbegin()+2, std::make_pair(get_iterator(*(candidate.rbegin()+2)), END)))
+>>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
 		{
 			return;
 		}
@@ -424,6 +459,7 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 	{
 		candidate.resize(original_text.size() + 2);
 		if (!enumerate_triple_character(
+<<<<<<< HEAD
 		            recommendations,
 	{ candidate.rbegin() + 2, candidate.rbegin() + 1, candidate.rbegin()},
 		{
@@ -431,6 +467,15 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 			std::make_pair(FRONT, END),
 			std::make_pair(BOUNDARY(1), END),
 		}))
+=======
+			recommendations,
+			{ candidate.rbegin()+2, candidate.rbegin()+1, candidate.rbegin()},
+			{
+				std::make_pair( get_iterator(*(candidate.rbegin()+2)), END),
+				std::make_pair( FRONT, END),
+				std::make_pair( get_iterator(*(candidate.rbegin()+1)), END),
+			}))
+>>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
 		{
 			return;
 		}
