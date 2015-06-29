@@ -39,6 +39,10 @@ void dsa::login()
 	// Authenticate the password.
 	if (accounts[id].authenticate(password))
 	{
+#ifdef DEBUG
+		std::cout << username << " logins " << std::endl;
+#endif
+
 		std::cout << "success" << std::endl;
 		last_login_id = id;
 	}
@@ -84,6 +88,10 @@ void dsa::create()
 	// Store the account into the lookup table.
 	finder.insert(username, id);
 
+#ifdef DEBUG
+	std::cout << "Creating account: " << username << std::endl;
+#endif
+	
 	std::cout << "success" << std::endl;
 }
 
@@ -158,6 +166,9 @@ void dsa::merge()
 		return;
 	}
 
+#ifdef DEBUG
+	std::cout << "Merging " << username << " with " << username2 << std::endl;
+#endif
 	// Merge the accounts.
 	unsigned int new_stat = accounts[id].merge_with(accounts[id2]);
 
@@ -168,7 +179,7 @@ void dsa::merge()
 	finder.remove(username2);
 	//finder.remove(accounts[id2].get_username());
 
-	std::cout << "success, " << username << " has " << new_stat << std::endl;
+	std::cout << "success, " << username << " has " << new_stat << " dollars" << std::endl;
 }
 
 void dsa::deposit()

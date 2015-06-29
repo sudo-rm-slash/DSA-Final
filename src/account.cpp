@@ -59,6 +59,10 @@ std::pair<bool, unsigned int> dsa::account::withdraw(unsigned int value)
 
 unsigned int dsa::account::merge_with(dsa::account& slave)
 {
+
+#ifdef DEBUG
+	std::cout << std::endl << "Account 1 has " << this->cash << " , Account 2 has " << slave.cash << std::endl;
+#endif
 	// Transfer the money.
 	this->cash += slave.cash;
 	slave.cash = 0;
