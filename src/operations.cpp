@@ -234,6 +234,7 @@ void dsa::transfer()
 	else
 	{
 		std::cout << "fail, " << status.second << " dollars only in current account" << std::endl;
+		return;
 	}
 
 	// Deposit to the given account.

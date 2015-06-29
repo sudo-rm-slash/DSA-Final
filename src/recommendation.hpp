@@ -22,7 +22,6 @@ namespace dsa
 {
 	class recommendation
 	{
-
 	private:
 		std::string candidate;
 		std::unordered_map<std::string, unsigned int>& container;
@@ -50,7 +49,6 @@ namespace dsa
 				std::vector<std::string>& recommendations,
 				std::vector<std::string::reverse_iterator>&& positions,
 				std::vector<bound_t>&& bounds);
-
 	};
 
 }

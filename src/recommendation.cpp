@@ -103,6 +103,15 @@ bool dsa::recommendation::enumerate_double_character(
         std::pair<std::string::reverse_iterator, std::string::reverse_iterator> positions,
         std::pair<bound_t, bound_t>&& bounds_pair)
 {
+<<<<<<< HEAD
+	for (int i = bounds_pair.first.first ? char_to_index(bounds_pair.first.first) + 1 : 0; candidate_characters[i] != bounds_pair.first.second ; ++i)
+	{
+		// std::cout << " First lower bound: " << bounds_pair.first.first << std::endl;
+		// std::cout << " Key: " << i << std::endl;
+		// std::cout <<"Position: " << positions.first << " Candidate character: " << candidate_characters[i] << std::endl;
+		candidate_string[ positions.first ] = candidate_characters[i];
+=======
+>>>>>>> 5061607529068db3bb864d7e94dca68866cd3d8e
 
 	char original_character = *(positions.first);
 	for (auto it = bounds_pair.first.first ; it != bounds_pair.first.second ; ++it)
@@ -123,11 +132,19 @@ bool dsa::recommendation::enumerate_triple_character(
         std::vector<std::string::reverse_iterator>&& positions,
         std::vector<bound_t>&& bounds)
 {
+<<<<<<< HEAD
+	for (int i = bounds[0].first ? char_to_index(bounds[0].first) + 1 : 0; candidate_characters[i] != bounds[0].second ; ++i)
+	{
+		candidate_string[ positions[0] ] = candidate_characters[i];
+
+		if (!enumerate_single_character(recommendations , positions[1],  bounds[1]))
+=======
 	char original_character = *(positions[0]);
 	for (auto it = bounds[0].first ; it != bounds[0].second ; ++it)
 	{
 		*(positions[0]) = *it;	
 		if (!enumerate_single_character( recommendations, positions[1],  bounds[1]))
+>>>>>>> 5061607529068db3bb864d7e94dca68866cd3d8e
 		{
 			return false;
 		}
