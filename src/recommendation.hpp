@@ -9,7 +9,8 @@
 
 #define RECOMMENDATION_NUMBER 10
 
-typedef std::tuple<std::string::const_iterator, std::string::const_iterator> bound_t;
+// typedef std::tuple<std::string::const_iterator, std::string::const_iterator> bound_t;
+typedef std::pair<std::string::const_iterator, std::string::const_iterator> bound_t;
 
 namespace dsa
 {
