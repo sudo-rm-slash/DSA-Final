@@ -16,63 +16,6 @@
 /* Get iterator for the last character of the current candidate */
 #define BACK (get_iterator(candidate.back())+1)
 
-<<<<<<< HEAD
-// Extra space reserved for candidate strings
-#define EXTRA_SPACE 4
-
-// Candidate has been confirmed and can be added into recommendation lists.
-#define ADD_RECOMMENDATION( candidate_string, length ) \
-	recommendations.emplace_back(candidate_string);
-
-// Append '\0' to some position so that candidate_string ends there
-#define APPEND_END_CHARACTER( candidate_string, position ) \
-	candidate_string[ position ] = '\0';
-
-// Recover the candidate_string to original text in convenience of later enumeration
-#define RECOVER_STRING( candidate_string, position ) \
-	candidate_string[ position ] = this->original_text[ position ];
-
-// Check if we are going too far
-#define CHECK_LENGTH( text_length, length ) \
-	if(  text_length < length )return;
-
-// Check if candidate_string exists in our target container
-#define PROBE( candidate_string, length )             			\
-	/*std::cout << " --> " << candidate_string << endl;*/ 		\
-	if(container.find(std::string(candidate_string)) == container.end())			\
-	{                                           				\
-		ADD_RECOMMENDATION( candidate_string, length ) 			\
-	}
-
-
-/* Front identifier for candidate_characters */
-#define FRONT (char)0
-/* End   identifier for candidate_characters */
-#define END   '\0'
-
-/**
- * Map character to its corresponding index in static variable 'candidate_characters'.
- * @arg ch
- * @return: index
- */
-int dsa::recommendation::char_to_index(const char c)
-{
-	if (c < 'A')
-	{
-		// c is a digit
-		return c - '0';
-	}
-	else if (c < 'a')
-	{
-		// c is an uppercase alphabet.
-		return c - 'A' + 10;
-	}
-	else
-	{
-		// c is a lowercase alphabet.
-		return c - 'a' + 10 + 26;
-	}
-=======
 #ifdef DEBUG
 const std::string candidate_characters("01234");
 #else
@@ -98,7 +41,6 @@ std::string::const_iterator dsa::recommendation::get_iterator( char ch )
 
 	// ch is lowercase alphabet: ch - 'a' + 10 + 26 ( ch - 97 + 10 + 26 )
 	return candidate_characters.cbegin() + ch - 61;
->>>>>>> 5061607529068db3bb864d7e94dca68866cd3d8e
 }
 
 
@@ -129,19 +71,11 @@ std::string::const_iterator dsa::recommendation::get_iterator( char ch )
 
 bool dsa::recommendation::enumerate_single_character( std::vector<std::string>& recommendations, std::string::reverse_iterator position, bound_t bounds)
 {
-<<<<<<< HEAD
-	for (int i = bounds.first ? char_to_index(bounds.first) + 1 : 0 ; candidate_characters[i] != bounds.second ; ++i)
-	{
-		candidate_string[ position ] = candidate_characters[i];
-		//std::cout  <<"Position: " << position << " Candidate character: " << candidate_characters[i] << std::endl;
-		PROBE(candidate_string, length)
-=======
 	char original_character = *position;
 	for (auto it = bounds.first ; it != bounds.second ; ++it)
 	{
 		*position = *it;
 		PROBE( candidate );
->>>>>>> 5061607529068db3bb864d7e94dca68866cd3d8e
 		if (recommendations.size() >= RECOMMENDATION_NUMBER)
 		{
 			return false;
@@ -507,14 +441,6 @@ void dsa::recommendation::recommend( std::vector<std::string>& recommendations, 
 #endif
 	if (original_text.size() > 1)
 	{
-<<<<<<< HEAD
-		std::make_pair(original_text[text_length - 2], END),
-			std::make_pair(FRONT, END),
-			std::make_pair(original_text[text_length - 1], END)
-		}))
-		return;
-		RECOVER_STRING(candidate_string, text_length + 1);
-=======
 		candidate.resize( original_text.size()+2 );
 		if (!enumerate_triple_character(
 			recommendations,
@@ -528,7 +454,6 @@ void dsa::recommendation::recommend( std::vector<std::string>& recommendations, 
 			return;
 		}
 		candidate.resize( original_text.size() );
->>>>>>> 5061607529068db3bb864d7e94dca68866cd3d8e
 	}
 }
 
