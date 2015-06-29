@@ -422,7 +422,6 @@ void dsa::recommendation::recommend(std::vector<std::string>& recommendations, c
 #endif
 	if (original_text.size() > 1)
 	{
-<<<<<<< HEAD
 		candidate.resize( original_text.size()+2 );
 		if (!enumerate_triple_character(
 			recommendations,
