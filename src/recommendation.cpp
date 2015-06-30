@@ -43,7 +43,7 @@ void dsa::recommendation::recommend(const std::unordered_map<std::string, unsign
 	 */
 	DEBUG_MESG("S S S E|")
 
-	if( original_str.size() > 1 )
+	if (original_str.size() > 1)
 	{
 		// Remove the last character.
 		this->candidate_str.pop_back();
@@ -58,7 +58,6 @@ void dsa::recommendation::recommend(const std::unordered_map<std::string, unsign
 		// Restore the last character.
 		this->candidate_str.push_back(original_str.back());
 	}
-
 
 	/**
 	 * Score = 1
