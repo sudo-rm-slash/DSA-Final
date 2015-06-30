@@ -31,12 +31,15 @@ int main()
 	// Generate name-function lookup table.
 	functions function_lookup;
 	init_function_lookup_table(function_lookup);
+#ifdef DEBUG
+	int counter = 1;
+#endif
 
 	std::string operation;
 	while (std::cin >> operation)
 	{
 #ifdef DEBUG
-		std::cerr << ">>> \"" << operation << "\" START <<<" << std::endl;
+		std::cerr << "test " << counter++ << " >>> \"" << operation << "\" START <<<" << std::endl;
 #endif
 
 		// Find the target function.

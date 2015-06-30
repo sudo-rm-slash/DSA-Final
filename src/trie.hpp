@@ -25,20 +25,44 @@ namespace dsa
 		{
 		private:
 			trie_node* node;
-			char_map<trie_node*>::iterator map_iterator;
+			char_map<trie_node*>::iterator map_iterator;			
+			
+			//Get the pointer of the node where the traveler is. 
+			trie_node* get_node();
 
 		public:
 			traveler();
+			
+			//Note: if an invalid node is insert, SEGMENTATION FAULT may happen.
 			traveler(trie_node*);
 
+			//If it is first time used to a parent travel object, it will return the first child traveler.
+			//And the second time will return the second child of the child.
+			//If there is no anymore child, it will return an invalid child.
 			traveler child_next();
+
+			//Find the child of a parent node which is of the index.
+			//If such child is not found, it will return an invalid child.
 			traveler child(char);
-			trie_node* get_node();
-			bool valid();			//Check whether or not the node
-			int get_data();			//Only meaningful when at leave. Get the index of account.
-			char get_char(); 		//TBA
-			traveler parent(); 		//TBA
+
+			//Check whether or not the node the traveler at is valid.
+			bool valid();			
+			
+			//When traveler is at the leaf, it will return the data the leaf store.
+			int get_data();		 
+
+			//Get the character of the node the traveler at.
+			char get_char(); 		
+
+			//TBA
+			traveler parent(); 	       
+
+			//When traveler is at the leaf, it will return the search id of the leaf.
+			//It is used with update_search_id to prevent the wildcard from duplicate output. 
 			unsigned int get_search_id();
+
+			//When traveler is at the leaf, it will update the search id of the leaf.
+			//Whenever the leaf is searched, it should use it to sync its search_id with now_search_id
 			void update_search_id(unsigned int now_search_id);
 
 		};
