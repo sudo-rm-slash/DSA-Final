@@ -70,7 +70,7 @@ unsigned int dsa::account::merge_with(dsa::account& slave)
 	               std::begin(slave.related_history), std::end(slave.related_history),
 	               std::back_inserter(temp));
 	// ...wipe the slave
-	//slave.related_history.clear();
+	slave.related_history.clear();
 	// ...copy
 	this->related_history.swap(temp);
 
