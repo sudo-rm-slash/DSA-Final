@@ -65,8 +65,11 @@ void dsa::trie::remove(const char* str)
 	do
 	{
 		node_stack[depth] = node;
+		//key to find child of the node.
 		key = str[depth];
-		depth += 1;
+
+		//depth point to an empty place
+		depth += 1; 
 		node = node->children.find(key);
 
 		if (node == nullptr)
@@ -76,11 +79,19 @@ void dsa::trie::remove(const char* str)
 	}
 	while (key != '\0');
 
-	node->ptr_account = -1;
-
+	//Now depth point to the top position.
 	depth --;
 
+	//Pop one. Now the node is the parent of the leaf
 	node = node_stack[depth];
+
+	//remove the child from the parent's children map
+	//And delete it
+	delete node -> children.remove( str[depth] );
+
+	//Pop a node again.
+	depth --;	
+	node = node_stack[depth];	
 
 	while (depth > 0 && node->children.get_size() == 0)
 	{
@@ -150,6 +161,7 @@ void dsa::trie::wildcard_node( std::vector<unsigned int>&result, traveler& tr_no
 			// std::cerr << std::endl;
 
 		}
+		break;
 	}
 	default:
 	{
