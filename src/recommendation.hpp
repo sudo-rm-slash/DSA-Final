@@ -26,7 +26,6 @@ namespace dsa
 	{
 	private:
 
-<<<<<<< HEAD:src/recommendation.hpp
 	#ifdef DEBUG_RECOMMENDATION
 		const char candidate_chars[SIZE_OF_CANDIDATE_CHARACTER+1] = "012345";
 	#else

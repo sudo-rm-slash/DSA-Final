@@ -1,3 +1,5 @@
+#include "lookup_table.hpp"
+
 void dsa::lookup_table::insert(const std::string& username, unsigned int id)
 {
 	tree_lookup.insert(username.c_str(), id);
