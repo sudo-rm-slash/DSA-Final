@@ -13,12 +13,19 @@ std::string dsa::history::find(unsigned int index, unsigned int associated_id)
 	this->string_builder.str(std::string());
 	this->string_builder.clear();
 
+#ifdef DEBUG
+	std::cerr << "index: " << index << std::endl;
+	std::cerr << "associated_id: " << associated_id << std::endl;
+	std::cerr << "from: " << this->container[index].from << std::endl;
+	std::cerr << "to: " << this->container[index].to << std::endl;
+#endif
+
 	// Identify the direction and push into the placeholder.
-	if (this->container[index].from == associated_id)
+	if (ownerships.find_root(this->container[index].from) == associated_id)
 	{
 		string_builder << "From ";
 	}
-	else if (this->container[index].to == associated_id)
+	else if (ownerships.find_root(this->container[index].to) == associated_id)
 	{
 		string_builder << "To ";
 	}

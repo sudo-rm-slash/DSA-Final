@@ -168,7 +168,7 @@ void dsa::merge()
 	finder.remove(username2);
 	//finder.remove(accounts[id2].get_username());
 
-	std::cout << "success, " << username << " has " << new_stat << std::endl;
+	std::cout << "success, " << username << " has " << new_stat << " dollars" << std::endl;
 }
 
 void dsa::deposit()
@@ -260,6 +260,7 @@ void dsa::find()
 	finder.find_wildcard(username, last_login_id, suggestions);
 	if (suggestions.size() > 0)
 	{
+		std::sort( suggestions.begin(), suggestions.end() );
 		std::cout << suggestions[0];
 		for (auto itr = std::next(std::begin(suggestions)); itr != std::end(suggestions); ++itr)
 		{
@@ -285,8 +286,6 @@ void dsa::search()
 	else
 	{
 		std::cout << "no record" << std::endl;
-		// Respoect the spec, ID doesn't exist equal to "no record".
-		//std::cout << "ID " << username << " not found" << std::endl;
 		return;
 	}
 
