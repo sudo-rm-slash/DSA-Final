@@ -72,7 +72,7 @@ unsigned int dsa::account::merge_with(dsa::account& slave)
 	// ...wipe the slave
 	slave.related_history.clear();
 	// ...copy
-	this->related_history = temp;
+	this->related_history.swap(temp);
 
 	// Return new cash statistics.
 	return this->cash;

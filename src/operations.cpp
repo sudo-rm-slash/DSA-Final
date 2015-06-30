@@ -284,9 +284,9 @@ void dsa::search()
 	}
 	else
 	{
-		std::cout << "no record" << std::endl;
+		//std::cout << "no record" << std::endl;
 		// Respoect the spec, ID doesn't exist equal to "no record".
-		//std::cout << "ID " << username << " not found" << std::endl;
+		std::cout << "ID " << username << " not found" << std::endl;
 		return;
 	}
 
