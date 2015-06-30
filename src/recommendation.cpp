@@ -19,9 +19,9 @@
  *      D -> Slot whose character is different from the original text
  *      E -> Empty slot
  */
-void dsa::recommendation::recommend(const std::unordered_map<std::string, unsigned int>& hashtable, 
-									const std::string& original_str, 
-									std::vector<std::string>& results)
+void dsa::recommendation::recommend(const std::unordered_map<std::string, unsigned int>& hashtable,
+                                    const std::string& original_str,
+                                    std::vector<std::string>& results)
 {
 	// Start from the original string.
 	this->candidate_str = original_str;
@@ -41,7 +41,7 @@ void dsa::recommendation::recommend(const std::unordered_map<std::string, unsign
 	 * Score = 1
 	 *      S S S E|
 	 */
-	DEBUG_MESG( "S S S E|" )
+	DEBUG_MESG("S S S E|")
 
 	if( original_str.size() > 1 )
 	{
@@ -65,7 +65,7 @@ void dsa::recommendation::recommend(const std::unordered_map<std::string, unsign
 	 *      S S S D|
 	 *      Setup upper bound to restrain the candidate character, to preserve the alphabetic order.
 	 */
-	DEBUG_MESG( "Score = 1: S S S D|" )
+	DEBUG_MESG("Score = 1: S S S D|")
 
 	SET_BOUNDARY(0, FIRST_CANDIDATE, char_to_candidate(original_str.back()))
 	SET_POSITOIN(0, this->candidate_str.rbegin())
@@ -82,7 +82,7 @@ void dsa::recommendation::recommend(const std::unordered_map<std::string, unsign
 	 *      S S S S|D
 	 */
 
-	DEBUG_MESG( "Score = 1: S S S S|D" )
+	DEBUG_MESG("Score = 1: S S S S|D")
 
 	// Push back a dummy character to extend the length of the string.
 	this->candidate_str.push_back('0');
@@ -104,9 +104,9 @@ void dsa::recommendation::recommend(const std::unordered_map<std::string, unsign
 	 *      S S S D|
 	 *      Setup lower bound to restrain the candidate character, to preserve the alphabetic order.
 	 */
-	DEBUG_MESG( "Score = 1: S S S D|" )
+	DEBUG_MESG("Score = 1: S S S D|")
 
-	SET_BOUNDARY(0, char_to_candidate(original_str.back())+1, LAST_CANDIDATE)
+	SET_BOUNDARY(0, char_to_candidate(original_str.back()) + 1, LAST_CANDIDATE)
 	SET_POSITOIN(0, this->candidate_str.rbegin());
 
 	// Enumerate the lower bounded portion.
@@ -120,14 +120,14 @@ void dsa::recommendation::recommend(const std::unordered_map<std::string, unsign
 	 *      S S D E|
 	 */
 
-	DEBUG_MESG( "Score = 2: S S D E| + S S D S|" )
+	DEBUG_MESG("Score = 2: S S D E| + S S D S|")
 
-	if( original_str.size() > 1 )
+	if (original_str.size() > 1)
 	{
 		SET_BOUNDARY(0, FIRST_CANDIDATE, BOUNDARY(1))
 
 		// Enumerate the lower bounded portion.
-		if (enumerate_toggle_single_character(hashtable, results,original_str.back()))
+		if (enumerate_toggle_single_character(hashtable, results, original_str.back()))
 		{
 			return;
 		}
@@ -139,14 +139,14 @@ void dsa::recommendation::recommend(const std::unordered_map<std::string, unsign
 	 *      S S S D|D
 	 */
 
-	DEBUG_MESG( "Score = 2: S S S D|D" )
+	DEBUG_MESG("Score = 2: S S S D|D")
 
 	// Push back a dummy character to extend the length of the string.
 	this->candidate_str.push_back('0');
 
 	// Enumerate the entire character map.
 	SET_BOUNDARY(0, FIRST_CANDIDATE, char_to_candidate(original_str.back()))
-	SET_POSITOIN(0, this->candidate_str.rbegin()+1)
+	SET_POSITOIN(0, this->candidate_str.rbegin() + 1)
 	SET_BOUNDARY(1, FIRST_CANDIDATE, LAST_CANDIDATE)
 	SET_POSITOIN(1, this->candidate_str.rbegin())
 
@@ -156,7 +156,7 @@ void dsa::recommendation::recommend(const std::unordered_map<std::string, unsign
 		return;
 	}
 
-	SET_BOUNDARY(0, char_to_candidate(original_str.back())+1, LAST_CANDIDATE)
+	SET_BOUNDARY(0, char_to_candidate(original_str.back()) + 1, LAST_CANDIDATE)
 
 	// Enumerate the upper bounded portion.
 	if (enumerate_double_character(hashtable, results))
@@ -171,14 +171,14 @@ void dsa::recommendation::recommend(const std::unordered_map<std::string, unsign
 	 *      S S D E| + S S D S|
 	 */
 
-	DEBUG_MESG( "Score = 2: S S D E| + S S D S|" )
+	DEBUG_MESG("Score = 2: S S D E| + S S D S|")
 
-	if( original_str.size() > 1 )
+	if (original_str.size() > 1)
 	{
-		SET_BOUNDARY(0, BOUNDARY(1)+1,LAST_CANDIDATE )
+		SET_BOUNDARY(0, BOUNDARY(1) + 1, LAST_CANDIDATE)
 
 		// Enumerate the lower bounded portion.
-		if (enumerate_toggle_single_character(hashtable, results,original_str.back()))
+		if (enumerate_toggle_single_character(hashtable, results, original_str.back()))
 		{
 			return;
 		}
@@ -190,11 +190,11 @@ void dsa::recommendation::recommend(const std::unordered_map<std::string, unsign
 	 *      S D S S|
 	 */
 
-	DEBUG_MESG( "Score = 3: S D S S|" )
-	if( original_str.size() > 2 )
+	DEBUG_MESG("Score = 3: S D S S|")
+	if (original_str.size() > 2)
 	{
 		SET_BOUNDARY(0, FIRST_CANDIDATE, BOUNDARY(2))
-		SET_POSITOIN(0, this->candidate_str.rbegin()+2);
+		SET_POSITOIN(0, this->candidate_str.rbegin() + 2);
 
 		// Enumerate the lower bounded portion.
 		if (enumerate_single_character(hashtable, results))
@@ -202,14 +202,14 @@ void dsa::recommendation::recommend(const std::unordered_map<std::string, unsign
 			return;
 		}
 
-	/**
-	 * Score = 3
-	 *      S S E E|
-	 */
+		/**
+		 * Score = 3
+		 *      S S E E|
+		 */
 
-	DEBUG_MESG( "Score = 3: S S E E|" )
+		DEBUG_MESG("Score = 3: S S E E|")
 
-		this->candidate_str.erase( this->candidate_str.end()-2, this->candidate_str.end() );
+		this->candidate_str.erase(this->candidate_str.end() - 2, this->candidate_str.end());
 
 		if (NOT_FOUND(this->candidate_str))
 		{
@@ -218,7 +218,7 @@ void dsa::recommendation::recommend(const std::unordered_map<std::string, unsign
 		}
 
 		// Restore the last two character.
-		this->candidate_str.insert(this->candidate_str.end(), original_str.end()-2, original_str.end());
+		this->candidate_str.insert(this->candidate_str.end(), original_str.end() - 2, original_str.end());
 
 	} // end of bracket: original_str.size() > 2
 
@@ -228,18 +228,18 @@ void dsa::recommendation::recommend(const std::unordered_map<std::string, unsign
 	 *      S S D S|D
 	 */
 
-	if( original_str.size() > 1 )
+	if (original_str.size() > 1)
 	{
-		DEBUG_MESG( "Score = 3: S S D D| + S S D S|D " )
+		DEBUG_MESG("Score = 3: S S D D| + S S D S|D ")
 		SET_BOUNDARY(0, FIRST_CANDIDATE, BOUNDARY(1))
-		SET_POSITOIN(0, this->candidate_str.rbegin()+1)
+		SET_POSITOIN(0, this->candidate_str.rbegin() + 1)
 		SET_BOUNDARY(1, FIRST_CANDIDATE, BOUNDARY(0))
 		SET_POSITOIN(1, this->candidate_str.rbegin())
-		if( enumerate_triple_character( hashtable, results ) )
+		if (enumerate_triple_character(hashtable, results))
 		{
 			return;
 		}
-		this->candidate_str[ original_str.size()-2 ] = *( original_str.rbegin()+1);
+		this->candidate_str[ original_str.size() - 2 ] = *(original_str.rbegin() + 1);
 	}
 	/**
 	 * Score = 3
@@ -247,12 +247,12 @@ void dsa::recommendation::recommend(const std::unordered_map<std::string, unsign
 	 */
 
 	DEBUG_MESG("Score = 3: S S S S|D D")
-	this->candidate_str.resize(original_str.size()+2);
-	SET_BOUNDARY(0, FIRST_CANDIDATE, LAST_CANDIDATE )
-	SET_BOUNDARY(1, FIRST_CANDIDATE, LAST_CANDIDATE )
-	SET_POSITOIN(0, this->candidate_str.rbegin()+1)
+	this->candidate_str.resize(original_str.size() + 2);
+	SET_BOUNDARY(0, FIRST_CANDIDATE, LAST_CANDIDATE)
+	SET_BOUNDARY(1, FIRST_CANDIDATE, LAST_CANDIDATE)
+	SET_POSITOIN(0, this->candidate_str.rbegin() + 1)
 	SET_POSITOIN(1, this->candidate_str.rbegin())
-	if( enumerate_double_character( hashtable, results ) )
+	if (enumerate_double_character(hashtable, results))
 	{
 		return;
 	}
@@ -263,30 +263,30 @@ void dsa::recommendation::recommend(const std::unordered_map<std::string, unsign
 	 *      S S D S|D
 	 *      S S D D|
 	 */
-	if( original_str.size() > 1 )
+	if (original_str.size() > 1)
 	{
-		DEBUG_MESG( "Score = 3: S S D D| + S S D S|D " )
-		SET_BOUNDARY(0, BOUNDARY(1)+1, LAST_CANDIDATE)
-		SET_POSITOIN(0, this->candidate_str.rbegin()+1)
+		DEBUG_MESG("Score = 3: S S D D| + S S D S|D ")
+		SET_BOUNDARY(0, BOUNDARY(1) + 1, LAST_CANDIDATE)
+		SET_POSITOIN(0, this->candidate_str.rbegin() + 1)
 		SET_BOUNDARY(1, FIRST_CANDIDATE, BOUNDARY(0))
 		SET_POSITOIN(1, this->candidate_str.rbegin())
-		if( enumerate_triple_character( hashtable, results ) )
+		if (enumerate_triple_character(hashtable, results))
 		{
 			return;
 		}
-		this->candidate_str[ original_str.size()-2 ] = *( original_str.rbegin()+1);
+		this->candidate_str[ original_str.size() - 2 ] = *(original_str.rbegin() + 1);
 	}
 
 	/**
 	 * Score = 3
 	 *      S D S S|
 	 */
-	if( original_str.size() > 2 )
+	if (original_str.size() > 2)
 	{
 		DEBUG_MESG("Score = 3: S D S S|")
-		SET_BOUNDARY(0, BOUNDARY(2)+1, LAST_CANDIDATE)
-		SET_POSITOIN(0, this->candidate_str.rbegin()+2)
-		if( enumerate_single_character( hashtable, results ) )
+		SET_BOUNDARY(0, BOUNDARY(2) + 1, LAST_CANDIDATE)
+		SET_POSITOIN(0, this->candidate_str.rbegin() + 2)
+		if (enumerate_single_character(hashtable, results))
 		{
 			return;
 		}
@@ -302,13 +302,13 @@ bool dsa::recommendation::enumerate_single_character(const std::unordered_map<st
 	for (char i = this->boundaries[level].lower; i < this->boundaries[level].upper; i++)
 	{
 		*(this->positions[level]) = this->candidate_chars[i];
-		if( NOT_FOUND( this->candidate_str ) )
+		if (NOT_FOUND(this->candidate_str))
 		{
 			results.push_back(this->candidate_str);
 			PRINT_CANDIDATE()
 		}
 
-		if( results.size() >= TARGET_AMOUNT )
+		if (results.size() >= TARGET_AMOUNT)
 		{
 			return true;
 		}
@@ -349,7 +349,7 @@ bool dsa::recommendation::enumerate_triple_character(const std::unordered_map<st
 	// Enumertate through the characters in the table.
 	for (char i = this->boundaries[0].lower; i < this->boundaries[0].upper; i++)
 	{
-		*(candidate_str.rbegin()+1) = this->candidate_chars[i];
+		*(candidate_str.rbegin() + 1) = this->candidate_chars[i];
 		SET_POSITOIN(1, this->candidate_str.rbegin())
 		if (enumerate_single_character(hashtable, results, 1))
 		{
@@ -376,38 +376,38 @@ bool dsa::recommendation::enumerate_triple_character(const std::unordered_map<st
 bool dsa::recommendation::enumerate_toggle_single_character(const std::unordered_map<std::string, unsigned int>& hashtable, std::vector<std::string>& results, char toggle_character)
 {
 	// Backup the character that is going to be changed.
-	const char backup = *(this->candidate_str.rbegin()+1);
+	const char backup = *(this->candidate_str.rbegin() + 1);
 
 	for (char i = this->boundaries[0].lower; i < this->boundaries[0].upper; i++)
 	{
 		this->candidate_str.pop_back();
 		this->candidate_str.back() = this->candidate_chars[i];
-		if( NOT_FOUND( this->candidate_str ) )
+		if (NOT_FOUND(this->candidate_str))
 		{
 			results.push_back(this->candidate_str);
 			PRINT_CANDIDATE()
 		}
 
-		if( results.size() >= TARGET_AMOUNT )
+		if (results.size() >= TARGET_AMOUNT)
 		{
 			return true;
 		}
 
-		this->candidate_str.push_back( toggle_character );
-		if( NOT_FOUND( this->candidate_str ) )
+		this->candidate_str.push_back(toggle_character);
+		if (NOT_FOUND(this->candidate_str))
 		{
 			results.push_back(this->candidate_str);
 			PRINT_CANDIDATE()
 		}
 
-		if( results.size() >= TARGET_AMOUNT )
+		if (results.size() >= TARGET_AMOUNT)
 		{
 			return true;
 		}
 	}
 
 	// Restore the last character.
-	*(this->candidate_str.rbegin()+1) = backup;
+	*(this->candidate_str.rbegin() + 1) = backup;
 
 	return false;
 }

@@ -26,6 +26,7 @@ namespace dsa
 	{
 	private:
 
+<<<<<<< HEAD:src/recommendation.hpp
 	#ifdef DEBUG_RECOMMENDATION
 		const char candidate_chars[SIZE_OF_CANDIDATE_CHARACTER+1] = "012345";
 	#else
@@ -39,8 +40,8 @@ namespace dsa
 			char upper;
 			char lower;
 		};
-		std::array<std::string::reverse_iterator,3> positions;	// Local storage for the positions.
-		std::array<boundary,3> boundaries;				// Local storage for the boundaries.
+		std::array<std::string::reverse_iterator, 3> positions;	// Local storage for the positions.
+		std::array<boundary, 3> boundaries;				// Local storage for the boundaries.
 
 
 	public:
@@ -79,34 +80,34 @@ namespace dsa
 		 */
 		bool enumerate_single_character(const std::unordered_map<std::string, unsigned int>& hashtable, std::vector<std::string>& results, int level = 0);
 
-		/** 
+		/**
 		 * @Function:  Enumerate all possible pairs of character
-		 * 
+		 *
 		 * @Param:     hashtable
 		 * @Param:     results
-		 * 
+		 *
 		 * @Return:    Whether the requirement is satisfied.
 		 */
 		bool enumerate_double_character(const std::unordered_map<std::string, unsigned int>& hashtable, std::vector<std::string>& results);
 
-		/** 
+		/**
 		 * @Function:  Enumerate all possible triples in alphabetical order
-		 * 
+		 *
 		 * @Param:     hashtable
 		 * @Param:     results
-		 * 
+		 *
 		 * @Return:    Whether the requirement is satisfied.
 		 */
 		bool enumerate_triple_character(const std::unordered_map<std::string, unsigned int>& hashtable, std::vector<std::string>& results);
 
-		/** 
+		/**
 		 * @Function:  Doggling the last character of a candidate string
-		 * 
+		 *
 		 * @Param:     hashtable
 		 * @Param:     results
 		 * @Param:     toggle_character
-		 * 
-		 * @Return:    
+		 *
+		 * @Return:
 		 */
 		bool enumerate_toggle_single_character(const std::unordered_map<std::string, unsigned int>& hashtable, std::vector<std::string>& results, char toggle_character);
 
