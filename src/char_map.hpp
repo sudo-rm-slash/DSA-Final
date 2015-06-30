@@ -11,15 +11,22 @@ public:
 		unsigned int index = 0;
 		char_map<T>*map;
 	public:
+
 		iterator();
+
 		//Constructor. Move index to the first element.
+		//If there is no element, the iterator will be at an invalid position.
 		iterator(char_map<T>*);
-		//Return the data. If there is no corresponding data, it will return 0.
+
+		//Return the data of the position the iterator at.
+		//If the iterator is at an invalid position, it will return 0.
 		T get_data();
+
 		//Move the iterator to next element.
-		//Return true if it move successfully. 
-		//Otherwise, if the iterator has been at the end of the array, return false.
-		bool next();
+		//If the iterator before moving next is at the last element, 
+		//Then after next() call, it will be at an invalid position. 
+		//( that will cause get_data to return 0. )
+		void next();
 	};
 
 	int insert( char key, T data );	
@@ -38,16 +45,16 @@ private:
 template <class T>
 unsigned char_map<T>::key_to_ind( char key ){
 	if( key == '\0' ){
-		return 62;
+		return 0;
 	}
 	else if( '0' <= key && key <= '9' ){
-		return key - '0' + 52;
+		return key - '0' + 1;
 	}
 	else if( 'A' <= key && key <= 'Z' ){
-		return key - 'A' + 26;
+		return key - 'A' + 11;
 	}
 	else if( 'a' <= key && key <= 'z' ){
-		return key - 'a';
+		return key - 'a' + 37;
 	}
 	return -1;
 }
@@ -67,9 +74,9 @@ int char_map<T>::insert( char key, T data ){
 
 template <class T>
 typename char_map<T>::iterator char_map<T>::get_iterator(){
-	if( this == nullptr ){
-		return nullptr;
-	}
+	// if( this == nullptr ){
+	// 	return nullptr;
+	// }
 	return iterator( this );
 }
 
@@ -126,21 +133,15 @@ T char_map<T>::iterator::get_data(){
 	return map -> array[index];
 }
 
+
 template <class T>
-bool char_map<T>::iterator::next(){
-	if( index >= ARR_SIZE -1 ){
-		index = ARR_SIZE;
-		return false;
-	}
-	index += 1;		
-	while( map -> array[index] == 0 ){
-		if( index == ARR_SIZE - 1 ){
-			return false;
-		}
+void char_map<T>::iterator::next(){
+	if( index < ARR_SIZE ){
+		index += 1;
 		while( index < ARR_SIZE && map -> array[index] == 0 ){
-		      index += 1;
+			index += 1;
 		}
 	}
-	return true;
 }
+
 

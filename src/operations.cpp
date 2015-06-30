@@ -237,9 +237,8 @@ void dsa::transfer()
 		return;
 	}
 
-	// Deposit to the given account.
+	// Deposit to the given account. "value" is equal to "status.second".
 	accounts[id].deposit(value);
-	//accounts[id].deposit(status.second);
 
 	// Add an entry in the history.
 	unsigned int index = transaction_history.insert(last_login_id, id, value);
@@ -256,6 +255,7 @@ void dsa::find()
 {
 	std::cin >> username;
 
+	// Respect the spec, ignoring specific ID. 
 	//finder.find_wildcard(username, suggestions);
 	finder.find_wildcard(username, last_login_id, suggestions);
 	if (suggestions.size() > 0)
@@ -285,6 +285,7 @@ void dsa::search()
 	else
 	{
 		std::cout << "no record" << std::endl;
+		// Respoect the spec, ID doesn't exist equal to "no record".
 		//std::cout << "ID " << username << " not found" << std::endl;
 		return;
 	}
