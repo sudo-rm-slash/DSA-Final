@@ -46,6 +46,21 @@ bool dsa::lookup_table::exists(const std::string& username)
 	return false;
 }
 
+bool dsa::lookup_table::exists(const std::string& username, std::vector<unsigned int>& results)
+{
+	auto itr = this->hashtable_lookup.find(username);
+	if (itr != std::end(hashtable_lookup))
+	{
+		results = this->hashtable_lookup.at(username).indices;
+		return true;
+	}
+
+	// Reset the dirty bit to true, in order to trigger refind.
+	this->dirty_last_found_id = true;
+
+	return false;
+}
+
 unsigned int dsa::lookup_table::find_specific(const std::string& username)
 {
 	if (dirty_last_found_id)
@@ -73,22 +88,6 @@ unsigned int dsa::lookup_table::find_specific(const std::string& username)
 	dirty_last_found_id = true;
 
 	return this->last_found_id;
-}
-
-void dsa::lookup_table::find_specific(const std::string& username, std::vector<unsigned int>& results)
-{
-	auto itr = this->hashtable_lookup.find(username);
-	if (itr != std::end(hashtable_lookup))
-	{
-		results = itr->second.indices;
-	}
-	else
-	{
-		throw std::invalid_argument("Invalid argument: Username doesn't exsit.\n");
-	}
-
-	// Reset the dirty bit.
-	dirty_last_found_id = true;
 }
 
 void dsa::lookup_table::find_wildcard(const std::string& pattern, std::vector<std::string>& results)
