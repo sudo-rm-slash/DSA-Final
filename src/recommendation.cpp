@@ -1,16 +1,12 @@
 #include "recommendation.hpp"
 
 #ifdef DEBUG
-
 #include <iostream>
 #define PRINT_CANDIDATE() std::cout << "--> " << this->candidate_str << std::endl;
 #define DEBUG_MESG(mesg) std::cout << mesg << std::endl;
-
 #else
-
 #define PRINT_CANDIDATE()
 #define DEBUG_MESG(mesg)
-
 #endif
 
 /**
