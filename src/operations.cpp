@@ -293,6 +293,14 @@ void dsa::search()
 
 #ifdef DEBUG
 	std::cerr << "...history_length = " << results.size() << std::endl;
+	std::cerr << "...history" << std::endl;
+	for(const auto& item : results)
+	{
+		std::cerr << "..." << item.first << ", [";
+		for(const auto& his : item.second)
+			std::cerr << his << ", ";
+		std::cerr << "]" << std::endl;
+	}
 #endif
 
 	if (results.size() == 0)
@@ -303,6 +311,12 @@ void dsa::search()
 	{
 		for (const auto& user : results)
 		{
+#ifdef DEBUG
+			std::cerr << "...id = " << user.first << std::endl;
+#endif
+			if(last_login_id == ownerships.find_root(user.first))
+				//continue;
+
 			for (const auto& index : user.second)
 			{
 				std::cout << transaction_history.find(index, user.first) << std::endl;
