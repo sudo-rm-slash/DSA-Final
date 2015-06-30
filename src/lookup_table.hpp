@@ -76,14 +76,14 @@ namespace dsa
 		bool exists(const std::string& username);
 
 		//
+		// Specialize for search()
+		//
+		bool exists(const std::string& username, std::vector<unsigned int>& results);
+
+		//
 		// @brief TODO
 		//
 		unsigned int find_specific(const std::string& username);
-
-		//
-		//
-		//
-		void find_specific(const std::string& username, std::vector<unsigned int>& results);
 
 		/**
 		 * Find all the accounts that match the wildcard pattern.

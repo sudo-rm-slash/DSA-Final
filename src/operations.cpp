@@ -275,11 +275,7 @@ void dsa::search()
 
 	// Check the existance of the usernames.
 	std::vector<unsigned int> ids;
-	if (finder.exists(username))
-	{
-		finder.find_specific(username, ids);
-	}
-	else
+	if (!finder.exists(username, ids))
 	{
 		//std::cout << "no record" << std::endl;
 		// Respoect the spec, ID doesn't exist equal to "no record".
