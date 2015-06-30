@@ -31,11 +31,21 @@ namespace dsa
 	class lookup_table
 	{
 	private:
+		// Declared in recommendation.hpp to solve forwared decalaration issue.
+		/*
+		struct tagged_indices
+		{
+			bool active;
+			std::vector<unsigned int> indices;
+		};
+		*/
+
+
 #ifdef TRIE
 		dsa::trie tree_lookup;
 #elif ART
 #endif
-		std::unordered_map<std::string, unsigned int> hashtable_lookup;
+		std::unordered_map<std::string, tagged_indices> hashtable_lookup;
 		dsa::recommendation suggestion_factory;
 
 		std::set<std::pair<unsigned int, std::string> > suggestions_buffer;
@@ -69,6 +79,11 @@ namespace dsa
 		// @brief TODO
 		//
 		unsigned int find_specific(const std::string& username);
+
+		//
+		//
+		//
+		void find_specific(const std::string& username, std::vector<unsigned int>& results);
 
 		/**
 		 * Find all the accounts that match the wildcard pattern.

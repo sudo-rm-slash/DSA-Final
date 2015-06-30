@@ -4,13 +4,26 @@
 void dsa::lookup_table::insert(const std::string& username, unsigned int id)
 {
 	tree_lookup.insert(username.c_str(), id);
-	hashtable_lookup.emplace(username, id);
+
+	// Add a new entry if item doesn't exist.
+	if (this->hashtable_lookup.find(username) == std::end(hashtable_lookup))
+	{
+		// id is stored in a vector, using C++11 initializer.
+		tagged_indices temp = {false, {id}};
+		this->hashtable_lookup.insert({username, temp});
+	}
+	else
+	{
+		this->hashtable_lookup[username].indices.push_back(id);
+	}
+
+	this->hashtable_lookup[username].active = true;
 }
 
 void dsa::lookup_table::remove(const std::string& username)
 {
 	tree_lookup.remove(username.c_str());
-	hashtable_lookup.erase(username);
+	this->hashtable_lookup[username].active = false;
 }
 
 bool dsa::lookup_table::exists(const std::string& username)
@@ -18,17 +31,20 @@ bool dsa::lookup_table::exists(const std::string& username)
 	auto itr = this->hashtable_lookup.find(username);
 	if (itr != std::end(hashtable_lookup))
 	{
-		this->last_found_id = itr->second;
-		this->dirty_last_found_id = false;
+		// Check if the account is activate.
+		if (this->hashtable_lookup.at(username).active)
+		{
+			this->last_found_id = itr->second.indices.back();
+			this->dirty_last_found_id = false;
 
-		return true;
+			return true;
+		}
 	}
-	else
-	{
-		this->dirty_last_found_id = true;
 
-		return false;
-	}
+	// Reset the dirty bit to true, in order to trigger refind.
+	this->dirty_last_found_id = true;
+
+	return false;
 }
 
 unsigned int dsa::lookup_table::find_specific(const std::string& username)
@@ -38,19 +54,42 @@ unsigned int dsa::lookup_table::find_specific(const std::string& username)
 		auto itr = this->hashtable_lookup.find(username);
 		if (itr != std::end(hashtable_lookup))
 		{
-			this->last_found_id = itr->second;
+			// Check if the account is activate.
+			if (this->hashtable_lookup.at(username).active)
+			{
+				this->last_found_id = itr->second.indices.back();
+			}
+			else
+			{
+				throw std::runtime_error("Runtime error: Account not activated.\n");
+			}
 		}
 		else
 		{
 			throw std::invalid_argument("Invalid argument: Username doesn't exsit.\n");
 		}
 	}
-	else
-	{
-		dirty_last_found_id = true;
-	}
+
+	// Reset the dirty bit.
+	dirty_last_found_id = true;
 
 	return this->last_found_id;
+}
+
+void dsa::lookup_table::find_specific(const std::string& username, std::vector<unsigned int>& results)
+{
+	auto itr = this->hashtable_lookup.find(username);
+	if (itr != std::end(hashtable_lookup))
+	{
+		results = itr->second.indices;
+	}
+	else
+	{
+		throw std::invalid_argument("Invalid argument: Username doesn't exsit.\n");
+	}
+
+	// Reset the dirty bit.
+	dirty_last_found_id = true;
 }
 
 void dsa::lookup_table::find_wildcard(const std::string& pattern, std::vector<std::string>& results)

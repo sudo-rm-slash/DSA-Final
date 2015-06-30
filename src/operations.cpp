@@ -255,7 +255,7 @@ void dsa::find()
 {
 	std::cin >> username;
 
-	// Respect the spec, ignoring specific ID. 
+	// Respect the spec, ignoring specific ID.
 	//finder.find_wildcard(username, suggestions);
 	finder.find_wildcard(username, last_login_id, suggestions);
 	if (suggestions.size() > 0)
@@ -274,13 +274,10 @@ void dsa::search()
 	std::cin >> username;
 
 	// Check the existance of the usernames.
-	unsigned int id;
+	std::vector<unsigned int> ids;
 	if (finder.exists(username))
 	{
-		id = finder.find_specific(username);
-#ifdef DEBUG
-		std::cerr << "...id = " << id << std::endl;
-#endif
+		finder.find_specific(username, ids);
 	}
 	else
 	{
@@ -291,8 +288,13 @@ void dsa::search()
 	}
 
 	// Find their common history.
-	std::vector<unsigned int> results;
-	accounts[last_login_id].get_common_history(accounts[id], results);
+	std::map<unsigned int, std::vector<unsigned int> > results;
+	for (const auto& id : ids)
+	{
+		std::vector<unsigned int> temp;
+		accounts[last_login_id].get_common_history(accounts[id], temp);
+		results.insert({id, temp});
+	}
 
 #ifdef DEBUG
 	std::cerr << "...history_length = " << results.size() << std::endl;
@@ -304,9 +306,12 @@ void dsa::search()
 	}
 	else
 	{
-		for (const auto& index : results)
+		for (const auto& user : results)
 		{
-			std::cout << transaction_history.find(index, id) << std::endl;
+			for (const auto& index : user.second)
+			{
+				std::cout << transaction_history.find(index, user.first) << std::endl;
+			}
 		}
 	}
 }

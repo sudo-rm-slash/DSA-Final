@@ -3,7 +3,7 @@
 #ifdef DEBUG
 #include <iostream>
 #define PRINT_CANDIDATE() std::cout << "--> " << this->candidate_str << std::endl;
-#define DEBUG_MESG(mesg) std::cout << mesg << std::endl;
+#define DEBUG_MESG(mesg) std::cerr << mesg << std::endl;
 #else
 #define PRINT_CANDIDATE()
 #define DEBUG_MESG(mesg)
@@ -15,7 +15,7 @@
  *      D -> Slot whose character is different from the original text
  *      E -> Empty slot
  */
-void dsa::recommendation::recommend(const std::unordered_map<std::string, unsigned int>& hashtable,
+void dsa::recommendation::recommend(const std::unordered_map<std::string, dsa::tagged_indices>& hashtable,
                                     const std::string& original_str,
                                     std::vector<std::string>& results)
 {
@@ -288,7 +288,7 @@ void dsa::recommendation::recommend(const std::unordered_map<std::string, unsign
 	}
 }
 
-bool dsa::recommendation::enumerate_single_character(const std::unordered_map<std::string, unsigned int>& hashtable, std::vector<std::string>& results, int level)
+bool dsa::recommendation::enumerate_single_character(const std::unordered_map<std::string, tagged_indices>& hashtable, std::vector<std::string>& results, int level)
 {
 	// Backup the character that is going to be changed.
 	const char backup = *(this->positions[level]);
@@ -315,7 +315,7 @@ bool dsa::recommendation::enumerate_single_character(const std::unordered_map<st
 	return false;
 }
 
-bool dsa::recommendation::enumerate_double_character(const std::unordered_map<std::string, unsigned int>& hashtable, std::vector<std::string>& results)
+bool dsa::recommendation::enumerate_double_character(const std::unordered_map<std::string, tagged_indices>& hashtable, std::vector<std::string>& results)
 {
 	// Backup the character that is going to be changed.
 	const char backup = *(this->positions[0]);
@@ -338,7 +338,7 @@ bool dsa::recommendation::enumerate_double_character(const std::unordered_map<st
 	return false;
 }
 
-bool dsa::recommendation::enumerate_triple_character(const std::unordered_map<std::string, unsigned int>& hashtable, std::vector<std::string>& results)
+bool dsa::recommendation::enumerate_triple_character(const std::unordered_map<std::string, tagged_indices>& hashtable, std::vector<std::string>& results)
 {
 
 	// Enumertate through the characters in the table.
@@ -368,7 +368,7 @@ bool dsa::recommendation::enumerate_triple_character(const std::unordered_map<st
 	return false;
 }
 
-bool dsa::recommendation::enumerate_toggle_single_character(const std::unordered_map<std::string, unsigned int>& hashtable, std::vector<std::string>& results, char toggle_character)
+bool dsa::recommendation::enumerate_toggle_single_character(const std::unordered_map<std::string, tagged_indices>& hashtable, std::vector<std::string>& results, char toggle_character)
 {
 	// Backup the character that is going to be changed.
 	const char backup = *(this->candidate_str.rbegin() + 1);

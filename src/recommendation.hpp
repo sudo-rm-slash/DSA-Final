@@ -18,10 +18,16 @@
 
 namespace dsa
 {
+	struct tagged_indices
+		{
+			bool active;
+			std::vector<unsigned int> indices;
+		};
+
+
 	class recommendation
 	{
 	private:
-
 #ifdef DEBUG
 		const char candidate_chars[SIZE_OF_CANDIDATE_CHARACTER + 1] = "012345";
 		//const char candidate_chars[SIZE_OF_CANDIDATE_CHARACTER+1] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -47,7 +53,7 @@ namespace dsa
 		 * @arg original The original string to act as the template.
 		 * @arg results The container to store the results.
 		 */
-		void recommend(const std::unordered_map<std::string, unsigned int>& hashtable,
+		void recommend(const std::unordered_map<std::string, tagged_indices>& hashtable,
 		               const std::string& original_str,
 		               std::vector<std::string>& results);
 
@@ -74,7 +80,7 @@ namespace dsa
 		 * @arg level ( default to level 0 )
 		 * @return Whether the requirement is satisfied.
 		 */
-		bool enumerate_single_character(const std::unordered_map<std::string, unsigned int>& hashtable, std::vector<std::string>& results, int level = 0);
+		bool enumerate_single_character(const std::unordered_map<std::string, tagged_indices>& hashtable, std::vector<std::string>& results, int level = 0);
 
 		/**
 		 * @Function:  Enumerate all possible pairs of character
@@ -84,7 +90,7 @@ namespace dsa
 		 *
 		 * @Return:    Whether the requirement is satisfied.
 		 */
-		bool enumerate_double_character(const std::unordered_map<std::string, unsigned int>& hashtable, std::vector<std::string>& results);
+		bool enumerate_double_character(const std::unordered_map<std::string, tagged_indices>& hashtable, std::vector<std::string>& results);
 
 		/**
 		 * @Function:  Enumerate all possible triples in alphabetical order
@@ -94,7 +100,7 @@ namespace dsa
 		 *
 		 * @Return:    Whether the requirement is satisfied.
 		 */
-		bool enumerate_triple_character(const std::unordered_map<std::string, unsigned int>& hashtable, std::vector<std::string>& results);
+		bool enumerate_triple_character(const std::unordered_map<std::string, tagged_indices>& hashtable, std::vector<std::string>& results);
 
 		/**
 		 * @Function:  Doggling the last character of a candidate string
@@ -105,7 +111,7 @@ namespace dsa
 		 *
 		 * @Return:
 		 */
-		bool enumerate_toggle_single_character(const std::unordered_map<std::string, unsigned int>& hashtable, std::vector<std::string>& results, char toggle_character);
+		bool enumerate_toggle_single_character(const std::unordered_map<std::string, tagged_indices>& hashtable, std::vector<std::string>& results, char toggle_character);
 
 		/**
 		 * Map character to its corresponding index in static variable 'candidate_chars'.
