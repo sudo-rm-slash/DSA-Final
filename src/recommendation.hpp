@@ -1,49 +1,119 @@
 #ifndef __RECOMMENDATION_HPP__
 #define __RECOMMENDATION_HPP__
 
-#include <cstring>
-#include <vector>
-#include <unordered_map>
-#include <iostream>
-#include <string>
+#include <unordered_map>	// std::unordered_map
+#include <string>			// std::string
+#include <tuple>			// std::tuple
+#include <array> 			// std::array
+#include <vector> 			// std::vector
 
-#define RECOMMENDATION_NUMBER 10
+#define TARGET_AMOUNT 10
 
-typedef std::pair<std::string::const_iterator, std::string::const_iterator> bound_t;
+#ifdef DEBUG
+#define SIZE_OF_CANDIDATE_CHARACTER 6
+#else
+#define SIZE_OF_CANDIDATE_CHARACTER 62
+#endif
+
 
 namespace dsa
 {
 	class recommendation
 	{
 	private:
-		std::string candidate;
-		std::unordered_map<std::string, unsigned int>& container;
+
+#ifdef DEBUG
+		const char candidate_chars[SIZE_OF_CANDIDATE_CHARACTER + 1] = "012345";
+		//const char candidate_chars[SIZE_OF_CANDIDATE_CHARACTER+1] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+#else
+		const char candidate_chars[SIZE_OF_CANDIDATE_CHARACTER + 1] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+#endif
+
+		std::string candidate_str;		// Buffer storage for candidate string during the enumeration.
+
+		struct boundary
+		{
+			char upper;
+			char lower;
+		};
+		std::array<std::string::reverse_iterator, 3> positions;	// Local storage for the positions.
+		std::array<boundary, 3> boundaries;				// Local storage for the boundaries.
+
 
 	public:
-		recommendation(std::unordered_map<std::string, unsigned int>& _container)
-			: container(_container)
-		{
-		}
+		/**
+		 * Recommend a series of candidate strings that aren't occupied.
+		 * @arg hashtable The container that stores existed accounts.
+		 * @arg original The original string to act as the template.
+		 * @arg results The container to store the results.
+		 */
+		void recommend(const std::unordered_map<std::string, unsigned int>& hashtable,
+		               const std::string& original_str,
+		               std::vector<std::string>& results);
 
-		void recommend( std::vector<std::string>& recommendation, const std::string& original_text );
-		void print_recommendation();
-		void flush();
 
 	private:
-		std::string::const_iterator get_iterator( char ch );
-		bool enumerate_single_character( std::vector<std::string>& recommendations, std::string::reverse_iterator position, bound_t bounds);
+		/**
+		 * Enumerate all possible characters of a single slot and probe them one by one into the hashmap.
+		 * Note that there's an bounds to the enumeration. By doing so, we can preserve alphabetical order.
+		 * For an example, take 'abcd' as original text:
+		 *      ....
+		 *      ....
+		 *      abcc
+		 *      abcd
+		 *      abce
+		 *      abcf
+		 *      ....
+		 *      ....
+		 *      abcda
+		 *      abcdb
+		 *
+		 *      'abcda' has higher alphabetical order than 'abcf' but is being enumerated later
+		 * @arg hashtable
+		 * @arg results
+		 * @arg level ( default to level 0 )
+		 * @return Whether the requirement is satisfied.
+		 */
+		bool enumerate_single_character(const std::unordered_map<std::string, unsigned int>& hashtable, std::vector<std::string>& results, int level = 0);
 
-		bool enumerate_double_character(
-				std::vector<std::string>& recommendations,
-				std::pair<std::string::reverse_iterator, std::string::reverse_iterator> positions,
-				std::pair<bound_t, bound_t>&& bounds_pair);
+		/**
+		 * @Function:  Enumerate all possible pairs of character
+		 *
+		 * @Param:     hashtable
+		 * @Param:     results
+		 *
+		 * @Return:    Whether the requirement is satisfied.
+		 */
+		bool enumerate_double_character(const std::unordered_map<std::string, unsigned int>& hashtable, std::vector<std::string>& results);
 
-		bool enumerate_triple_character(
-				std::vector<std::string>& recommendations,
-				std::vector<std::string::reverse_iterator>&& positions,
-				std::vector<bound_t>&& bounds);
+		/**
+		 * @Function:  Enumerate all possible triples in alphabetical order
+		 *
+		 * @Param:     hashtable
+		 * @Param:     results
+		 *
+		 * @Return:    Whether the requirement is satisfied.
+		 */
+		bool enumerate_triple_character(const std::unordered_map<std::string, unsigned int>& hashtable, std::vector<std::string>& results);
+
+		/**
+		 * @Function:  Doggling the last character of a candidate string
+		 *
+		 * @Param:     hashtable
+		 * @Param:     results
+		 * @Param:     toggle_character
+		 *
+		 * @Return:
+		 */
+		bool enumerate_toggle_single_character(const std::unordered_map<std::string, unsigned int>& hashtable, std::vector<std::string>& results, char toggle_character);
+
+		/**
+		 * Map character to its corresponding index in static variable 'candidate_chars'.
+		 * @arg ch
+		 * @return: index
+		 */
+		char char_to_candidate(const char c);
 	};
-
 }
 
-#endif // end of __RECOMMENDATION_HPP__
+#endif

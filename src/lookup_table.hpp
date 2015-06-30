@@ -36,7 +36,7 @@ namespace dsa
 #elif ART
 #endif
 		std::unordered_map<std::string, unsigned int> hashtable_lookup;
-		dsa::recommendation* suggestion_factory;
+		dsa::recommendation suggestion_factory;
 
 		std::set<std::pair<unsigned int, std::string> > suggestions_buffer;
 
@@ -45,10 +45,6 @@ namespace dsa
 
 
 	public:
-		lookup_table();
-		~lookup_table();
-
-
 		/**
 		 * Insert a new account entry in the lookup table.
 		 * @arg username The string username.

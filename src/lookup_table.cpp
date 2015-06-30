@@ -1,16 +1,6 @@
 #include "lookup_table.hpp"
 
 
-dsa::lookup_table::lookup_table()
-{
-	this->suggestion_factory = new dsa::recommendation(this->hashtable_lookup);
-}
-
-dsa::lookup_table::~lookup_table()
-{
-	delete this->suggestion_factory;
-}
-
 void dsa::lookup_table::insert(const std::string& username, unsigned int id)
 {
 	tree_lookup.insert(username.c_str(), id);
@@ -165,5 +155,5 @@ unsigned int dsa::lookup_table::calculate_score(const std::string& str1, const s
 void dsa::lookup_table::suggest_nonexists(const std::string& username, std::vector<std::string>& suggestions)
 {
 	suggestions.clear();
-	suggestion_factory->recommend(suggestions, username);
+	suggestion_factory.recommend(this->hashtable_lookup, username, suggestions);
 }

@@ -1,548 +1,426 @@
 #include "recommendation.hpp"
 
-#define PROBE( candidate ) 									\
-	if(container.find(candidate) == container.end()) 		\
-	{                                           			\
-		recommendations.push_back( candidate );				\
-	}														\
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-	std::cout << " --> " << candidate << std::endl;
-=======
-	/*std::cout << " --> " << candidate << std::endl;*/			
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-=======
-	/*std::cout << " --> " << candidate << std::endl;*/			
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-=======
-	/*std::cout << " --> " << candidate << std::endl;*/			
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
+#ifdef DEBUG
 
-/* Front identifier for candidate_characters */
-#define FRONT candidate_characters.cbegin()
-/* End   identifier for candidate_characters */
-#define END   candidate_characters.cend()
+#include <iostream>
+#define PRINT_CANDIDATE() std::cout << "--> " << this->candidate_str << std::endl;
+#define DEBUG_MESG(mesg) std::cout << mesg << std::endl;
 
-const std::string candidate_characters("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+#else
 
+#define PRINT_CANDIDATE()
+#define DEBUG_MESG(mesg)
+
+#endif
 
 /**
- * @Function: map character to its corresponding index in static variable 'candidate_characters'
- *
- * @Param: ch
- *
- * @Return: index
+ * Mnemonics
+ *      S -> Slot whose character is the same as original text
+ *      D -> Slot whose character is different from the original text
+ *      E -> Empty slot
  */
-std::string::const_iterator dsa::recommendation::get_iterator(char ch)
+void dsa::recommendation::recommend(const std::unordered_map<std::string, unsigned int>& hashtable,
+                                    const std::string& original_str,
+                                    std::vector<std::string>& results)
 {
-	if (ch < 'A')
-		// ch is digit: ch - '0'
+	// Start from the original string.
+	this->candidate_str = original_str;
+
+
+#define NOT_FOUND(S) hashtable.find(S) == std::end(hashtable)
+#define SET_BOUNDARY(lvl, L, H) \
+			this->boundaries[lvl].lower = L; \
+			this->boundaries[lvl].upper = H;
+#define SET_POSITOIN(lvl, P) \
+			this->positions[lvl] = P;
+#define FIRST_CANDIDATE 0
+#define LAST_CANDIDATE SIZE_OF_CANDIDATE_CHARACTER
+#define BOUNDARY(offset) char_to_candidate(*(original_str.rbegin()+offset))
+
+	/**
+	 * Score = 1
+	 *      S S S E|
+	 */
+	DEBUG_MESG("S S S E|")
+
+	// Remove the last character.
+	this->candidate_str.pop_back();
+
+	// Test for the case.
+	if (NOT_FOUND(this->candidate_str))
 	{
-		return candidate_characters.cbegin() + ch - '0';
-	}
-	if (ch < 'a')
-		// ch is uppercase alphabet: ch - 'A' + 10 ( ch - 65 + 10 )
-	{
-		return candidate_characters.cbegin() + ch - 55;
-	}
-
-	// ch is lowercase alphabet: ch - 'a' + 10 + 26 ( ch - 97 + 10 + 26 )
-	return candidate_characters.cbegin() + ch - 61;
-}
-
-
-/**
- * @Function:  enumerate all possible characters of a single slot
- *             and PROBE them one by one into the hashmap.
- *             Note that there's an bounds to the enumeration. By doing so, we can preserve alphabetical order
- *             For example, take 'abcd' as original text:
- *             ....
- *             ....
- *             abcc
- *             abcd
- *             abce
- *             abcf
- *             ....
- *             ....
- *             abcda
- *             abcdb
- *
- *             'abcda' has higher alphabetical order than 'abcf' but is being enumerated later
- *
- *
- * @Param:     candidate
- * @Param:     position ( position of the character to be enumerated )
- * @Param:     length ( length of the resulting candidate string )
- * @Param:     upperbound ( upperbound to the enumeration )
- */
-
-bool dsa::recommendation::enumerate_single_character(std::vector<std::string>& recommendations, std::string::reverse_iterator position, bound_t bounds)
-{
-	char original_character = *position;
-	//for (auto it = std::get<1>(bounds) ; it != std::get<2>(bounds) ; ++it)
-	for (auto it = bounds.first ; it != bounds.second ; ++it)
-	{
-		*position = *it;
-		PROBE(candidate);
-		if (recommendations.size() >= RECOMMENDATION_NUMBER)
-		{
-			return false;
-		}
+		results.push_back(this->candidate_str);
+		PRINT_CANDIDATE()
 	}
 
-	*position = original_character;
+	// Restore the last character.
+	this->candidate_str.push_back(original_str.back());
 
-	return true;
-}
 
-/**
- * @Function:  enumerate all possible characters of a pair of slots
- *             and PROBE them one by one into the hashmap
- *
- * @Param:     candidate
- * @Param:     length
- * @Param:     positions
- * @Param:     bounds_pair
- *
- * @Return:
- */
-bool dsa::recommendation::enumerate_double_character(
-    std::vector<std::string>& recommendations,
-    std::pair<std::string::reverse_iterator, std::string::reverse_iterator> positions,
-    std::pair<bound_t, bound_t>&& bounds_pair)
-{
-	char original_character = *(positions.first);
-	for (auto it = bounds_pair.first.first ; it != bounds_pair.first.second ; ++it)
-	{
-		*(positions.first) = *it;
-		if (!enumerate_single_character(recommendations, positions.second,  bounds_pair.second))
-		{
-			return false;
-		}
-	}
-	*(positions.first) = original_character;
+	/**
+	 * Score = 1
+	 *      S S S D|
+	 *      Setup upper bound to restrain the candidate character, to preserve the alphabetic order.
+	 */
+	DEBUG_MESG("Score = 1: S S S D|")
 
-	return true;
-}
+	SET_BOUNDARY(0, FIRST_CANDIDATE, char_to_candidate(original_str.back()))
+	SET_POSITOIN(0, this->candidate_str.rbegin())
 
-bool dsa::recommendation::enumerate_triple_character(
-    std::vector<std::string>& recommendations,
-    std::vector<std::string::reverse_iterator>&& positions,
-    std::vector<bound_t>&& bounds)
-{
-	char original_character = *(positions[0]);
-	for (auto it = bounds[0].first ; it != bounds[0].second ; ++it)
-	{
-		*(positions[0]) = *it;
-		if (!enumerate_single_character(recommendations, positions[1],  bounds[1]))
-		{
-			return false;
-		}
-		if (!enumerate_single_character(recommendations, positions[2],  bounds[2]))
-		{
-			return false;
-		}
-	}
-	*(positions[0]) = original_character;
-
-	return true;
-}
-
-void dsa::recommendation::recommend(std::vector<std::string>& recommendations, const std::string & original_text)
-{
-	this->candidate = original_text;
-
-	/*
-	 *
-	 *	□ : Slot whose character is the same as original text
-	 *
-	 *  ✖ : Slot whose character is different from the original text
-	 *
-	 *	○ : Empty slot
-	 *
-	 **/
-
-//
-//	Score 1: □  □  □  ○  |
-//
-	/*----------------------------------------------------*/
-#ifdef DEBUG_RECOMMENDATION
-	std::cout << "Score 1: □  □  □  ○  | \n";
-#endif
-	if (original_text.size() > 1)
-	{
-		candidate.resize(original_text.size() - 1);
-		PROBE(candidate);
-		candidate.resize(original_text.size());
-	}
-	/*----------------------------------------------------*/
-
-//
-//	Upper bound ( the character of the original text is chosen here ) on candidate character to preserve alphabetic order
-//
-//	Score 1: □  □  □  ✖  |
-//
-	/*----------------------------------------------------*/
-#ifdef DEBUG_RECOMMENDATION
-	std::cout << "Score 1: □  □  □  ✖  | \n";
-#endif
-	if (original_text.size() > 0)
-	{
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-		if (!enumerate_single_character(recommendations, candidate.rbegin(), std::make_pair(FRONT, BACK)))
-=======
-		if (!enumerate_single_character( recommendations, candidate.rbegin(), std::make_pair(FRONT, get_iterator( candidate.back() ) ) ) )
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-=======
-		if (!enumerate_single_character( recommendations, candidate.rbegin(), std::make_pair(FRONT, get_iterator( candidate.back() ) ) ) )
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-=======
-		if (!enumerate_single_character( recommendations, candidate.rbegin(), std::make_pair(FRONT, get_iterator( candidate.back() ) ) ) )
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-		{
-			return;
-		}
-	}
-	/*----------------------------------------------------*/
-
-//
-//	Score 1: □  □  □  □  | ✖
-//
-	/*----------------------------------------------------*/
-#ifdef DEBUG_RECOMMENDATION
-	std::cout << "Score 1: □  □  □  □  | ✖  \n";
-#endif
-	candidate.resize(original_text.size() + 1);
-	if (!enumerate_single_character(recommendations, candidate.rbegin() , std::make_pair(FRONT, END)))
+	// Enumerate the lower bounded portion.
+	if (enumerate_single_character(hashtable, results))
 	{
 		return;
 	}
-	candidate.resize(original_text.size());
-	/*----------------------------------------------------*/
-
-//
-//	Lower bound on candidate character to preserve alphabetic order
-//
-//	Score 1: □  □  □  ✖  |
-//
-	/*----------------------------------------------------*/
-
-#ifdef DEBUG_RECOMMENDATION
-	std::cout << "Score 1: □  □  □  ✖  \n";
-#endif
-	if (original_text.size() > 0)
-	{
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-		if (!enumerate_single_character(recommendations, candidate.rbegin() , std::make_pair(BACK, END)))
-=======
-		if (!enumerate_single_character( recommendations, candidate.rbegin() , std::make_pair(get_iterator(candidate.back()), END)))
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-=======
-		if (!enumerate_single_character( recommendations, candidate.rbegin() , std::make_pair(get_iterator(candidate.back()), END)))
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-=======
-		if (!enumerate_single_character( recommendations, candidate.rbegin() , std::make_pair(get_iterator(candidate.back()), END)))
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-		{
-			return;
-		}
-	}
-	/*----------------------------------------------------*/
-
-//
-//	Score 2: □  □  ✖  ○  |
-//
-	/*----------------------------------------------------*/
-#ifdef DEBUG_RECOMMENDATION
-	std::cout << "Score 2: □  □  ✖  ○  | \n";
-#endif
-	if (original_text.size() > 1)
-	{
-		candidate.resize(original_text.size() - 1);
-		if (!enumerate_single_character(recommendations, candidate.rbegin(), std::make_pair(FRONT, END)))
-		{
-			return;
-		}
-		candidate.resize(original_text.size());
-	}
-	/*----------------------------------------------------*/
-
-//
-//	Score 2: □  □  ✖  □  |
-//
-	/*----------------------------------------------------*/
-#ifdef DEBUG_RECOMMENDATION
-	std::cout << "Score 2: □  □  ✖  □  |\n";
-#endif
-	if (original_text.size() > 1)
-	{
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-		if (!enumerate_single_character(recommendations, candidate.rbegin() + 1, std::make_pair(FRONT, BOUNDARY(1))))
-=======
-		if (!enumerate_single_character( recommendations, candidate.rbegin()+1, std::make_pair( FRONT, get_iterator(*(candidate.rbegin()+1)) ) ) )
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-=======
-		if (!enumerate_single_character( recommendations, candidate.rbegin()+1, std::make_pair( FRONT, get_iterator(*(candidate.rbegin()+1)) ) ) )
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-=======
-		if (!enumerate_single_character( recommendations, candidate.rbegin()+1, std::make_pair( FRONT, get_iterator(*(candidate.rbegin()+1)) ) ) )
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-		{
-			return;
-		}
-	}
-	/*----------------------------------------------------*/
 
 
-//
-//	Score 2: □  □  □  ✖  | ✖
-//
-	/*----------------------------------------------------*/
-#ifdef DEBUG_RECOMMENDATION
-	std::cout << "Score 2: □  □  □  ✖  | ✖  \n";
-#endif
-	if (original_text.size() > 0)
-	{
-		candidate.resize(original_text.size() + 1);
-		if (!enumerate_double_character(recommendations, std::make_pair(candidate.rbegin() + 1, candidate.rbegin()),
-		                                std::make_pair(
-		                                    std::make_pair(FRONT, get_iterator(*(candidate.rbegin()+1))),
-		                                    std::make_pair(FRONT, END)
-		                                )))
-		{
-			return;
-		}
-		if (!enumerate_double_character(recommendations, std::make_pair(candidate.rbegin() + 1, candidate.rbegin()),
-		                                std::make_pair(
-		                                    std::make_pair(get_iterator(*(candidate.rbegin()+1)), END),
-		                                    std::make_pair(FRONT, END)
-		                                )))
-		{
-			return;
-		}
-		candidate.resize(original_text.size());
-	}
-	/*----------------------------------------------------*/
+	/**
+	 * Score = 1
+	 *      S S S S|D
+	 */
 
-//
-//	Score 2: □  □  ✖  ○  |
-//
-	/*----------------------------------------------------*/
-#ifdef DEBUG_RECOMMENDATION
-	std::cout << "Score 2: □  □  ✖  ○  | \n";
-#endif
-	if (original_text.size() > 1)
-	{
-<<<<<<< HEAD
-		candidate.resize(original_text.size() - 1);
-		if (!enumerate_single_character(recommendations, candidate.rbegin(), std::make_pair(BACK, END)))
-=======
-		candidate.resize( original_text.size()-1 );
-		if (!enumerate_single_character( recommendations, candidate.rbegin(), std::make_pair(get_iterator(candidate.back()), END)))
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-=======
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-=======
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-		{
-			return;
-		}
-		candidate.resize(original_text.size());
-	}
-//
-//	Score 2: □  □  ✖  □  |
-//
-	/*----------------------------------------------------*/
-#ifdef DEBUG_RECOMMENDATION
-	std::cout << "Score 2: □  □  ✖  □  |\n";
-#endif
-	if (original_text.size() > 1)
-	{
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-		if (!enumerate_single_character(recommendations, candidate.rbegin() + 1, std::make_pair(BOUNDARY(1), END)))
-=======
-		if (!enumerate_single_character( recommendations, candidate.rbegin()+1, std::make_pair(get_iterator(*(candidate.rbegin()+1)), END)))
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-=======
-		if (!enumerate_single_character( recommendations, candidate.rbegin()+1, std::make_pair(get_iterator(*(candidate.rbegin()+1)), END)))
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-=======
-		if (!enumerate_single_character( recommendations, candidate.rbegin()+1, std::make_pair(get_iterator(*(candidate.rbegin()+1)), END)))
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-		{
-			return;
-		}
-	}
-	/*----------------------------------------------------*/
+	DEBUG_MESG("Score = 1: S S S S|D")
 
-//
-//	Score 3: □  ✖  □  □  |
-//
-	/*----------------------------------------------------*/
-#ifdef DEBUG_RECOMMENDATION
-	std::cout << "Score 3: □  ✖  □  □  | \n";
-#endif
-	if (original_text.size() > 2)
-	{
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-		if (!enumerate_single_character(recommendations, candidate.rbegin() + 2, std::make_pair(FRONT, BOUNDARY(2))))
-=======
-		if (!enumerate_single_character( recommendations, candidate.rbegin()+2, std::make_pair( FRONT, get_iterator(*(candidate.rbegin()+2)))))
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-=======
-		if (!enumerate_single_character( recommendations, candidate.rbegin()+2, std::make_pair( FRONT, get_iterator(*(candidate.rbegin()+2)))))
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-=======
-		if (!enumerate_single_character( recommendations, candidate.rbegin()+2, std::make_pair( FRONT, get_iterator(*(candidate.rbegin()+2)))))
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-		{
-			return;
-		}
-	}
+	// Push back a dummy character to extend the length of the string.
+	this->candidate_str.push_back('0');
 
+	// Enumerate the entire character map.
+	SET_BOUNDARY(0, FIRST_CANDIDATE, LAST_CANDIDATE)
+	SET_POSITOIN(0, this->candidate_str.rbegin())
 
-//
-//	Score 3: □  □  ○  ○  |
-//
-	/*----------------------------------------------------*/
-#ifdef DEBUG_RECOMMENDATION
-	std::cout << "Score 3: □  □  ○  ○  |\n";
-#endif
-	if (original_text.size() > 2)
-	{
-		candidate.resize(original_text.size() - 2);
-		PROBE(candidate);
-		candidate.resize(original_text.size());
-	}
-
-//
-//	Score 3: □  □  ✖  ✖  |
-//	Score 3: □  □  ✖  □   | ✖
-//
-	/*----------------------------------------------------*/
-
-#ifdef DEBUG_RECOMMENDATION
-	std::cout << "Score 3: □  □  ✖  ✖   + Score 3: □  □  ✖  □   | ✖  \n";
-#endif
-	if (original_text.size() > 1)
-	{
-		candidate.resize(original_text.size() + 1);
-		if (!enumerate_triple_character(recommendations,
-<<<<<<< HEAD
-	{ candidate.rbegin() + 2, candidate.rbegin() + 1, candidate.rbegin()},
-		{
-			std::make_pair(FRONT, BOUNDARY(2)) ,
-			std::make_pair(FRONT, BOUNDARY(1)) ,
-			std::make_pair(FRONT, END)
-		}))
-=======
-			{ candidate.rbegin()+2, candidate.rbegin()+1, candidate.rbegin()},
-			{
-				std::make_pair(FRONT, get_iterator( *(candidate.rbegin()+2))),
-				std::make_pair(FRONT, get_iterator( *(candidate.rbegin()+1))),
-				std::make_pair(FRONT, END)
-			}))
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-		{
-			return;
-		}
-		candidate.resize(original_text.size());
-	}
-
-//
-//	Score 3: □  □  □  □   | ✖  ✖
-//
-	/*----------------------------------------------------*/
-#ifdef DEBUG_RECOMMENDATION
-	std::cout << "Score 3: □  □  □  □   | ✖  ✖  \n";
-#endif
-	candidate.resize(original_text.size() + 2);
-	if (!enumerate_double_character(
-	            recommendations,
-	            std::make_pair(candidate.rbegin() + 1, candidate.rbegin()),
-	            std::make_pair(
-	                std::make_pair(FRONT, END),
-	                std::make_pair(FRONT, END)
-	            )))
+	// Enumerate the lower bounded portion.
+	if (enumerate_single_character(hashtable, results))
 	{
 		return;
 	}
-	candidate.resize(original_text.size());
 
-//
-//	Score 3: □  ✖  □  □  |
-//
-	/*----------------------------------------------------*/
-#ifdef DEBUG_RECOMMENDATION
-	std::cout << "Score 3: □  ✖  □  □  | \n";
-#endif
-	if (original_text.size() > 2)
+	this->candidate_str.pop_back();
+
+	/**
+	 * Score = 1
+	 *      S S S D|
+	 *      Setup lower bound to restrain the candidate character, to preserve the alphabetic order.
+	 */
+	DEBUG_MESG("Score = 1: S S S D|")
+
+	SET_BOUNDARY(0, char_to_candidate(original_str.back()) + 1, LAST_CANDIDATE)
+	SET_POSITOIN(0, this->candidate_str.rbegin());
+
+	// Enumerate the lower bounded portion.
+	if (enumerate_single_character(hashtable, results))
 	{
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-		if (!enumerate_single_character(recommendations, candidate.rbegin() + 2, std::make_pair(BOUNDARY(2), END)))
-=======
-		if (!enumerate_single_character( recommendations, candidate.rbegin()+2, std::make_pair(get_iterator(*(candidate.rbegin()+2)), END)))
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-=======
-		if (!enumerate_single_character( recommendations, candidate.rbegin()+2, std::make_pair(get_iterator(*(candidate.rbegin()+2)), END)))
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-=======
-		if (!enumerate_single_character( recommendations, candidate.rbegin()+2, std::make_pair(get_iterator(*(candidate.rbegin()+2)), END)))
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
-		{
-			return;
-		}
+		return;
 	}
 
+	/**
+	 * Score = 2
+	 *      S S D E|
+	 */
 
-//
-//	Score 3: □  □  ✖  □   | ✖  +  Score 3:  □  □  ✖  ✖  |
-//
-	/*----------------------------------------------------*/
-#ifdef DEBUG_RECOMMENDATION
-	std::cout << "Score 3: □  □  ✖  ✖   + Score 3: □  □  ✖  □   | ✖  \n";
-#endif
-	if (original_text.size() > 1)
+	DEBUG_MESG("Score = 2: S S D E| + S S D S|")
+
+	if (original_str.size() > 1)
 	{
-		candidate.resize(original_text.size() + 2);
-		if (!enumerate_triple_character(
-<<<<<<< HEAD
-		            recommendations,
-	{ candidate.rbegin() + 2, candidate.rbegin() + 1, candidate.rbegin()},
-		{
-			std::make_pair(BOUNDARY(2), END),
-			std::make_pair(FRONT, END),
-			std::make_pair(BOUNDARY(1), END),
-		}))
-=======
-			recommendations,
-			{ candidate.rbegin()+2, candidate.rbegin()+1, candidate.rbegin()},
-			{
-				std::make_pair( get_iterator(*(candidate.rbegin()+2)), END),
-				std::make_pair( FRONT, END),
-				std::make_pair( get_iterator(*(candidate.rbegin()+1)), END),
-			}))
->>>>>>> parent of 5061607... add macro BACK , BOUNDARY for more readable code
+		SET_BOUNDARY(0, FIRST_CANDIDATE, BOUNDARY(1))
+
+		// Enumerate the lower bounded portion.
+		if (enumerate_toggle_single_character(hashtable, results, original_str.back()))
 		{
 			return;
 		}
-		candidate.resize(original_text.size());
+
+	}
+
+	/**
+	 * Score = 2
+	 *      S S S D|D
+	 */
+
+	DEBUG_MESG("Score = 2: S S S D|D")
+
+	// Push back a dummy character to extend the length of the string.
+	this->candidate_str.push_back('0');
+
+	// Enumerate the entire character map.
+	SET_BOUNDARY(0, FIRST_CANDIDATE, char_to_candidate(original_str.back()))
+	SET_POSITOIN(0, this->candidate_str.rbegin() + 1)
+	SET_BOUNDARY(1, FIRST_CANDIDATE, LAST_CANDIDATE)
+	SET_POSITOIN(1, this->candidate_str.rbegin())
+
+	// Enumerate the lower bounded portion.
+	if (enumerate_double_character(hashtable, results))
+	{
+		return;
+	}
+
+	SET_BOUNDARY(0, char_to_candidate(original_str.back()) + 1, LAST_CANDIDATE)
+
+	// Enumerate the upper bounded portion.
+	if (enumerate_double_character(hashtable, results))
+	{
+		return;
+	}
+
+	this->candidate_str.pop_back();
+
+	/**
+	 * Score = 2
+	 *      S S D E| + S S D S|
+	 */
+
+	DEBUG_MESG("Score = 2: S S D E| + S S D S|")
+
+	if (original_str.size() > 1)
+	{
+		SET_BOUNDARY(0, BOUNDARY(1) + 1, LAST_CANDIDATE)
+
+		// Enumerate the lower bounded portion.
+		if (enumerate_toggle_single_character(hashtable, results, original_str.back()))
+		{
+			return;
+		}
+
+	}
+
+	/**
+	 * Score = 3
+	 *      S D S S|
+	 */
+
+	DEBUG_MESG("Score = 3: S D S S|")
+	if (original_str.size() > 2)
+	{
+		SET_BOUNDARY(0, FIRST_CANDIDATE, BOUNDARY(2))
+		SET_POSITOIN(0, this->candidate_str.rbegin() + 2);
+
+		// Enumerate the lower bounded portion.
+		if (enumerate_single_character(hashtable, results))
+		{
+			return;
+		}
+
+		/**
+		 * Score = 3
+		 *      S S E E|
+		 */
+
+		DEBUG_MESG("Score = 3: S S E E|")
+
+		this->candidate_str.erase(this->candidate_str.end() - 2, this->candidate_str.end());
+
+		if (NOT_FOUND(this->candidate_str))
+		{
+			results.push_back(this->candidate_str);
+			PRINT_CANDIDATE()
+		}
+
+		// Restore the last two character.
+		this->candidate_str.insert(this->candidate_str.end(), original_str.end() - 2, original_str.end());
+
+	} // end of bracket: original_str.size() > 2
+
+	/**
+	 * Score = 3
+	 *      S S D D|
+	 *      S S D S|D
+	 */
+
+	if (original_str.size() > 1)
+	{
+		DEBUG_MESG("Score = 3: S S D D| + S S D S|D ")
+		SET_BOUNDARY(0, FIRST_CANDIDATE, BOUNDARY(1))
+		SET_POSITOIN(0, this->candidate_str.rbegin() + 1)
+		SET_BOUNDARY(1, FIRST_CANDIDATE, BOUNDARY(0))
+		SET_POSITOIN(1, this->candidate_str.rbegin())
+		if (enumerate_triple_character(hashtable, results))
+		{
+			return;
+		}
+		this->candidate_str[ original_str.size() - 2 ] = *(original_str.rbegin() + 1);
+	}
+	/**
+	 * Score = 3
+	 *      S S S S|D D
+	 */
+
+	DEBUG_MESG("Score = 3: S S S S|D D")
+	this->candidate_str.resize(original_str.size() + 2);
+	SET_BOUNDARY(0, FIRST_CANDIDATE, LAST_CANDIDATE)
+	SET_BOUNDARY(1, FIRST_CANDIDATE, LAST_CANDIDATE)
+	SET_POSITOIN(0, this->candidate_str.rbegin() + 1)
+	SET_POSITOIN(1, this->candidate_str.rbegin())
+	if (enumerate_double_character(hashtable, results))
+	{
+		return;
+	}
+	this->candidate_str.resize(original_str.size());
+
+	/**
+	 * Score = 3
+	 *      S S D S|D
+	 *      S S D D|
+	 */
+	if (original_str.size() > 1)
+	{
+		DEBUG_MESG("Score = 3: S S D D| + S S D S|D ")
+		SET_BOUNDARY(0, BOUNDARY(1) + 1, LAST_CANDIDATE)
+		SET_POSITOIN(0, this->candidate_str.rbegin() + 1)
+		SET_BOUNDARY(1, FIRST_CANDIDATE, BOUNDARY(0))
+		SET_POSITOIN(1, this->candidate_str.rbegin())
+		if (enumerate_triple_character(hashtable, results))
+		{
+			return;
+		}
+		this->candidate_str[ original_str.size() - 2 ] = *(original_str.rbegin() + 1);
+	}
+
+	/**
+	 * Score = 3
+	 *      S D S S|
+	 */
+	if (original_str.size() > 2)
+	{
+		DEBUG_MESG("Score = 3: S D S S|")
+		SET_BOUNDARY(0, BOUNDARY(2) + 1, LAST_CANDIDATE)
+		SET_POSITOIN(0, this->candidate_str.rbegin() + 2)
+		if (enumerate_single_character(hashtable, results))
+		{
+			return;
+		}
 	}
 }
 
+bool dsa::recommendation::enumerate_single_character(const std::unordered_map<std::string, unsigned int>& hashtable, std::vector<std::string>& results, int level)
+{
+	// Backup the character that is going to be changed.
+	const char backup = *(this->positions[level]);
 
+	// Enumertate through the characters in the table.
+	for (char i = this->boundaries[level].lower; i < this->boundaries[level].upper; i++)
+	{
+		*(this->positions[level]) = this->candidate_chars[i];
+		if (NOT_FOUND(this->candidate_str))
+		{
+			results.push_back(this->candidate_str);
+			PRINT_CANDIDATE()
+		}
+
+		if (results.size() >= TARGET_AMOUNT)
+		{
+			return true;
+		}
+	}
+
+	// Restore the last character.
+	*(this->positions[level]) = backup;
+
+	return false;
+}
+
+bool dsa::recommendation::enumerate_double_character(const std::unordered_map<std::string, unsigned int>& hashtable, std::vector<std::string>& results)
+{
+	// Backup the character that is going to be changed.
+	const char backup = *(this->positions[0]);
+
+	// Enumertate through the characters in the table.
+	for (char i = this->boundaries[0].lower; i < this->boundaries[0].upper; i++)
+	{
+		*(this->positions[0]) = this->candidate_chars[i];
+
+		// Call lower level.
+		if (enumerate_single_character(hashtable, results, 1))
+		{
+			return true;
+		}
+	}
+
+	// Restore the last character.
+	*(this->positions[0]) = backup;
+
+	return false;
+}
+
+bool dsa::recommendation::enumerate_triple_character(const std::unordered_map<std::string, unsigned int>& hashtable, std::vector<std::string>& results)
+{
+
+	// Enumertate through the characters in the table.
+	for (char i = this->boundaries[0].lower; i < this->boundaries[0].upper; i++)
+	{
+		*(candidate_str.rbegin() + 1) = this->candidate_chars[i];
+		SET_POSITOIN(1, this->candidate_str.rbegin())
+		if (enumerate_single_character(hashtable, results, 1))
+		{
+			return true;
+		}
+
+		this->candidate_str.push_back('0');
+
+		SET_BOUNDARY(2, FIRST_CANDIDATE, LAST_CANDIDATE)
+		SET_POSITOIN(2, this->candidate_str.rbegin())
+
+		if (enumerate_single_character(hashtable, results, 2))
+		{
+			return true;
+		}
+
+		this->candidate_str.pop_back();
+
+	}
+
+	return false;
+}
+
+bool dsa::recommendation::enumerate_toggle_single_character(const std::unordered_map<std::string, unsigned int>& hashtable, std::vector<std::string>& results, char toggle_character)
+{
+	// Backup the character that is going to be changed.
+	const char backup = *(this->candidate_str.rbegin() + 1);
+
+	for (char i = this->boundaries[0].lower; i < this->boundaries[0].upper; i++)
+	{
+		this->candidate_str.pop_back();
+		this->candidate_str.back() = this->candidate_chars[i];
+		if (NOT_FOUND(this->candidate_str))
+		{
+			results.push_back(this->candidate_str);
+			PRINT_CANDIDATE()
+		}
+
+		if (results.size() >= TARGET_AMOUNT)
+		{
+			return true;
+		}
+
+		this->candidate_str.push_back(toggle_character);
+		if (NOT_FOUND(this->candidate_str))
+		{
+			results.push_back(this->candidate_str);
+			PRINT_CANDIDATE()
+		}
+
+		if (results.size() >= TARGET_AMOUNT)
+		{
+			return true;
+		}
+	}
+
+	// Restore the last character.
+	*(this->candidate_str.rbegin() + 1) = backup;
+
+	return false;
+}
+
+char dsa::recommendation::char_to_candidate(const char c)
+{
+	if (c < 'A')
+	{
+		return c - '0';				// c is a digit
+	}
+	else if (c < 'a')
+	{
+		return c - 'A' + 10;		// c is an uppercase alphabet.
+	}
+	else
+	{
+		return c - 'a' + 10 + 26;	// c is a lowercase alphabet.
+	}
+}
