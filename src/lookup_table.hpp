@@ -85,12 +85,11 @@ namespace dsa
 		 */
 		void find_wildcard(const std::string& pattern, unsigned int ignored_id, std::vector<std::string>& results);
 
-		//
-		// @brief Suggest exists accounts in the system.
-		//
-		// @param username The username to start with.
-		// @param suggestions The container to hold the suggestions.
-		//
+		/**
+		 * Suggest exists accounts in the system.
+		 * @arg username The username to start with.
+		 * @arg suggestions The container to hold the suggestions.
+		 */
 		void suggest_exists(const std::string& username, std::vector<std::string>& suggestions);
 
 		//
