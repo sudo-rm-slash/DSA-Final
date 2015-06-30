@@ -168,7 +168,7 @@ void dsa::merge()
 	finder.remove(username2);
 	//finder.remove(accounts[id2].get_username());
 
-	std::cout << "success, " << username << " has " << new_stat << std::endl;
+	std::cout << "success, " << username << " has " << new_stat << " dollars" << std::endl;
 }
 
 void dsa::deposit()
