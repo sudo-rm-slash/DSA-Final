@@ -26,7 +26,7 @@ void dsa::recommendation::recommend(const std::unordered_map<std::string, dsa::t
 	this->candidate_str = original_str;
 
 
-#define NOT_FOUND(S) hashtable.find(S) == std::end(hashtable)
+#define NOT_FOUND(S) hashtable.find(S) == std::end(hashtable) || !hashtable.find(S)->second.active 
 #define SET_BOUNDARY(lvl, L, H) \
 			this->boundaries[lvl].lower = L; \
 			this->boundaries[lvl].upper = H;
