@@ -26,11 +26,6 @@ namespace dsa
 		unsigned int new_account(std::string& username, std::string& password);
 
 		//
-		// @brief Merging the contents of two accounts.
-		//
-		void merge(unsigned int master, unsigned int slave);
-
-		//
 		// @brief Provide  direct access to the storage using subscripting.
 		//
 		dsa::account& operator[](unsigned int n);

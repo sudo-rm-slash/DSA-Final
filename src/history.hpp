@@ -14,6 +14,7 @@ namespace dsa
 	extern dsa::storage accounts;				// The accounts themselves.
 	extern dsa::relationships ownerships;		// The ownership between accounts.
 
+	enum priority_t { FROM , TO };
 
 	class history
 	{
@@ -23,6 +24,7 @@ namespace dsa
 			unsigned int from;
 			unsigned int to;
 			unsigned int amount;
+			bool priority;
 
 			entry(unsigned int _from, unsigned int _to, unsigned int _amount)
 				: from(_from), to(_to), amount(_amount)
@@ -51,6 +53,20 @@ namespace dsa
 		 * @return A history entry in the form of string.
 		 */
 		std::string find(unsigned int index, unsigned int associated_id);
+
+		/**
+		 * Check if TO and FROM are the same person ( share the same root )
+		 * @arg index The index of the entry.
+		 * @return yes/no
+		 */
+		bool check_self_history(unsigned int index);
+
+		/**
+		 * Set the master id to identify who is printed first in search
+		 * @arg index The index of the entry.
+		 * @arg master_id
+		 */
+		void set_priority(unsigned int index, unsigned int master_id);
 	};
 }
 

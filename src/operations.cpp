@@ -159,7 +159,7 @@ void dsa::merge()
 	}
 
 	// Merge the accounts.
-	unsigned int new_stat = accounts[id].merge_with(accounts[id2]);
+	unsigned int new_stat = accounts[id].merge_with(id, accounts[id2]);
 
 	// Link the relationships.
 	ownerships.link_users(id, id2);
@@ -287,8 +287,24 @@ void dsa::search()
 	for (const auto& id : ids)
 	{
 		std::vector<unsigned int> temp;
-		accounts[last_login_id].get_common_history(accounts[id], temp);
-		results.insert({id, temp});
+		if( id == ownerships.find_root(id))
+		{
+			accounts[last_login_id].get_common_history(accounts[id], temp);
+			if( last_login_id == ownerships.find_root(id) )
+			{
+				auto it = remove_if( temp.begin(), temp.end(), [](unsigned int history_index){ 
+							return !transaction_history.check_self_history(history_index); 
+						});
+				temp.erase( it, temp.end());
+#ifdef DEBUG
+				std:: cout << "Same root! \n";
+				std::cout<<"Remaining history between self:\n";
+				for(auto his:temp)
+					std::cout << his << " ";
+#endif
+			}
+			results.insert({id, temp});
+		}
 	}
 
 #ifdef DEBUG
@@ -303,24 +319,25 @@ void dsa::search()
 	}
 #endif
 
-	if (results.size() == 0)
+	bool is_empty = true;
+	for (const auto& user : results)
 	{
-		std::cout << "no record" << std::endl;
-	}
-	else
-	{
-		for (const auto& user : results)
-		{
 #ifdef DEBUG
-			std::cerr << "...id = " << user.first << std::endl;
+		std::cerr << "...id = " << user.first << std::endl;
 #endif
-			if(last_login_id == ownerships.find_root(user.first))
-				//continue;
 
-			for (const auto& index : user.second)
-			{
-				std::cout << transaction_history.find(index, user.first) << std::endl;
-			}
+		for (const auto& index : user.second)
+		{
+			std::cout << transaction_history.find(index, user.first) << std::endl;
+			if( is_empty )
+				is_empty = false;
 		}
 	}
+
+	if (is_empty)
+	{
+		// Warning ! Beware empty vector in each result
+		std::cout << "no record" << std::endl;
+	}
+
 }

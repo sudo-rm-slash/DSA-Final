@@ -12,6 +12,7 @@
 
 namespace dsa
 {
+
 	class account
 	{
 	private:
@@ -50,9 +51,10 @@ namespace dsa
 
 		/**
 		 * Merge the contents of another account with current one.
+		 * @arg master_id The id of the master who is being merged into
 		 * @arg slave The target account to merge with this one.
 		 */
-		unsigned int merge_with(dsa::account& slave);
+		unsigned int merge_with(unsigned int master_id, dsa::account& slave);
 
 		/**
 		 * Add a related history in the list.

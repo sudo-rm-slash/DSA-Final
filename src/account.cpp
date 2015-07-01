@@ -1,5 +1,10 @@
 #include "account.hpp"
+#include "history.hpp"
 
+namespace dsa 
+{
+	extern dsa::history transaction_history;		// The grand transaction history. History depends on accounts and ownerships.
+}
 
 dsa::account::account(std::string& password)
 {
@@ -57,27 +62,56 @@ std::pair<bool, unsigned int> dsa::account::withdraw(unsigned int value)
 	}
 }
 
-unsigned int dsa::account::merge_with(dsa::account& slave)
+unsigned int dsa::account::merge_with(unsigned int master_id, dsa::account& slave)
 {
 	// Transfer the money.
 	this->cash += slave.cash;
 	slave.cash = 0;
 
-	// Transfer the related history, union -> wipe slave -> copy.
+	// Transfer the related history 
 	// ...union
-	std::vector<unsigned int> temp;
-	std::set_union(std::begin(this->related_history), std::end(this->related_history),
-	               std::begin(slave.related_history), std::end(slave.related_history),
-	               std::back_inserter(temp));
-	// ...wipe the slave
-	slave.related_history.clear();
-	// ...copy
-	this->related_history.swap(temp);
+	std::vector<unsigned int> result(std::max(this->related_history.size(),slave.related_history.size()));
+	auto result_iterator = std::begin(result);
+	auto master_iterator = std::begin(this->related_history);
+	auto slave_iterator  = std::begin(slave.related_history);
+	while (true)
+	{
+		if (master_iterator==std::end(this->related_history))
+		{
+			std::copy(slave_iterator,std::end(slave.related_history),result_iterator);
+			break;
+		}
+		if (slave_iterator==std::end(slave.related_history))   
+		{
+			std::copy(master_iterator,std::end(this->related_history),result_iterator);
+			break;
+		}
+
+		if (*master_iterator<*slave_iterator) 
+		{ 
+			*result_iterator = *master_iterator; 
+			++master_iterator; 
+		}
+		else if (*slave_iterator<*master_iterator) 
+		{ 
+			*result_iterator = *slave_iterator; ++slave_iterator; 
+		}
+		else 
+		{ 
+			*result_iterator = *master_iterator; 
+			transaction_history.set_priority( *result_iterator, master_id );
+			++master_iterator; ++slave_iterator; 
+		}
+
+		++result_iterator;
+	}
+	
+	result.shrink_to_fit();
+	this->related_history = std::move(result);
 
 	// Return new cash statistics.
 	return this->cash;
 }
-
 void dsa::account::add_related_history(unsigned int index)
 {
 	this->related_history.push_back(index);
@@ -90,7 +124,6 @@ const std::string& dsa::account::get_username() const
 {
 	return this->username;
 }
-
 void dsa::account::get_common_history(dsa::account& compared_account, std::vector<unsigned int>& results)
 {
 	// Find common history.

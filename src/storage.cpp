@@ -10,11 +10,6 @@ unsigned int dsa::storage::new_account(std::string& username, std::string& passw
 	return container.size() - 1;
 }
 
-void dsa::storage::merge(unsigned int master, unsigned int slave)
-{
-	this->container[master].merge_with(this->container[slave]);
-}
-
 dsa::account& dsa::storage::operator[](unsigned int n)
 {
 	return this->container[n];
