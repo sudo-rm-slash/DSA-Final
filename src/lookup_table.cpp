@@ -51,7 +51,7 @@ bool dsa::lookup_table::exists(const std::string& username, std::vector<unsigned
 	auto itr = this->hashtable_lookup.find(username);
 	if (itr != std::end(hashtable_lookup))
 	{
-		results = this->hashtable_lookup.at(username).indices;
+		results = itr->second.indices;
 		return true;
 	}
 
