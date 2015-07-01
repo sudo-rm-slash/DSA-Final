@@ -136,15 +136,13 @@ void dsa::lookup_table::suggest_exists(const std::string& username, std::vector<
 	unsigned int score;
 	for (const auto& account : this->hashtable_lookup)
 	{
-		if (account.second.active == false)
+		// Skip the account if the account isn't active.
+		if (!account.second.active)
 		{
 			continue;
 		}
 
 		// Calculate the score.
-		if( !account.second.active )
-			continue;
-
 		score = calculate_score(username, account.first);
 
 		// Push into the priority queue.
