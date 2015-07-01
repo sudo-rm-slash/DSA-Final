@@ -136,6 +136,11 @@ void dsa::lookup_table::suggest_exists(const std::string& username, std::vector<
 	unsigned int score;
 	for (const auto& account : this->hashtable_lookup)
 	{
+		if (account.second.active == false)
+		{
+			continue;
+		}
+
 		// Calculate the score.
 		score = calculate_score(username, account.first);
 
@@ -155,7 +160,9 @@ void dsa::lookup_table::suggest_exists(const std::string& username, std::vector<
 	// Save the result to vector.
 	for (const auto& candidate : this->suggestions_buffer)
 	{
-		//std::cout << "...score = " << candidate.first << ", " << candidate.second << std::endl;
+#ifdef DEBUG
+		std::cerr << "...score = " << candidate.first << ", " << candidate.second << std::endl;
+#endif
 		suggestions.push_back(candidate.second);
 	}
 }
