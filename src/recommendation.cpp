@@ -39,18 +39,21 @@ void dsa::recommendation::recommend(const std::unordered_map<std::string, unsign
 	 */
 	DEBUG_MESG("S S S E|")
 
-	// Remove the last character.
-	this->candidate_str.pop_back();
-
-	// Test for the case.
-	if (NOT_FOUND(this->candidate_str))
+	if( original_str.size() > 1 )
 	{
-		results.push_back(this->candidate_str);
-		PRINT_CANDIDATE()
-	}
+		// Remove the last character.
+		this->candidate_str.pop_back();
 
-	// Restore the last character.
-	this->candidate_str.push_back(original_str.back());
+		// Test for the case.
+		if (NOT_FOUND(this->candidate_str))
+		{
+			results.push_back(this->candidate_str);
+			PRINT_CANDIDATE()
+		}
+
+		// Restore the last character.
+		this->candidate_str.push_back(original_str.back());
+	}
 
 
 	/**
